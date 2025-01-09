@@ -72,12 +72,12 @@ const Features = () => {
         title="Powerful Features for Seamless Workflow"
         description="Discover tools designed to help you stay organized, collaborate effectively, and deliver results faster."
       />
-      <div className="grid grid-cols-10 gap-6 mt-10">
+      <div className="grid sm:grid-cols-2 md:grid-cols-10 gap-6 mt-10">
         {mainFeatures.map((feature, index) => (
           <Card
             key={index}
-            className={cn("col-span-6 shadow", {
-              "col-span-4": index === 0 || index === 3,
+            className={cn("md:col-span-6 shadow", {
+              "md:col-span-4": index === 0 || index === 3,
             })}
           >
             <CardHeader>
@@ -96,13 +96,13 @@ const Features = () => {
           </Card>
         ))}
       </div>
-      <div className="grid grid-cols-4 gap-8 mt-14">
+      <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-8 mt-14">
         {features.map((feature, index) => (
           <div key={index}>
             <div className="size-10 border rounded-xl bg-white flex items-center justify-center">
               <feature.icon className="size-4" />
             </div>
-            <h3 className="font-semibold">{feature.title}</h3>
+            <h3 className="font-semibold mt-4">{feature.title}</h3>
             <p className="text-muted-foreground text-sm">
               {feature.description}
             </p>

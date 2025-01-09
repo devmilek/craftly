@@ -10,7 +10,7 @@ const WaitlistForm = () => {
   const form = useForm({});
   return (
     <Form {...form}>
-      <form className="flex gap-2">
+      <form className="flex gap-2 z-10">
         <FormField
           name="email"
           control={form.control}
@@ -21,6 +21,7 @@ const WaitlistForm = () => {
                   {...field}
                   type="email"
                   placeholder="Your address email"
+                  className="bg-background z-10"
                 />
               </FormControl>
             </FormItem>

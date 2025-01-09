@@ -53,7 +53,7 @@ const Pricing = () => {
         title="Choose the Perfect Plan for Your Business"
         description="Whether you're starting out or scaling up, Craftly has a plan that fits your needs."
       />
-      <div className="grid grid-cols-3 mt-12 gap-6">
+      <div className="grid md:grid-cols-3 mt-12 gap-6">
         {plans.map((plan, index) => (
           <PricingCard key={index} {...plan} />
         ))}

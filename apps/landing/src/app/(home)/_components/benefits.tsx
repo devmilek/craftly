@@ -59,16 +59,14 @@ const Benefits = () => {
         title="Why Freelancers and Small Teams Choose Craftly"
         description="Unlock the tools you need to boost productivity and grow your business effortlessly."
       />
-      <div className="grid grid-cols-3 gap-6 mt-10">
+      <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 mt-10">
         {benefits.map((benefit, index) => (
           <Card key={index} className="flex flex-col items-center space-y-4">
-            <CardHeader>
-              <div className="size-10 border rounded-xl bg-white flex items-center justify-center">
+            <CardHeader className="w-full">
+              <div className="size-10 mb-4 border rounded-xl bg-white flex items-center justify-center">
                 <benefit.icon className="size-4" />
               </div>
-              <CardTitle className="text-xl font-bold text-gray-900">
-                {benefit.title}
-              </CardTitle>
+              <CardTitle>{benefit.title}</CardTitle>
               <CardDescription>{benefit.description}</CardDescription>
             </CardHeader>
           </Card>

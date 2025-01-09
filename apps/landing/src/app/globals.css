@@ -7,7 +7,7 @@ body {
 }
 
 .container {
-  @apply max-w-5xl px-5
+  @apply max-w-5xl px-5 md:px-8
 }
 
 @layer base {

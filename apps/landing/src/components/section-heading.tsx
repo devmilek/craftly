@@ -18,8 +18,10 @@ const SectionHeading = ({
       <Badge variant="outline" className="mb-8">
         {badge}
       </Badge>
-      <h1 className="text-4xl font-bold mb-4">{title}</h1>
-      <p className="text-muted-foreground">{description}</p>
+      <h1 className="text-2xl md:text-4xl font-bold mb-4">{title}</h1>
+      <p className="text-muted-foreground text-sm md:text-base">
+        {description}
+      </p>
     </div>
   );
 };

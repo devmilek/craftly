@@ -32,7 +32,7 @@ const faqs = [
 
 const FAQ = () => {
   return (
-    <section className="my-14 grid grid-cols-2 gap-10">
+    <section className="my-14 grid md:grid-cols-2 gap-10">
       <SectionHeading
         badge="FAQ"
         description="Find answers to common questions about Craftly and how it can help your business."
