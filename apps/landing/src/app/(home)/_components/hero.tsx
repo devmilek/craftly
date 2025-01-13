@@ -1,14 +1,18 @@
+"use client";
+
 import { Badge } from "@/components/ui/badge";
 import React from "react";
 import WaitlistForm from "./waitlist-form";
 import Image from "next/image";
-import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { BackgroundBeams } from "@/components/ui/background-beams";
+import { motion, useTransform, useScroll } from "framer-motion";
 
 const Hero = () => {
+  const { scrollY } = useScroll();
+  const rotateX = useTransform(scrollY, [0, 1000], [0, 20]);
+  const rotateY = useTransform(scrollY, [0, 1000], [0, 20]);
   return (
     <section className="flex flex-col items-center min-h-[calc(100vh-4rem)] py-14 text-center">
-      {/* <BackgroundBeamsWithCollision className="flex flex-col pb-20"> */}
       <div className="max-w-3xl mb-6">
         <div className="flex items-center gap-2 justify-center mb-6">
           <Badge>NEW</Badge>
@@ -23,14 +27,15 @@ const Hero = () => {
         </p>
       </div>
       <WaitlistForm />
-      {/* </BackgroundBeamsWithCollision> */}
-      <Image
-        src="/hero.png"
-        width={1200}
-        height={800}
-        alt=""
-        className="rounded-2xl border ring-[20px] ring-border/20 mt-20 z-10 shadow-xl"
-      />
+      <motion.div style={{ rotateX, rotateY }}>
+        <Image
+          src="/hero.png"
+          width={1200}
+          height={800}
+          alt=""
+          className="rounded-2xl border ring-[20px] ring-border/20 mt-20 z-10 shadow-xl"
+        />
+      </motion.div>
       <BackgroundBeams />
     </section>
   );
