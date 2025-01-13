@@ -10,6 +10,18 @@ export const auth = betterAuth({
     usePlural: true,
   }),
   plugins: [organization()],
+  user: {
+    changeEmail: {
+      enabled: true,
+      sendChangeEmailVerification: async ({ user, newEmail, url }) => {
+        await sendMail({
+          to: newEmail,
+          subject: `Hi ${user.name}, please verify your new email address`,
+          text: `Click the link to verify: ${url}`,
+        });
+      },
+    },
+  },
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,

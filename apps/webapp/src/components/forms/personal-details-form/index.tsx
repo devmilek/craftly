@@ -16,8 +16,10 @@ import { personalDetailsFormSchema, PersonalDetailsFormSchema } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { TrashIcon } from "lucide-react";
+import { useModal } from "@/hooks/use-modals-store";
 
 const PersonalDetailsForm = () => {
+  const { onOpen } = useModal("change-email");
   const form = useForm<PersonalDetailsFormSchema>({
     resolver: zodResolver(personalDetailsFormSchema),
     defaultValues: async () => {
@@ -52,7 +54,10 @@ const PersonalDetailsForm = () => {
                     {field.value && (
                       <AvatarImage src={field.value} className="rounded-full" />
                     )}
-                    <AvatarFallback>CN</AvatarFallback>
+                    <AvatarFallback className="uppercase">
+                      {/* TODO: fix this */}
+                      {form.getValues("name") ? form.getValues("name")[0] : "A"}
+                    </AvatarFallback>
                   </Avatar>
                   <Button
                     variant="outline"
@@ -87,7 +92,15 @@ const PersonalDetailsForm = () => {
                   <FormControl>
                     <Input {...field} disabled />
                   </FormControl>
-                  <Button variant="outline">Change</Button>
+                  <Button
+                    variant="outline"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      onOpen();
+                    }}
+                  >
+                    Change
+                  </Button>
                 </div>
               </FormItem>
             )}

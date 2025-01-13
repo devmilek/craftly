@@ -14,6 +14,7 @@ export const {
   forgetPassword,
   resetPassword,
   organization,
+  changeEmail,
   useActiveOrganization,
 } = createAuthClient({
   baseURL: "http://localhost:3003", // the base url of your auth server
