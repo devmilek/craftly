@@ -6,7 +6,7 @@ import SocialAuth from "../_components/social-auth";
 import SignInForm from "@/components/forms/sign-in-form";
 
 export const metadata: Metadata = {
-  title: "Sign In | Craftly",
+  title: "Sign In",
 };
 
 const SignInPage = () => {

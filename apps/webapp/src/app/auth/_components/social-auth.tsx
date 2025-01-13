@@ -13,7 +13,7 @@ const SocialAuth = () => {
     setGithubLoading(true);
     await signIn.social({
       provider: "github",
-      callbackURL: "/app",
+      callbackURL: "/",
     });
     setGithubLoading(false);
   };
@@ -22,7 +22,7 @@ const SocialAuth = () => {
     setGoogleLoading(true);
     await signIn.social({
       provider: "google",
-      callbackURL: "/app",
+      callbackURL: "/",
     });
     setGoogleLoading(false);
   };

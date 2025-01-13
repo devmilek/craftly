@@ -6,7 +6,7 @@ import SocialAuth from "../_components/social-auth";
 import SignUpForm from "@/components/forms/sign-up-form";
 
 export const metadata: Metadata = {
-  title: "Sign Up | Craftly",
+  title: "Sign Up",
 };
 
 const SignUpPage = () => {

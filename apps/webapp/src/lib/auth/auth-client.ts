@@ -16,6 +16,6 @@ export const {
   organization,
   useActiveOrganization,
 } = createAuthClient({
-  baseURL: "http://localhost:3000", // the base url of your auth server
+  baseURL: "http://localhost:3003", // the base url of your auth server
   plugins: [organizationClient()],
 });
