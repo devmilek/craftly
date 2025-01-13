@@ -1,7 +1,28 @@
+import PersonalDetailsForm from "@/components/forms/personal-details-form";
+import SidebarNavbar from "@/components/global/sidebar/sidebar-navbar";
+import { AnnotatedSection } from "@/components/ui/annotated";
 import React from "react";
 
 const Settings = () => {
-  return <div>Settings</div>;
+  return (
+    <>
+      <SidebarNavbar
+        items={[
+          {
+            label: "Settings",
+          },
+        ]}
+      />
+      <div className="px-4">
+        <AnnotatedSection
+          title="Personal details"
+          description="Set your name and contact information, the email address entered here is used for your login access."
+        >
+          <PersonalDetailsForm />
+        </AnnotatedSection>
+      </div>
+    </>
+  );
 };
 
 export default Settings;
