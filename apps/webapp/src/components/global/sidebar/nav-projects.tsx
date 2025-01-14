@@ -29,6 +29,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { useModal } from "@/hooks/use-modals-store";
 
 const projects = [
   {
@@ -50,11 +51,12 @@ const projects = [
 
 export function NavProjects() {
   const { isMobile } = useSidebar();
+  const { onOpen } = useModal("create-project");
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
-      <SidebarGroupAction name="Create Project">
+      <SidebarGroupAction name="Create Project" onClick={onOpen}>
         <PlusIcon />
       </SidebarGroupAction>
       <SidebarMenu>

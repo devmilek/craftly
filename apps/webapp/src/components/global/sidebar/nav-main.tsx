@@ -1,55 +1,77 @@
 "use client";
 
 import {
+  BookUser,
   CheckCheckIcon,
-  ChevronRight,
   Folder,
   HomeIcon,
+  LucideIcon,
+  PlusIcon,
   Timer,
   UsersIcon,
 } from "lucide-react";
 
 import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuAction,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
+import { useModal } from "@/hooks/use-modals-store";
 
-const navItems = [
-  {
-    icon: HomeIcon,
-    label: "Home",
-    href: "/",
-  },
-  {
-    icon: CheckCheckIcon,
-    label: "Tasks",
-    href: "/tasks",
-  },
-  {
-    icon: Folder,
-    label: "Projects",
-    href: "/projects",
-  },
-  {
-    icon: Timer,
-    label: "Time Tracking",
-    href: "/time-tracking",
-  },
-];
+interface NavItem {
+  icon: LucideIcon;
+  label: string;
+  href: string;
+  action?: {
+    icon: LucideIcon;
+    label: string;
+    onClick: () => void;
+  };
+}
 
 export function NavMain() {
+  const { onOpen } = useModal("create-client");
+  const navItems: NavItem[] = [
+    {
+      icon: HomeIcon,
+      label: "Home",
+      href: "/",
+    },
+    {
+      icon: CheckCheckIcon,
+      label: "Tasks",
+      href: "/tasks",
+    },
+    {
+      icon: Folder,
+      label: "Projects",
+      href: "/projects",
+    },
+    {
+      icon: Timer,
+      label: "Time Tracking",
+      href: "/time-tracking",
+    },
+    {
+      icon: UsersIcon,
+      label: "Clients",
+      href: "/clients",
+      action: {
+        icon: PlusIcon,
+        label: "Create Client",
+        onClick: onOpen,
+      },
+    },
+    {
+      icon: BookUser,
+      label: "Contacts",
+      href: "/contacts",
+    },
+  ];
   return (
     <SidebarGroup>
       <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -62,37 +84,14 @@ export function NavMain() {
                 <span>{item.label}</span>
               </Link>
             </SidebarMenuButton>
+            {item.action && (
+              <SidebarMenuAction showOnHover onClick={item.action.onClick}>
+                <item.action.icon />
+                <span className="sr-only">{item.action.label}</span>
+              </SidebarMenuAction>
+            )}
           </SidebarMenuItem>
         ))}
-        <Collapsible asChild className="group/collapsible">
-          <SidebarMenuItem>
-            <CollapsibleTrigger asChild>
-              <SidebarMenuButton tooltip="Connections">
-                <UsersIcon />
-                <span>Connections</span>
-                <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
-              </SidebarMenuButton>
-            </CollapsibleTrigger>
-            <CollapsibleContent>
-              <SidebarMenuSub>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild>
-                    <Link href={"/clients"}>
-                      <span>Clients</span>
-                    </Link>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-                <SidebarMenuSubItem>
-                  <SidebarMenuSubButton asChild>
-                    <Link href={"/contacts"}>
-                      <span>Contacts</span>
-                    </Link>
-                  </SidebarMenuSubButton>
-                </SidebarMenuSubItem>
-              </SidebarMenuSub>
-            </CollapsibleContent>
-          </SidebarMenuItem>
-        </Collapsible>
       </SidebarMenu>
     </SidebarGroup>
   );

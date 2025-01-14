@@ -1,4 +1,8 @@
-export type ModalType = "change-email";
+export type ModalType =
+  | "change-email"
+  | "create-organization"
+  | "create-project"
+  | "create-client";
 
 import { create } from "zustand";
 

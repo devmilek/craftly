@@ -11,6 +11,9 @@ export const auth = betterAuth({
     usePlural: true,
   }),
   appName: "Craftly",
+  advanced: {
+    cookiePrefix: "craftly",
+  },
   plugins: [
     organization(),
     twoFactor(),
