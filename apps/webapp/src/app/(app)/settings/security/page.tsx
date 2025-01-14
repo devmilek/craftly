@@ -8,6 +8,7 @@ import { Separator } from "@/components/ui/separator";
 import ChangePasswordForm from "@/components/forms/change-password-form";
 import MultiFactorCard from "./_components/multi-factor-card";
 import { getCurrentSession } from "@/lib/auth/utils";
+import PasskeysCard from "./_components/passkeys-card";
 
 const SecuritySettingsPage = async () => {
   const accounts = await auth.api.listUserAccounts({
@@ -19,6 +20,10 @@ const SecuritySettingsPage = async () => {
   const isPasswordSet = accounts.some(
     (account) => account.provider === "credential"
   );
+
+  const passkeys = await auth.api.listPasskeys({
+    headers: await headers(),
+  });
 
   return (
     <>
@@ -50,6 +55,13 @@ const SecuritySettingsPage = async () => {
           description="Add an extra layer of security to your login by requiring an additional factor."
         >
           <MultiFactorCard twoFactorEnabled={!!user?.twoFactorEnabled} />
+        </AnnotatedSection>
+        <Separator />
+        <AnnotatedSection
+          title="Passkeys"
+          description="Use biometrics or device PIN to sign in without a password. Passkeys are more secure than passwords and protect against phishing attacks."
+        >
+          <PasskeysCard passkeys={passkeys} />
         </AnnotatedSection>
       </div>
     </>

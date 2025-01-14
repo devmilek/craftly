@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signIn } from "@/lib/auth/auth-client";
@@ -65,6 +65,17 @@ const SignInForm = () => {
     );
   };
 
+  useEffect(() => {
+    if (
+      !PublicKeyCredential.isConditionalMediationAvailable ||
+      !PublicKeyCredential.isConditionalMediationAvailable()
+    ) {
+      return;
+    }
+
+    void signIn.passkey({ autoFill: true });
+  }, []);
+
   return (
     <Form {...form}>
       <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -75,7 +86,12 @@ const SignInForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} type="email" disabled={loading} />
+                <Input
+                  {...field}
+                  type="email"
+                  disabled={loading}
+                  autoComplete="username webauthn"
+                />
               </FormControl>
             </FormItem>
           )}
@@ -95,7 +111,12 @@ const SignInForm = () => {
                 </Link>
               </div>
               <FormControl>
-                <Input {...field} type="password" disabled={loading} />
+                <Input
+                  {...field}
+                  type="password"
+                  disabled={loading}
+                  autoComplete="current-password webauthn"
+                />
               </FormControl>
             </FormItem>
           )}
