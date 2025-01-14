@@ -88,47 +88,6 @@ const CreateClientModal = () => {
                 </FormItem>
               )}
             />
-            {/* <div className="p-5 rounded-lg bg-accent border grid gap-4">
-              <FormField
-                name="contactName"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Contact Name</FormLabel>
-                    <FormControl>
-                      <Input {...field} disabled={isLoading} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="contactEmail"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input {...field} disabled={isLoading} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                name="contactPhone"
-                control={form.control}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Phone Number</FormLabel>
-                    <FormControl>
-                      <Input {...field} disabled={isLoading} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div> */}
           </form>
         </Form>
         <DialogFooter>
