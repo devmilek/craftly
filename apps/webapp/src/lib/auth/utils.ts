@@ -2,25 +2,76 @@
 
 import { headers } from "next/headers";
 import { auth } from ".";
-
-export const getCurrentSession = async () => {
-  const session = await auth.api.getSession({
-    headers: await headers(), // you need to pass the headers object.
-  });
-
-  if (!session) {
-    return {
-      user: null,
-      session: null,
-    };
-  }
-
-  return session;
-};
-
 import { and, eq, isNotNull } from "drizzle-orm";
 import { db } from "../db";
 import { members, sessions } from "../db/schemas";
+import { redirect } from "next/navigation";
+
+export const getCurrentSession = async () => {
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!data) {
+    return {
+      user: null,
+      session: null,
+      activeOrganizationId: null,
+    };
+  }
+
+  return {
+    user: data.user,
+    session: data.session,
+    activeOrganizationId: data.session.activeOrganizationId,
+  };
+};
+
+export const ensureSessionWithOrganization = async () => {
+  const data = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!data) {
+    redirect("/auth/sign-in");
+  }
+
+  if (!data.session.activeOrganizationId) {
+    redirect("/auth/select-organization");
+  }
+
+  return {
+    user: data.user,
+    session: data.session,
+    organizationId: data.session.activeOrganizationId,
+  };
+};
+
+// export const ensureServerAction = async () => {
+//   const data = await auth.api.getSession({
+//     headers: await headers(),
+//   });
+
+//   if (!data) {
+//     return {
+//       success: false,
+//       error: "Not authenticated",
+//     };
+//   }
+
+//   if (!data.session.activeOrganizationId) {
+//     return {
+//       success: false,
+//       error: "No active organization",
+//     };
+//   }
+
+//   return {
+//     user: data.user,
+//     session: data.session,
+//     organizationId: data.session.activeOrganizationId,
+//   };
+// };
 
 export const getActiveOrganization = async ({
   sessionId,

@@ -47,6 +47,7 @@ const CreateClientModal = () => {
 
     if (error) {
       toast.error(error);
+      return;
     }
 
     onClose();

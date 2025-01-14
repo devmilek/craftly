@@ -18,7 +18,7 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
   return (
     <SidebarProvider className="">
       <AppSidebar user={user} />
-      <main className="w-full">{children}</main>
+      <main className="w-full px-8">{children}</main>
     </SidebarProvider>
   );
 };
