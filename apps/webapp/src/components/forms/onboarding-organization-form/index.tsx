@@ -53,7 +53,7 @@ const OnboardingOrganizationForm = ({ name }: { name: string }) => {
       organizationId: data.id,
     });
 
-    replace("/app");
+    replace("/");
   };
 
   const isLoading = form.formState.isSubmitting;

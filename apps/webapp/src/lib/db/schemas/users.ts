@@ -67,6 +67,8 @@ export const organizations = pgTable("organizations", {
   metadata: text("metadata"),
 });
 
+export type Organization = typeof organizations.$inferSelect;
+
 export const members = pgTable("members", {
   id: text("id").primaryKey(),
   organizationId: text("organization_id")

@@ -19,7 +19,7 @@ const SelectOrganizationPage = async () => {
   });
 
   if (orgs.length === 0) {
-    redirect("/onboarding");
+    redirect("/auth/create-organization");
   }
 
   return (

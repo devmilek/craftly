@@ -2,11 +2,13 @@
 
 import {
   Folder,
+  Frame,
+  MapIcon,
   MoreHorizontal,
+  PieChart,
   PlusIcon,
   Share,
   Trash2,
-  type LucideIcon,
 } from "lucide-react";
 
 import {
@@ -28,15 +30,25 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 
-export function NavProjects({
-  projects,
-}: {
-  projects: {
-    name: string;
-    url: string;
-    icon: LucideIcon;
-  }[];
-}) {
+const projects = [
+  {
+    name: "Design Engineering",
+    url: "#",
+    icon: Frame,
+  },
+  {
+    name: "Sales & Marketing",
+    url: "#",
+    icon: PieChart,
+  },
+  {
+    name: "Travel",
+    url: "#",
+    icon: MapIcon,
+  },
+];
+
+export function NavProjects() {
   const { isMobile } = useSidebar();
 
   return (

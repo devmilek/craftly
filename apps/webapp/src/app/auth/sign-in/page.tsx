@@ -4,12 +4,20 @@ import Link from "next/link";
 import React from "react";
 import SocialAuth from "../_components/social-auth";
 import SignInForm from "@/components/forms/sign-in-form";
+import { getCurrentSession } from "@/lib/auth/utils";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Sign In",
 };
 
-const SignInPage = () => {
+const SignInPage = async () => {
+  const { user } = await getCurrentSession();
+
+  if (user) {
+    redirect("/");
+  }
+
   return (
     <div className="max-w-md w-full shadow-lg bg-gray-50 rounded-xl border overflow-hidden">
       <div className="px-10 py-8 bg-white rounded-xl border-b">

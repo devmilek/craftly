@@ -5,11 +5,16 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 const AppLayout = async ({ children }: { children: React.ReactNode }) => {
-  const { user } = await getCurrentSession();
+  const { user, session } = await getCurrentSession();
 
-  if (!user) {
+  if (!session) {
     redirect("/auth/sign-in");
   }
+
+  if (!session.activeOrganizationId) {
+    redirect("/auth/select-organization");
+  }
+
   return (
     <SidebarProvider className="">
       <AppSidebar user={user} />
