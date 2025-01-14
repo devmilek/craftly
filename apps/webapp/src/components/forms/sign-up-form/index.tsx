@@ -39,6 +39,7 @@ const SignUpForm = () => {
       email: values.email,
       password: values.password,
       name: `${values.firstName} ${values.lastName}`,
+      callbackURL: "/",
     });
 
     if (error) {

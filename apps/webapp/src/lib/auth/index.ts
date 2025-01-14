@@ -3,6 +3,7 @@ import { organization, twoFactor } from "better-auth/plugins";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "../db";
 import { sendMail } from "../nodemailer";
+import { passkey } from "better-auth/plugins/passkey";
 
 export const auth = betterAuth({
   database: drizzleAdapter(db, {
@@ -10,7 +11,15 @@ export const auth = betterAuth({
     usePlural: true,
   }),
   appName: "Craftly",
-  plugins: [organization(), twoFactor()],
+  plugins: [
+    organization(),
+    twoFactor(),
+    passkey({
+      rpID: "localhost",
+      rpName: "Craftly",
+      origin: "http://localhost:3003",
+    }),
+  ],
   user: {
     changeEmail: {
       enabled: true,
@@ -73,4 +82,5 @@ export const auth = betterAuth({
       },
     },
   },
+  trustedOrigins: ["https://tolerant-hyena-model.ngrok-free.app/"],
 });

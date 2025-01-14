@@ -49,7 +49,7 @@ const SecuritySettingsPage = async () => {
           title="Multi-factor authentication"
           description="Add an extra layer of security to your login by requiring an additional factor."
         >
-          <MultiFactorCard twoFactorEnabled={!!user.twoFactorEnabled} />
+          <MultiFactorCard twoFactorEnabled={!!user?.twoFactorEnabled} />
         </AnnotatedSection>
       </div>
     </>

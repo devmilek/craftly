@@ -8,16 +8,14 @@ export default async function authMiddleware(request: NextRequest) {
   const { data: session } = await betterFetch<Session>(
     "/api/auth/get-session",
     {
-      baseURL: request.nextUrl.origin,
+      baseURL: "http://localhost:3003",
       headers: {
-        //get the cookie from the request
         cookie: request.headers.get("cookie") || "",
       },
     }
   );
 
   console.log("middleware session", session);
-
   if (!session) {
     return NextResponse.redirect(new URL("/auth/sign-in", request.url));
   }

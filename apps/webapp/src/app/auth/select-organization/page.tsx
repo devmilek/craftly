@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import React from "react";
-import SelectOrganizationFeed from "./_components/select-organization-feed";
+// import SelectOrganizationFeed from "./_components/select-organization-feed";
 import { Icons } from "@/components/global/icons";
 import { getCurrentSession } from "@/lib/auth/utils";
 
@@ -32,7 +32,7 @@ const SelectOrganizationPage = async () => {
             Choose an organization to continue
           </p>
         </header>
-        <SelectOrganizationFeed orgs={orgs} />
+        {/* <SelectOrganizationFeed orgs={orgs} /> */}
       </div>
       <div className="text-center py-4 text-sm text-muted-foreground">
         Don’t have an account?{" "}

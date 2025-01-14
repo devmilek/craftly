@@ -2,6 +2,7 @@ import { createAuthClient } from "better-auth/react";
 import {
   organizationClient,
   twoFactorClient,
+  passkeyClient,
 } from "better-auth/client/plugins";
 
 export const {
@@ -22,7 +23,8 @@ export const {
   unlinkAccount,
   useActiveOrganization,
   twoFactor,
+  passkey,
 } = createAuthClient({
   baseURL: "http://localhost:3003", // the base url of your auth server
-  plugins: [organizationClient(), twoFactorClient()],
+  plugins: [organizationClient(), twoFactorClient(), passkeyClient()],
 });

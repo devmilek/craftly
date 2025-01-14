@@ -42,8 +42,11 @@ const SignInForm = () => {
         onRequest: () => {
           setLoading(true);
         },
-        onSuccess: () => {
-          //redirect to the dashboard
+        onSuccess: (context) => {
+          if (context.data.twoFactorRedirect) {
+            console.log("two factor redirect");
+            window.location.href = "/auth/two-factor";
+          }
           setLoading(false);
           push("/");
         },

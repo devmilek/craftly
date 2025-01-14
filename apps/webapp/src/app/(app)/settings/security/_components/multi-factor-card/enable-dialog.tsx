@@ -12,12 +12,14 @@ import {
 } from "@/components/ui/dialog";
 import { CodeForm } from "./code-form";
 import PasswordForm from "./password-form";
+import { useRouter } from "next/navigation";
 
 const EnableDialog = () => {
   const [open, setOpen] = React.useState(false);
   const [totpUri, setTotpUri] = React.useState<string | null>(null);
   const [recoveryCodes, setRecoveryCodes] = React.useState<string[]>([]);
   const [showRecoveryCodes, setShowRecoveryCodes] = React.useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -52,6 +54,7 @@ const EnableDialog = () => {
                 setTotpUri(null);
                 setOpen(false);
                 setShowRecoveryCodes(true);
+                router.refresh();
               }}
             />
           ) : (
