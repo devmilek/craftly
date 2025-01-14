@@ -8,6 +8,7 @@ import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schemas";
 import { redirect } from "next/navigation";
+import { v4 as uuid } from "uuid";
 
 export const createProject = async (values: CreateProjectSchema) => {
   const { session, activeOrganizationId } = await getCurrentSession();
@@ -35,13 +36,17 @@ export const createProject = async (values: CreateProjectSchema) => {
     };
   }
 
-  const { name, clientId, description } = validatedData.data;
+  const { name, clientId, description, dueDate } = validatedData.data;
+
+  const projectId = uuid();
 
   try {
     await db.insert(projects).values({
       name,
       clientId,
       description,
+      dueDate,
+      organizationId: activeOrganizationId,
     });
   } catch (e) {
     console.error(e);
@@ -51,5 +56,5 @@ export const createProject = async (values: CreateProjectSchema) => {
     };
   }
 
-  redirect("/clients/" + clientId);
+  redirect("/projects/" + projectId);
 };

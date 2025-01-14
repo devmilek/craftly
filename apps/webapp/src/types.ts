@@ -1,3 +1,5 @@
+import { projectStatus } from "./lib/db/schemas";
+
 export type Organization = {
   id: string;
   name: string;
@@ -7,3 +9,5 @@ export type Organization = {
   metadata?: any;
   logo?: string | null | undefined;
 };
+
+export type ProjectStatus = (typeof projectStatus)[number];

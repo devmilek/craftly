@@ -25,9 +25,11 @@ import { Client } from "@/lib/db/schemas";
 export function ClientsCombobox({
   value,
   onChange,
+  disabled,
 }: {
-  value: string | null;
+  value?: string | null;
   onChange: (client: string | null) => void;
+  disabled?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
   const [client, setClient] = React.useState<Client | null>(null);
@@ -55,6 +57,7 @@ export function ClientsCombobox({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          disabled={disabled}
           variant="outline"
           role="combobox"
           aria-expanded={open}

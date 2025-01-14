@@ -7,12 +7,10 @@ import { ImageIcon, TrashIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const AvatarUploader = ({
-  rounded,
   fallback,
   src,
   className,
 }: {
-  rounded?: boolean;
   fallback: string;
   src?: string;
   className?: string;

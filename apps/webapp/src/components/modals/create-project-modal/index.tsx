@@ -23,9 +23,19 @@ import { createProjectSchema, CreateProjectSchema } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Loader2 } from "lucide-react";
+import { CalendarIcon, Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
 import { ClientsCombobox } from "./clients-combobox";
+import { createProject } from "@/actions/projects/create-project";
+import { toast } from "sonner";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
+import { Calendar } from "@/components/ui/calendar";
+import { format } from "date-fns";
 
 const CreateProjectModal = () => {
   const { isOpen, onClose } = useModal("create-project");
@@ -40,12 +50,12 @@ const CreateProjectModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: CreateProjectSchema) => {
-    // const { error } = await createClient(values);
+    const { error } = await createProject(values);
 
-    // if (error) {
-    //   toast.error(error);
-    //   return;
-    // }
+    if (error) {
+      toast.error(error);
+      return;
+    }
 
     onClose();
     form.reset();
@@ -90,13 +100,54 @@ const CreateProjectModal = () => {
               )}
             />
             <FormField
+              control={form.control}
+              name="dueDate"
+              render={({ field }) => (
+                <FormItem className="flex flex-col">
+                  <FormLabel>Due date</FormLabel>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "pl-3 text-left font-normal",
+                            !field.value && "text-muted-foreground"
+                          )}
+                        >
+                          {field.value ? (
+                            format(field.value, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                          <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={field.value}
+                        onSelect={field.onChange}
+                        disabled={(date) =>
+                          date < new Date() || date < new Date("1900-01-01")
+                        }
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
               name="clientId"
               control={form.control}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Client</FormLabel>
                   <FormControl>
-                    <ClientsCombobox {...field} />
+                    <ClientsCombobox {...field} disabled={isLoading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
