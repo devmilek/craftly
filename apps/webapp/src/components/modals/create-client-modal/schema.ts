@@ -1,6 +1,7 @@
 import { z } from "zod";
 
-export const createProjectSchema = z.object({
+export const createClientSchema = z.object({
   name: z.string().nonempty("Project name cannot be empty"),
-  description: z.string().optional(),
 });
+
+export type CreateClientSchema = z.infer<typeof createClientSchema>;
