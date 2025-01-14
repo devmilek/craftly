@@ -1,5 +1,5 @@
 import { betterAuth } from "better-auth";
-import { organization } from "better-auth/plugins";
+import { organization, twoFactor } from "better-auth/plugins";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
 import { db } from "../db";
 import { sendMail } from "../nodemailer";
@@ -9,7 +9,8 @@ export const auth = betterAuth({
     provider: "pg",
     usePlural: true,
   }),
-  plugins: [organization()],
+  appName: "Craftly",
+  plugins: [organization(), twoFactor()],
   user: {
     changeEmail: {
       enabled: true,
@@ -20,6 +21,11 @@ export const auth = betterAuth({
           text: `Click the link to verify: ${url}`,
         });
       },
+    },
+  },
+  account: {
+    accountLinking: {
+      enabled: true,
     },
   },
   emailAndPassword: {
@@ -41,11 +47,6 @@ export const auth = betterAuth({
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    },
-  },
-  account: {
-    accountLinking: {
-      enabled: true,
     },
   },
   emailVerification: {

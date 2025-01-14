@@ -51,7 +51,7 @@ const SignUpForm = () => {
     }
 
     setLoading(false);
-    push("/verify-email");
+    push("/auth/verify-email?email=" + values.email);
   };
 
   return (

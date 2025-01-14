@@ -1,5 +1,8 @@
 import { createAuthClient } from "better-auth/react";
-import { organizationClient } from "better-auth/client/plugins";
+import {
+  organizationClient,
+  twoFactorClient,
+} from "better-auth/client/plugins";
 
 export const {
   signIn,
@@ -15,8 +18,11 @@ export const {
   resetPassword,
   organization,
   changeEmail,
+  linkSocial,
+  unlinkAccount,
   useActiveOrganization,
+  twoFactor,
 } = createAuthClient({
   baseURL: "http://localhost:3003", // the base url of your auth server
-  plugins: [organizationClient()],
+  plugins: [organizationClient(), twoFactorClient()],
 });

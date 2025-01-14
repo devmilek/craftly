@@ -45,13 +45,14 @@ const SignInForm = () => {
         onSuccess: () => {
           //redirect to the dashboard
           setLoading(false);
-          push("/app");
+          push("/");
         },
         onError: (ctx) => {
           if (ctx.error.status === 403) {
             const params = new URLSearchParams();
             params.set("email", values.email);
-            push(`/verify-email?${params.toString()}`);
+            console.log("verify email");
+            push(`/auth/verify-email?${params.toString()}`);
             return;
           }
           toast.error(ctx.error.message);
@@ -84,7 +85,7 @@ const SignInForm = () => {
               <div className="flex justify-between">
                 <FormLabel>Password</FormLabel>
                 <Link
-                  href="/forget-password"
+                  href="/auth/forget-password"
                   className="text-sm underline text-muted-foreground"
                 >
                   Forget password?

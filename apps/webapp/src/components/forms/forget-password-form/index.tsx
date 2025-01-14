@@ -32,13 +32,14 @@ const ForgetPasswordForm = () => {
   const onSubmit = async (values: z.infer<typeof schema>) => {
     const { error } = await forgetPassword({
       email: values.email,
-      redirectTo: "/reset-password",
+      redirectTo: "/auth/reset-password",
     });
 
     if (error) {
       toast.error(error.message);
       return;
     }
+    form.reset();
 
     toast.success("Check your email for the reset link");
   };

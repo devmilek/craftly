@@ -1,13 +1,13 @@
 "use client";
 
 import {
-  BadgeCheck,
   Bell,
   ChevronsUpDown,
-  CreditCard,
+  LockKeyholeIcon,
   LogOut,
   Sparkles,
   SunIcon,
+  UserIcon,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -34,10 +34,14 @@ import {
 } from "@/components/ui/sidebar";
 import { User } from "better-auth";
 import { useTheme } from "next-themes";
+import Link from "next/link";
+import { signOut } from "@/lib/auth/auth-client";
+import { useRouter } from "next/navigation";
 
 export function NavUser({ user }: { user: User }) {
   const { isMobile } = useSidebar();
   const { setTheme, theme } = useTheme();
+  const router = useRouter();
 
   return (
     <SidebarMenu>
@@ -88,13 +92,17 @@ export function NavUser({ user }: { user: User }) {
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <BadgeCheck />
-                Account
+              <DropdownMenuItem asChild>
+                <Link href="/settings">
+                  <UserIcon />
+                  Profile
+                </Link>
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <CreditCard />
-                Billing
+              <DropdownMenuItem asChild>
+                <Link href="/settings/security">
+                  <LockKeyholeIcon />
+                  Security
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuItem>
                 <Bell />
@@ -126,7 +134,17 @@ export function NavUser({ user }: { user: User }) {
               </DropdownMenuSub>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem
+              onClick={async () => {
+                await signOut({
+                  fetchOptions: {
+                    onSuccess: () => {
+                      router.push("/auth/sign-in"); // redirect to login page
+                    },
+                  },
+                });
+              }}
+            >
               <LogOut />
               Log out
             </DropdownMenuItem>

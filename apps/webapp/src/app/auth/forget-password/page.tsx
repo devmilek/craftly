@@ -18,7 +18,7 @@ const ForgetPasswordPage = () => {
       </div>
       <div className="text-center py-4 text-sm text-muted-foreground">
         You remember your password?{" "}
-        <Link href="/sign-up" className="text-primary font-medium">
+        <Link href="/auth/sign-up" className="text-primary font-medium">
           Sign in
         </Link>
       </div>

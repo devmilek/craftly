@@ -35,7 +35,7 @@ const SignInPage = () => {
       </div>
       <div className="text-center py-4 text-sm text-muted-foreground">
         Don’t have an account?{" "}
-        <Link href="/sign-up" className="text-primary font-medium">
+        <Link href="/auth/sign-up" className="text-primary font-medium">
           Sign up
         </Link>
       </div>
