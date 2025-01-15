@@ -19,8 +19,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useQuery } from "@tanstack/react-query";
-import { getClientById, searchClients } from "./actions";
 import { Client } from "@/lib/db/schemas";
+import { getClientById, searchClients } from "@/actions/clients";
 
 export function ClientsCombobox({
   value,
@@ -51,7 +51,7 @@ export function ClientsCombobox({
         setClient(client || null);
       }
     }
-  }, [value, data]);
+  }, []);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -61,7 +61,9 @@ export function ClientsCombobox({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="justify-between flex w-full"
+          className={cn("justify-between flex w-full font-normal", {
+            "text-muted-foreground": !value,
+          })}
         >
           {client ? client.name : "Select client..."}
           <ChevronsUpDown className="opacity-50" />
