@@ -34,7 +34,8 @@ interface NavItem {
 }
 
 export function NavMain() {
-  const { onOpen } = useModal("create-client");
+  const { onOpen: onClientOpen } = useModal("create-client");
+  const { onOpen: onTaskOpen } = useModal("create-task");
   const navItems: NavItem[] = [
     {
       icon: HomeIcon,
@@ -45,6 +46,11 @@ export function NavMain() {
       icon: CheckCheckIcon,
       label: "Tasks",
       href: "/tasks",
+      action: {
+        icon: PlusIcon,
+        label: "Create Task",
+        onClick: onTaskOpen,
+      },
     },
     {
       icon: Folder,
@@ -63,7 +69,7 @@ export function NavMain() {
       action: {
         icon: PlusIcon,
         label: "Create Client",
-        onClick: onOpen,
+        onClick: onClientOpen,
       },
     },
     {

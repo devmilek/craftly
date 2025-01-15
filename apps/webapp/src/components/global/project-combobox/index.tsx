@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/popover";
 import { useQuery } from "@tanstack/react-query";
 import { Project } from "@/lib/db/schemas";
-import { getProjectById, searchProjects } from "./actions";
+import { getProjectById, searchProjects } from "@/actions/projects";
 
 export function ProjectsCombobox({
   value,

@@ -22,7 +22,7 @@ import { timerSchema, TimerSchema } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { ProjectsCombobox } from "./project-combobox";
+import { ProjectsCombobox } from "../project-combobox";
 
 const StopwatchPopover = () => {
   const {
