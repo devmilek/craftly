@@ -32,6 +32,7 @@ export const projects = pgTable("projects", {
   dueDate: date("due_date", {
     mode: "date",
   }),
+  archived: boolean().notNull().default(false),
 
   clientId: uuid().references(() => clients.id),
   organizationId: varchar()

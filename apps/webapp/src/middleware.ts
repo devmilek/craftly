@@ -15,7 +15,6 @@ export default async function authMiddleware(request: NextRequest) {
     }
   );
 
-  console.log("middleware session", session);
   if (!session) {
     return NextResponse.redirect(new URL("/auth/sign-in", request.url));
   }

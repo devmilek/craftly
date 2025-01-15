@@ -29,22 +29,15 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { useMediaQuery } from "@/hooks/use-media-query";
-import { HomeIcon, PlusIcon, SearchIcon, TimerIcon } from "lucide-react";
+import { HomeIcon, PlusIcon, SearchIcon } from "lucide-react";
 import Link from "next/link";
 import React from "react";
+import StopwatchPopover from "../stopwatch-popover";
 
 type BreadCrumbItem = {
   href?: string;
   label: string;
 };
-
-// const items = [
-//   { href: "#", label: "Home" },
-//   { href: "#", label: "Documentation" },
-//   { href: "#", label: "Building Your Application" },
-//   { href: "#", label: "Data Fetching" },
-//   { label: "Caching and Revalidating" },
-// ];
 
 const ITEMS_TO_DISPLAY = 3;
 
@@ -66,9 +59,8 @@ const SidebarNavbar = ({ items }: { items: BreadCrumbItem[] }) => {
             </kbd>
           </p>
         </Button>
-        <Button variant="outline" size="icon">
-          <TimerIcon />
-        </Button>
+        <StopwatchPopover />
+
         <Button size="icon">
           <PlusIcon />
         </Button>

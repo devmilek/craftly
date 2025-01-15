@@ -2,10 +2,10 @@
 
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
-import { clients } from "@/lib/db/schemas";
+import { projects } from "@/lib/db/schemas";
 import { and, eq, ilike } from "drizzle-orm";
 
-export const searchClients = async (query: string) => {
+export const searchProjects = async (query: string) => {
   const { user, organizationId } = await getCurrentSession();
 
   if (!user) {
@@ -16,11 +16,11 @@ export const searchClients = async (query: string) => {
     return [];
   }
 
-  const data = await db.query.clients.findMany({
+  const data = await db.query.projects.findMany({
     where: and(
-      eq(clients.archived, false),
-      ilike(clients.name, `%${query}%`),
-      eq(clients.organizationId, organizationId)
+      ilike(projects.name, `%${query}%`),
+      eq(projects.organizationId, organizationId),
+      eq(projects.archived, false)
     ),
     limit: 7,
   });
@@ -28,7 +28,7 @@ export const searchClients = async (query: string) => {
   return data;
 };
 
-export const getClientById = async (id: string) => {
+export const getProjectById = async (id: string) => {
   const { organizationId, user } = await getCurrentSession();
 
   if (!user) {
@@ -39,11 +39,11 @@ export const getClientById = async (id: string) => {
     return null;
   }
 
-  const data = await db.query.clients.findFirst({
+  const data = await db.query.projects.findFirst({
     where: and(
-      eq(clients.archived, false),
-      eq(clients.id, id),
-      eq(clients.organizationId, organizationId)
+      eq(projects.archived, false),
+      eq(projects.id, id),
+      eq(projects.organizationId, organizationId)
     ),
   });
 

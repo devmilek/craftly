@@ -16,14 +16,14 @@ export const getCurrentSession = async () => {
     return {
       user: null,
       session: null,
-      activeOrganizationId: null,
+      organizationId: null,
     };
   }
 
   return {
     user: data.user,
     session: data.session,
-    activeOrganizationId: data.session.activeOrganizationId,
+    organizationId: data.session.activeOrganizationId,
   };
 };
 
