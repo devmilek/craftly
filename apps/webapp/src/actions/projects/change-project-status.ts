@@ -10,7 +10,7 @@ export const changeProjectStatus = async (
   projectId: string,
   status: string
 ) => {
-  const { session, activeOrganizationId } = await getCurrentSession();
+  const { session, organizationId } = await getCurrentSession();
 
   if (!session) {
     return {
@@ -19,7 +19,7 @@ export const changeProjectStatus = async (
     };
   }
 
-  if (!activeOrganizationId) {
+  if (!organizationId) {
     return {
       success: false,
       error: "No active organization",
@@ -40,7 +40,7 @@ export const changeProjectStatus = async (
     })
     .where(
       and(
-        eq(projects.organizationId, activeOrganizationId),
+        eq(projects.organizationId, organizationId),
         eq(projects.id, projectId)
       )
     );

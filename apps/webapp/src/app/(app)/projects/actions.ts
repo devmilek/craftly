@@ -3,7 +3,7 @@
 import { ensureSessionWithOrganization } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schemas";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 
 export const getProjects = async () => {
   const { organizationId } = await ensureSessionWithOrganization();
@@ -13,6 +13,7 @@ export const getProjects = async () => {
     with: {
       client: true,
     },
+    orderBy: desc(projects.updatedAt),
   });
 
   return data;

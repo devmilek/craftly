@@ -28,9 +28,12 @@ import { Button } from "@/components/ui/button";
 import { createClient } from "@/actions/clients/create-client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { queryClient } from "@/components/providers/query-provider";
+import { useRouter } from "next/navigation";
 
 const CreateClientModal = () => {
   const { isOpen, onClose } = useModal("create-client");
+  const router = useRouter();
   const form = useForm<CreateClientSchema>({
     defaultValues: {
       name: "",
@@ -43,11 +46,26 @@ const CreateClientModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: CreateClientSchema) => {
-    const { error } = await createClient(values);
+    const { error, id } = await createClient(values);
 
     if (error) {
       toast.error(error);
       return;
+    }
+
+    queryClient.invalidateQueries({
+      queryKey: ["clients"],
+    });
+
+    if (id) {
+      toast("Client created successfully", {
+        action: {
+          label: "View client",
+          onClick: () => {
+            router.push(`/clients/${id}`);
+          },
+        },
+      });
     }
 
     onClose();

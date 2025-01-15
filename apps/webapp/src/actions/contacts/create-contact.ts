@@ -54,7 +54,7 @@ export const createContact = async (values: CreateContactSchema) => {
 
     return {
       success: true,
-      error: "",
+      id: contactId,
     };
   } catch (e) {
     console.error(e);

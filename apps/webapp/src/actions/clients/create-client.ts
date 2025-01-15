@@ -7,7 +7,6 @@ import {
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { clients } from "@/lib/db/schemas/clients";
-import { redirect } from "next/navigation";
 import { v4 as uuid } from "uuid";
 
 export const createClient = async (values: CreateClientSchema) => {
@@ -54,5 +53,8 @@ export const createClient = async (values: CreateClientSchema) => {
     };
   }
 
-  redirect("/clients/" + clientId);
+  return {
+    success: true,
+    id: clientId,
+  };
 };

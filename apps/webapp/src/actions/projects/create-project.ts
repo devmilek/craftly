@@ -7,7 +7,6 @@ import {
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schemas";
-import { redirect } from "next/navigation";
 import { v4 as uuid } from "uuid";
 
 export const createProject = async (values: CreateProjectSchema) => {
@@ -57,5 +56,8 @@ export const createProject = async (values: CreateProjectSchema) => {
     };
   }
 
-  redirect("/projects/" + projectId);
+  return {
+    success: true,
+    id: projectId,
+  };
 };

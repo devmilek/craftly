@@ -31,9 +31,12 @@ import { ClientsSelect } from "@/components/selects/clients-select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { createContact } from "@/actions/contacts/create-contact";
 import { toast } from "sonner";
+import { queryClient } from "@/components/providers/query-provider";
+import { useRouter } from "next/navigation";
 
 const CreateContactModal = () => {
   const { isOpen, onClose } = useModal("create-contact");
+  const router = useRouter();
 
   const form = useForm<CreateContactSchema>({
     defaultValues: {
@@ -51,11 +54,26 @@ const CreateContactModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: CreateContactSchema) => {
-    const { error } = await createContact(values);
+    const { error, id } = await createContact(values);
 
     if (error) {
       toast.error(error);
       return;
+    }
+
+    queryClient.invalidateQueries({
+      queryKey: ["contacts"],
+    });
+
+    if (id) {
+      toast("Contact created successfully", {
+        action: {
+          label: "View contact",
+          onClick: () => {
+            router.push(`/contacts/${id}`);
+          },
+        },
+      });
     }
 
     onClose();

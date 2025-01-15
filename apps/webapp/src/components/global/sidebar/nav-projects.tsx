@@ -1,15 +1,6 @@
 "use client";
 
-import {
-  Folder,
-  Frame,
-  MapIcon,
-  MoreHorizontal,
-  PieChart,
-  PlusIcon,
-  Share,
-  Trash2,
-} from "lucide-react";
+import { Folder, MoreHorizontal, PlusIcon, Share, Trash2 } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -30,28 +21,22 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { useModal } from "@/hooks/use-modals-store";
+import { useQuery } from "@tanstack/react-query";
+import { getSidebarProjects } from "@/actions/projects";
+import dynamic from "next/dynamic";
 
-const projects = [
-  {
-    name: "Design Engineering",
-    url: "#",
-    icon: Frame,
-  },
-  {
-    name: "Sales & Marketing",
-    url: "#",
-    icon: PieChart,
-  },
-  {
-    name: "Travel",
-    url: "#",
-    icon: MapIcon,
-  },
-];
+const NavProjectsSkeleton = dynamic(() => import("./nav-projects-skeleton"), {
+  ssr: false,
+});
 
 export function NavProjects() {
   const { isMobile } = useSidebar();
   const { onOpen } = useModal("create-project");
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["projects", "sidebar"],
+    queryFn: getSidebarProjects,
+  });
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -60,11 +45,11 @@ export function NavProjects() {
         <PlusIcon />
       </SidebarGroupAction>
       <SidebarMenu>
-        {projects.map((item) => (
+        {data?.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <Link href={item.url}>
-                <div className="size-5 leading-none flex items-center justify-center bg-accent rounded">
+              <Link href={"/projects/" + item.id}>
+                <div className="size-5 leading-none flex items-center justify-center bg-accent rounded flex-shrink-0">
                   {item.name[0]}
                 </div>
                 <span>{item.name}</span>
@@ -99,10 +84,13 @@ export function NavProjects() {
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
+        {isLoading && <NavProjectsSkeleton />}
         <SidebarMenuItem>
-          <SidebarMenuButton>
-            <MoreHorizontal />
-            <span>More</span>
+          <SidebarMenuButton asChild>
+            <Link href="/projects">
+              <MoreHorizontal />
+              <span>More</span>
+            </Link>
           </SidebarMenuButton>
         </SidebarMenuItem>
       </SidebarMenu>

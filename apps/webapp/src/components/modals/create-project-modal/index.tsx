@@ -36,6 +36,8 @@ import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
 import { ClientsSelect } from "@/components/selects/clients-select";
+import { useRouter } from "next/navigation";
+import { queryClient } from "@/components/providers/query-provider";
 
 const CreateProjectModal = () => {
   const { isOpen, onClose } = useModal("create-project");
@@ -46,15 +48,31 @@ const CreateProjectModal = () => {
     },
     resolver: zodResolver(createProjectSchema),
   });
+  const router = useRouter();
 
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: CreateProjectSchema) => {
-    const { error } = await createProject(values);
+    const { error, id } = await createProject(values);
 
     if (error) {
       toast.error(error);
       return;
+    }
+
+    queryClient.invalidateQueries({
+      queryKey: ["projects"],
+    });
+
+    if (id) {
+      toast("Project created successfully", {
+        action: {
+          label: "View project",
+          onClick: () => {
+            router.push(`/projects/${id}`);
+          },
+        },
+      });
     }
 
     onClose();

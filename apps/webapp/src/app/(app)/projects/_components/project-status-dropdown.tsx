@@ -28,7 +28,7 @@ const ProjectStatusDropdown = ({
   const onChange = async (status: string) => {
     const promise = async () => {
       await changeProjectStatus(projectId, status);
-      await queryClient.invalidateQueries({
+      queryClient.invalidateQueries({
         queryKey: ["projects"],
       });
     };
