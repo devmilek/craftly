@@ -28,7 +28,7 @@ export const projects = pgTable("projects", {
     length: 500,
   }),
   completed: boolean().default(false),
-  status: projectStatusEnum("project_status").default("new"),
+  status: projectStatusEnum("project_status").notNull().default("new"),
   dueDate: date("due_date", {
     mode: "date",
   }),

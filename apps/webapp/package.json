@@ -63,6 +63,7 @@
     "react-image-crop": "^11.0.7",
     "react-qr-code": "^2.0.15",
     "react-resizable-panels": "^2.1.7",
+    "react-timer-hook": "^3.0.8",
     "recharts": "^2.15.0",
     "sonner": "^1.7.1",
     "tailwind-merge": "^2.6.0",
