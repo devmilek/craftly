@@ -35,7 +35,8 @@ export const createContact = async (values: CreateContactSchema) => {
     };
   }
 
-  const { name, email, clientId, phone, position } = validatedData.data;
+  const { name, email, clientId, phone, position, primary } =
+    validatedData.data;
 
   const contactId = uuid();
 
@@ -48,6 +49,7 @@ export const createContact = async (values: CreateContactSchema) => {
       phone,
       position,
       organizationId,
+      primary,
     });
 
     return {

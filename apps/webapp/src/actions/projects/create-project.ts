@@ -11,7 +11,7 @@ import { redirect } from "next/navigation";
 import { v4 as uuid } from "uuid";
 
 export const createProject = async (values: CreateProjectSchema) => {
-  const { session, activeOrganizationId } = await getCurrentSession();
+  const { session, organizationId } = await getCurrentSession();
 
   if (!session) {
     return {
@@ -20,7 +20,7 @@ export const createProject = async (values: CreateProjectSchema) => {
     };
   }
 
-  if (!activeOrganizationId) {
+  if (!organizationId) {
     return {
       success: false,
       error: "No active organization",
@@ -42,11 +42,12 @@ export const createProject = async (values: CreateProjectSchema) => {
 
   try {
     await db.insert(projects).values({
+      id: projectId,
       name,
       clientId,
       description,
       dueDate,
-      organizationId: activeOrganizationId,
+      organizationId,
     });
   } catch (e) {
     console.error(e);

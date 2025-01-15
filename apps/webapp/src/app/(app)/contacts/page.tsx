@@ -1,8 +1,9 @@
 import SidebarNavbar from "@/components/global/sidebar/sidebar-navbar";
 import React from "react";
 import Header from "./_components/header";
+import DataTable from "./_components/data-table";
 
-const ContactsPage = () => {
+const ContactsPage = async () => {
   return (
     <>
       <SidebarNavbar
@@ -13,6 +14,7 @@ const ContactsPage = () => {
         ]}
       />
       <Header />
+      <DataTable />
     </>
   );
 };

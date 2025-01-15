@@ -15,7 +15,7 @@ export const contacts = pgTable("contacts", {
   }).notNull(),
   email: varchar({
     length: 100,
-  }),
+  }).notNull(),
   phone: varchar({
     length: 100,
   }),
