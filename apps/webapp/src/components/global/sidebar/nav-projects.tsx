@@ -49,7 +49,7 @@ export function NavProjects() {
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
               <Link href={"/projects/" + item.id}>
-                <div className="size-5 leading-none flex items-center justify-center bg-accent rounded flex-shrink-0">
+                <div className="size-5 uppercase leading-none flex items-center justify-center bg-accent rounded flex-shrink-0">
                   {item.name[0]}
                 </div>
                 <span>{item.name}</span>

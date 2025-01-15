@@ -3,7 +3,14 @@ import SidebarNavbar from "@/components/global/sidebar/sidebar-navbar";
 import { ensureSessionWithOrganization } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { clients, projects } from "@/lib/db/schemas";
-import { and, eq, getTableColumns, ilike } from "drizzle-orm";
+import {
+  and,
+  countDistinct,
+  eq,
+  getTableColumns,
+  ilike,
+  sql,
+} from "drizzle-orm";
 import { Metadata } from "next";
 import React from "react";
 import Header from "./_components/header";
@@ -35,7 +42,11 @@ const ClientsPage = async ({
   const { archived, query } = await loadSearchParams(searchParams);
 
   const data = await db
-    .select({ ...getTableColumns(clients) })
+    .select({
+      ...getTableColumns(clients),
+      projectsCount: countDistinct(projects.id),
+      doneProjectsCount: sql<number>`count(distinct CASE WHEN ${projects.completed} = true THEN ${projects.id} END)`,
+    })
     .from(clients)
     .where(
       and(
@@ -44,7 +55,8 @@ const ClientsPage = async ({
         ilike(clients.name, `%${query}%`)
       )
     )
-    .leftJoin(projects, eq(projects.clientId, clients.id));
+    .leftJoin(projects, eq(projects.clientId, clients.id))
+    .groupBy(clients.id);
 
   return (
     <>
