@@ -1,16 +1,15 @@
 "use server";
 
 import {
-  createClientSchema,
-  CreateClientSchema,
-} from "@/components/modals/create-client-modal/schema";
+  createContactSchema,
+  CreateContactSchema,
+} from "@/components/modals/create-contact-modal/schema";
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
-import { clients } from "@/lib/db/schemas/clients";
-import { redirect } from "next/navigation";
+import { contacts } from "@/lib/db/schemas";
 import { v4 as uuid } from "uuid";
 
-export const createClient = async (values: CreateClientSchema) => {
+export const createContact = async (values: CreateContactSchema) => {
   const { session, organizationId } = await getCurrentSession();
 
   if (!session) {
@@ -27,7 +26,7 @@ export const createClient = async (values: CreateClientSchema) => {
     };
   }
 
-  const validatedData = createClientSchema.safeParse(values);
+  const validatedData = createContactSchema.safeParse(values);
 
   if (!validatedData.success) {
     return {
@@ -36,23 +35,30 @@ export const createClient = async (values: CreateClientSchema) => {
     };
   }
 
-  const { name } = validatedData.data;
+  const { name, email, clientId, phone, position } = validatedData.data;
 
-  const clientId = uuid();
+  const contactId = uuid();
 
   try {
-    await db.insert(clients).values({
-      id: clientId,
+    await db.insert(contacts).values({
+      id: contactId,
       name,
+      email,
+      clientId,
+      phone,
+      position,
       organizationId,
     });
+
+    return {
+      success: true,
+      error: "",
+    };
   } catch (e) {
     console.error(e);
     return {
       success: false,
-      error: "Failed to create client",
+      error: "Failed to create contact",
     };
   }
-
-  redirect("/clients/" + clientId);
 };

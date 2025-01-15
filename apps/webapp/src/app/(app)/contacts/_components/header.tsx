@@ -8,7 +8,7 @@ import { PlusIcon } from "lucide-react";
 import React from "react";
 
 const Header = () => {
-  const { onOpen } = useModal("create-project");
+  const { onOpen } = useModal("create-contact");
 
   return (
     <header>

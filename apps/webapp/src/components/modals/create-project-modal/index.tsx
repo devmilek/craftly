@@ -25,7 +25,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CalendarIcon, Loader2 } from "lucide-react";
 import { Textarea } from "@/components/ui/textarea";
-import { ClientsCombobox } from "./clients-combobox";
 import { createProject } from "@/actions/projects/create-project";
 import { toast } from "sonner";
 import {
@@ -36,6 +35,7 @@ import {
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import { format } from "date-fns";
+import { ClientsSelect } from "@/components/selects/clients-select";
 
 const CreateProjectModal = () => {
   const { isOpen, onClose } = useModal("create-project");
@@ -147,7 +147,7 @@ const CreateProjectModal = () => {
                 <FormItem>
                   <FormLabel>Client</FormLabel>
                   <FormControl>
-                    <ClientsCombobox {...field} disabled={isLoading} />
+                    <ClientsSelect {...field} disabled={isLoading} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

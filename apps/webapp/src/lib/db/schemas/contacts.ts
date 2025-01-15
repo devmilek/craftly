@@ -19,6 +19,9 @@ export const contacts = pgTable("contacts", {
   phone: varchar({
     length: 100,
   }),
+  position: varchar({
+    length: 100,
+  }),
   primary: boolean().notNull().default(false),
   clientId: uuid().references(() => clients.id, {
     onDelete: "cascade",

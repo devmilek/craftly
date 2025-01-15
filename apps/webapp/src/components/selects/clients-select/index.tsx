@@ -22,7 +22,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Client } from "@/lib/db/schemas";
 import { getClientById, searchClients } from "@/actions/clients";
 
-export function ClientsCombobox({
+export function ClientsSelect({
   value,
   onChange,
   disabled,
