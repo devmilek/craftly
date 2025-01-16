@@ -55,9 +55,9 @@ const PrioritySelect = ({
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search framework..." />
+          <CommandInput placeholder="Search priority..." />
           <CommandList>
-            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandEmpty>No priority found.</CommandEmpty>
             <CommandGroup>
               <CommandItem
                 value="none"

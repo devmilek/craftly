@@ -157,6 +157,7 @@ const CreateTaskModal = () => {
                     </FormItem>
                   )}
                 />
+                <Button className="mt-auto">Save</Button>
               </div>
             </form>
           </Form>
