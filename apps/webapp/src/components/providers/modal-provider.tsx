@@ -5,6 +5,7 @@ import CreateProjectModal from "../modals/create-project-modal";
 import CreateClientModal from "../modals/create-client-modal";
 import CreateContactModal from "../modals/create-contact-modal";
 import CreateTaskModal from "../modals/create-task-modal";
+import InviteMembersModal from "../modals/invite-members-modal";
 
 const ModalProvider = () => {
   return (
@@ -15,6 +16,7 @@ const ModalProvider = () => {
       <CreateClientModal />
       <CreateContactModal />
       <CreateTaskModal />
+      <InviteMembersModal />
     </>
   );
 };

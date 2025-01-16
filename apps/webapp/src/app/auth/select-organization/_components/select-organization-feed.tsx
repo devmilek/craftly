@@ -2,6 +2,7 @@
 
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { organization } from "@/lib/auth/auth-client";
+import { getInitials } from "@/lib/utils";
 import { Organization } from "@/types";
 import { ChevronRight } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -24,7 +25,7 @@ const SelectOrganizationFeed = ({ orgs }: { orgs: Organization[] }) => {
     push("/");
   };
   return (
-    <div>
+    <div className="grid gap-2">
       {orgs.map((org) => (
         <div
           key={org.id}
@@ -32,7 +33,9 @@ const SelectOrganizationFeed = ({ orgs }: { orgs: Organization[] }) => {
           onClick={() => onClick(org.id)}
         >
           <Avatar className="">
-            <AvatarFallback className="uppercase">{org.name[0]}</AvatarFallback>
+            <AvatarFallback className="uppercase">
+              {getInitials(org.name)}
+            </AvatarFallback>
           </Avatar>
           <div>
             <h4 className="font-medium text-sm">{org.name}</h4>

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDown, FactoryIcon, Plus } from "lucide-react";
+import { ChevronDown, FactoryIcon, Plus, UsersRound } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -22,6 +22,7 @@ import { organization } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modals-store";
+import Link from "next/link";
 
 type OrganizationType = {
   id: string;
@@ -99,6 +100,14 @@ export function TeamSwitcher({
                 <Plus className="size-4" />
               </div>
               <div className="font-medium text-muted-foreground">Add team</div>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="gap-2 p-2" asChild>
+              <Link href="/organization/members">
+                <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                  <UsersRound className="size-4" />
+                </div>
+                <div className="font-medium text-muted-foreground">Members</div>
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

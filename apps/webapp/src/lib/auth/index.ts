@@ -15,7 +15,21 @@ export const auth = betterAuth({
     cookiePrefix: "craftly",
   },
   plugins: [
-    organization(),
+    organization({
+      sendInvitationEmail: async ({
+        email,
+        inviter,
+        organization,
+        role,
+        id,
+      }) => {
+        await sendMail({
+          to: email,
+          subject: `You have been invited to join ${organization.name}`,
+          text: `Hi there! ${inviter.user.name} has invited you to join ${organization.name} as a ${role}. Click the link to accept: http://localhost:3003/auth/accept-invitation/${id}`,
+        });
+      },
+    }),
     twoFactor(),
     passkey({
       rpID: "localhost",

@@ -4,7 +4,8 @@ export type ModalType =
   | "create-project"
   | "create-client"
   | "create-contact"
-  | "create-task";
+  | "create-task"
+  | "invite-members";
 
 import { create } from "zustand";
 

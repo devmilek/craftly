@@ -49,7 +49,7 @@ const CreateTaskModal = () => {
                       <FormControl>
                         <input
                           placeholder="Task Name"
-                          className="text-lg font-semibold focus-visible:outline-none w-full"
+                          className="text-lg font-semibold focus-visible:outline-none w-full bg-background"
                           {...field}
                         />
                       </FormControl>
@@ -63,7 +63,7 @@ const CreateTaskModal = () => {
                     <FormItem>
                       <FormControl>
                         <textarea
-                          className="focus-visible:outline-none text-sm mt-2 w-full"
+                          className="focus-visible:outline-none text-sm mt-2 w-full bg-background"
                           placeholder="Description..."
                           rows={10}
                           {...field}
