@@ -11,8 +11,8 @@ export const metadata: Metadata = {
 
 const SignUpPage = () => {
   return (
-    <div className="max-w-md w-full shadow-lg bg-gray-50 rounded-xl border overflow-hidden">
-      <div className="px-10 py-8 bg-white rounded-xl border-b">
+    <div className="max-w-md w-full shadow-lg bg-accent rounded-xl border overflow-hidden">
+      <div className="px-10 py-8 bg-background rounded-xl border-b">
         <header className="text-center mb-6">
           <Icons.bigLogo className="w-36 mx-auto mb-6" />
           <h1 className="font-bold text-xl">Create your account</h1>

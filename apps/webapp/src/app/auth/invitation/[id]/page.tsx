@@ -25,8 +25,8 @@ const SignInPage = async ({ params }: { params: Promise<{ id: string }> }) => {
     });
 
     return (
-      <div className="max-w-md w-full shadow-lg bg-gray-50 rounded-xl border overflow-hidden">
-        <div className="px-10 py-8 bg-white rounded-xl border-b">
+      <div className="max-w-md w-full shadow-lg bg-accent rounded-xl border overflow-hidden">
+        <div className="px-10 py-8 bg-background rounded-xl border-b">
           <header className="text-center mb-6">
             <Icons.bigLogo className="w-36 mx-auto mb-6" />
             <h1 className="font-bold text-xl">Join the organization</h1>
@@ -35,7 +35,7 @@ const SignInPage = async ({ params }: { params: Promise<{ id: string }> }) => {
               <strong>{invitation.organizationName}</strong>
             </p>
           </header>
-          <div className="bg-gray-50 p-4 rounded-lg space-y-2 mb-4">
+          <div className="bg-accent/20 p-4 rounded-lg space-y-2 mb-4">
             <p className="text-sm">
               <span className="text-muted-foreground">Role:</span>{" "}
               <span className="capitalize">{invitation.role}</span>
