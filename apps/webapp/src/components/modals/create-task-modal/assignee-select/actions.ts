@@ -2,7 +2,7 @@
 
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
-import { clients, members, users } from "@/lib/db/schemas";
+import { members, users } from "@/lib/db/schemas";
 import { and, eq, ilike, inArray, or } from "drizzle-orm";
 
 export const searchMembers = async (query: string) => {
@@ -34,7 +34,7 @@ export const searchMembers = async (query: string) => {
   return data;
 };
 
-export const getClientsByIds = async (ids: string[]) => {
+export const getMembersByIds = async (ids: string[]) => {
   const { organizationId, user } = await getCurrentSession();
 
   if (!user) {
@@ -45,13 +45,20 @@ export const getClientsByIds = async (ids: string[]) => {
     return null;
   }
 
-  const data = await db.query.clients.findMany({
-    where: and(
-      eq(clients.archived, false),
-      inArray(clients.id, ids),
-      eq(clients.organizationId, organizationId)
-    ),
-  });
+  const data = await db
+    .select({
+      id: users.id,
+      name: users.name,
+      email: users.email,
+    })
+    .from(members)
+    .where(
+      and(
+        eq(members.organizationId, organizationId),
+        inArray(members.userId, ids)
+      )
+    )
+    .innerJoin(users, eq(members.userId, users.id));
 
   return data;
 };

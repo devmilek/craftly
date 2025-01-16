@@ -81,6 +81,8 @@ export const members = pgTable("members", {
   createdAt: timestamp("created_at").notNull(),
 });
 
+export type Member = typeof members.$inferSelect;
+
 export const invitations = pgTable("invitations", {
   id: text("id").primaryKey(),
   organizationId: text("organization_id")

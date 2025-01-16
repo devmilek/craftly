@@ -36,7 +36,7 @@ export const ClientFilter = () => {
   const [open, setOpen] = React.useState(false);
 
   const { data, isLoading } = useQuery({
-    queryKey: ["search-clients", inputValue],
+    queryKey: ["clients", "search-clients", inputValue],
     queryFn: async () => await searchClients(inputValue),
   });
 

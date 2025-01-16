@@ -26,7 +26,7 @@ const DueDateSelect = ({
       <PopoverTrigger asChild>
         <Button
           disabled={disabled}
-          variant="ghost"
+          variant={value ? "secondary" : "ghost"}
           className={cn("flex min-w-0 justify-start w-full", {
             "text-muted-foreground": !value,
           })}
@@ -42,9 +42,6 @@ const DueDateSelect = ({
           mode="single"
           selected={value}
           onSelect={onChange}
-          disabled={(date) =>
-            date > new Date() || date < new Date("1900-01-01")
-          }
           initialFocus
         />
       </PopoverContent>

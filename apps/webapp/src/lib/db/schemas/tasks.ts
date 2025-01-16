@@ -13,7 +13,7 @@ export const tasks = pgTable("tasks", {
   name: varchar({
     length: 100,
   }).notNull(),
-  status: taskStatusEnum("status").notNull(),
+  status: taskStatusEnum("status").notNull().default("todo"),
   priority: taskPriorityEnum("priority"),
   projectId: uuid()
     .notNull()

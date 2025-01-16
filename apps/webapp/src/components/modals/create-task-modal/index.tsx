@@ -19,6 +19,8 @@ import {
 import { ProjectsSelect } from "./projects-select";
 import DueDateSelect from "./due-date-select";
 import { AssigneeSelect } from "./assignee-select";
+import PrioritySelect from "./priority-select";
+import StatusSelect from "./status-select";
 
 const CreateTaskModal = () => {
   const { isOpen, onClose } = useModal("create-task");
@@ -28,8 +30,11 @@ const CreateTaskModal = () => {
     defaultValues: {
       name: "",
       description: "",
+      status: "todo",
     },
   });
+
+  const assignees = form.watch("assigneesId");
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
@@ -79,6 +84,7 @@ const CreateTaskModal = () => {
                     <PlusIcon />
                     Add Subtask
                   </Button>
+                  <pre>{JSON.stringify(assignees, null, 2)}</pre>
                 </section>
                 <Separator className="my-5" />
                 <section>
@@ -92,6 +98,17 @@ const CreateTaskModal = () => {
 
               {/* SIDEBAR */}
               <div className="w-[240px] bg-accent/30 border-l flex-col flex-shrink-0 py-6 px-4 flex gap-4">
+                <FormField
+                  name="status"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormControl>
+                        <StatusSelect {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
                 <FormField
                   name="projectId"
                   control={form.control}
@@ -124,6 +141,18 @@ const CreateTaskModal = () => {
                       <FormLabel>Due Date</FormLabel>
                       <FormControl>
                         <DueDateSelect {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  name="priority"
+                  control={form.control}
+                  render={({ field }) => (
+                    <FormItem className="w-full">
+                      <FormLabel>Priority</FormLabel>
+                      <FormControl>
+                        <PrioritySelect {...field} />
                       </FormControl>
                     </FormItem>
                   )}

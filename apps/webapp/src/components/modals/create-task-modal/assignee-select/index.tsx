@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Check, FolderIcon, Loader2Icon } from "lucide-react";
+import { Loader2Icon, UserPlus } from "lucide-react";
 
 import { cn, getInitials } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -19,10 +19,9 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useQuery } from "@tanstack/react-query";
-import { Project } from "@/lib/db/schemas";
-import { getProjectById } from "@/actions/projects";
-import { searchMembers } from "./actions";
+import { getMembersByIds, searchMembers } from "./actions";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export function AssigneeSelect({
   value,
@@ -30,53 +29,69 @@ export function AssigneeSelect({
   disabled,
 }: {
   value?: string[];
-  onChange: (client: string[] | null) => void;
+  onChange: (clientsIds: string[] | null) => void;
   disabled?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
-  const [project, setProject] = React.useState<Project | null>(null);
+  const [members, setMembers] = React.useState<
+    {
+      id: string;
+      name: string;
+      email: string;
+    }[]
+  >([]);
   const [inputValue, setInputValue] = React.useState("");
 
   const { data, isLoading } = useQuery({
-    queryKey: ["assignee", inputValue],
+    queryKey: ["members", inputValue],
     queryFn: async () => await searchMembers(inputValue),
   });
 
-  // React.useEffect(() => {
-  //   if (value) {
-  //     getAndSetMembers();
-  //   }
+  React.useEffect(() => {
+    if (value && value.length > 0) {
+      getAndSetClient();
+    }
 
-  //   async function getAndSetMembers() {
-  //     if (value) {
-  //       const project = await getProjectById(value);
-  //       setProject(project || null);
-  //     }
-  //   }
-  // }, [value, data]);
+    async function getAndSetClient() {
+      if (value && value.length > 0) {
+        const data = await getMembersByIds(value);
+        setMembers(data || []);
+      }
+    }
+  }, []);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           disabled={disabled}
-          variant="ghost"
+          variant={members.length > 0 ? "secondary" : "ghost"}
           role="combobox"
           aria-expanded={open}
           className={cn("flex min-w-0 justify-start w-full", {
-            "text-muted-foreground": !value,
+            "text-muted-foreground": !value || value?.length === 0,
           })}
         >
-          <FolderIcon className="opacity-50" />
+          <UserPlus className="opacity-50" />
           <span className="truncate">
-            {project ? project.name : "Select projects..."}
+            {members.length > 0 ? (
+              <>
+                {members.length > 2 ? (
+                  <>{members.length} selected</>
+                ) : (
+                  <>{members.map((member) => member.name).join(", ")}</>
+                )}
+              </>
+            ) : (
+              "Select members..."
+            )}
           </span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
-        <Command shouldFilter={false}>
+        <Command>
           <CommandInput
-            placeholder="Search projects..."
+            placeholder="Search members..."
             value={inputValue}
             onValueChange={(val) => {
               setInputValue(val);
@@ -88,34 +103,40 @@ export function AssigneeSelect({
                 <Loader2Icon className="animate-spin size-4" />
               </CommandEmpty>
             )}
-            {!isLoading && <CommandEmpty>No projects found.</CommandEmpty>}
+            {!isLoading && <CommandEmpty>No members found.</CommandEmpty>}
             <CommandGroup>
               {data?.map((item) => (
                 <CommandItem
                   key={item.id}
                   value={item.id}
                   onSelect={(currentValue) => {
-                    // setProject(
-                    //   currentValue === project?.id
-                    //     ? null
-                    //     : data.find((i) => i.id === currentValue) || null
-                    // );
-                    // onChange(
-                    //   currentValue === project?.id ? null : currentValue
-                    // );
+                    setMembers((prev) => {
+                      if (prev?.some((member) => member.id === currentValue)) {
+                        return prev?.filter(
+                          (member) => member.id !== currentValue
+                        );
+                      }
+
+                      return [...(prev || []), item];
+                    });
+
+                    if (value?.some((member) => member === currentValue)) {
+                      return onChange(
+                        value?.filter((member) => member !== currentValue)
+                      );
+                    }
+
+                    onChange([...(value || []), currentValue]);
                     // setOpen(false);
                   }}
                 >
-                  <Avatar>
+                  <Checkbox
+                    checked={value?.some((member) => member === item.id)}
+                  />
+                  <Avatar className="size-8">
                     <AvatarFallback>{getInitials(item.name)}</AvatarFallback>
                   </Avatar>
                   {item.name}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      project?.id === item.id ? "opacity-100" : "opacity-0"
-                    )}
-                  />
                 </CommandItem>
               ))}
             </CommandGroup>

@@ -58,7 +58,7 @@ export function ProjectsSelect({
       <PopoverTrigger asChild>
         <Button
           disabled={disabled}
-          variant="ghost"
+          variant={value ? "secondary" : "ghost"}
           role="combobox"
           aria-expanded={open}
           className={cn("flex min-w-0 justify-start w-full", {
