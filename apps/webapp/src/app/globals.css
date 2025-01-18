@@ -43,9 +43,9 @@ body {
     --sidebar-ring: 217.2 91.2% 59.8%;
 
     /* Additional colors */
-    --info-foreground: 200.4 98% 39.4%;
-    --progress-foreground: 40.6 96.1% 40.4%;
-    --success-foreground: 142.1 76.2% 36.3%;
+    --info-foreground: 198.6 88.7% 48.4%;
+    --progress-foreground: 45.4 93.4% 47.5%;
+    --success-foreground: 142.1 70.6% 45.3%;
     --review-foreground: 271.5 81.3% 55.9%;
   }
   .dark {

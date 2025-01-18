@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { projectStatus } from "@/lib/db/schemas";
-import { cn, formatProjectStatus } from "@/lib/utils";
+import { cn, formatStatus } from "@/lib/utils";
 import { ProjectStatus } from "@/types";
 import { ChevronDown } from "lucide-react";
 import React from "react";
@@ -65,7 +65,7 @@ const ProjectStatusDropdown = ({
               "bg-review-foreground": status === "in_review",
             })}
           />
-          {formatProjectStatus(status)}
+          {formatStatus(status)}
           <ChevronDown className="ml-2 size-4" />
         </button>
       </DropdownMenuTrigger>
@@ -75,7 +75,7 @@ const ProjectStatusDropdown = ({
         <DropdownMenuRadioGroup value={status} onValueChange={onChange}>
           {projectStatus.map((status) => (
             <DropdownMenuRadioItem key={status} value={status}>
-              {formatProjectStatus(status)}
+              {formatStatus(status)}
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>

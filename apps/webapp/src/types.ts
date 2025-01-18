@@ -1,4 +1,4 @@
-import { projectStatus } from "./lib/db/schemas";
+import { projectStatus, taskPriority, taskStatus } from "./lib/db/schemas";
 
 export type Organization = {
   id: string;
@@ -11,3 +11,5 @@ export type Organization = {
 };
 
 export type ProjectStatus = (typeof projectStatus)[number];
+export type TaskStatus = (typeof taskStatus)[number];
+export type TaskPriority = (typeof taskPriority)[number];

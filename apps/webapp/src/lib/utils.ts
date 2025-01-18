@@ -1,4 +1,4 @@
-import { ProjectStatus } from "@/types";
+import { ProjectStatus, TaskStatus } from "@/types";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -21,7 +21,7 @@ export function getInitials(value: string) {
 }
 
 // Project status text formatting
-export function formatProjectStatus(status: ProjectStatus) {
+export function formatStatus(status: ProjectStatus | TaskStatus | string) {
   switch (status) {
     case "new":
       return "New";
@@ -31,5 +31,13 @@ export function formatProjectStatus(status: ProjectStatus) {
       return "In Progress";
     case "in_review":
       return "In Review";
+    case "completed":
+      return "Completed";
+    case "in-progress":
+      return "In Progress";
+    case "todo":
+      return "To Do";
+    default:
+      return status;
   }
 }
