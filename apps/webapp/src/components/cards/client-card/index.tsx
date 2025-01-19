@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useAlertModal } from "@/hooks/use-alert-modal";
 import { Client } from "@/lib/db/schemas";
 import { getInitials } from "@/lib/utils";
@@ -25,7 +26,7 @@ type ClientCardProps = Client & {
   avatarSrc: string | null;
 };
 
-const ClientCard = ({ client }: { client: ClientCardProps }) => {
+export const ClientCard = ({ client }: { client: ClientCardProps }) => {
   const openAlert = useAlertModal((state) => state.open);
 
   const onRemove = () => {
@@ -133,4 +134,6 @@ const ClientCard = ({ client }: { client: ClientCardProps }) => {
   );
 };
 
-export default ClientCard;
+export const ClientCardSkeleton = () => {
+  return <Skeleton className="h-[160px]" />;
+};

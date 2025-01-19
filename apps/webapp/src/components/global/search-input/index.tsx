@@ -9,7 +9,7 @@ const SearchInput = () => {
     "query",
     parseAsString.withDefault("").withOptions({
       throttleMs: 600,
-      shallow: false,
+      shallow: true,
     })
   );
 

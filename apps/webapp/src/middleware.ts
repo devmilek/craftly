@@ -5,17 +5,19 @@ import { NextResponse, type NextRequest } from "next/server";
 type Session = typeof auth.$Infer.Session;
 
 export default async function authMiddleware(request: NextRequest) {
-  const { data: session } = await betterFetch<Session>(
-    "/api/auth/get-session",
-    {
-      baseURL: "http://localhost:3003",
-      headers: {
-        cookie: request.headers.get("cookie") || "",
-      },
-    }
-  );
+  // const { data: session } = await betterFetch<Session>(
+  //   "/api/auth/get-session",
+  //   {
+  //     baseURL: "http://localhost:3003",
+  //     headers: {
+  //       cookie: request.headers.get("cookie") || "",
+  //     },
+  //   }
+  // );
 
-  if (!session) {
+  const sessionCookie = request.cookies.get("craftly.session_token");
+
+  if (!sessionCookie) {
     return NextResponse.redirect(new URL("/auth/sign-in", request.url));
   }
   return NextResponse.next();

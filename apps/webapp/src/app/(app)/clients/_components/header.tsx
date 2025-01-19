@@ -40,9 +40,7 @@ const Header = () => {
 const StatusDropdown = () => {
   const [status, setStatus] = useQueryState(
     "archived",
-    parseAsBoolean.withDefault(false).withOptions({
-      shallow: false,
-    })
+    parseAsBoolean.withDefault(false)
   );
 
   const handleStatusChange = (value: string) => {
