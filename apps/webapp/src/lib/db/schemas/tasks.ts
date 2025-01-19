@@ -4,7 +4,6 @@ import {
   pgTable,
   text,
   timestamp,
-  unique,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -43,13 +42,13 @@ export const tasks = pgTable("tasks", {
 
 export type Task = typeof tasks.$inferSelect;
 
-// export const taskAssignees = pgTable("task_assignees", {
-//   taskId: uuid().references(() => tasks.id, {
-//     onDelete: "cascade",
-//   }),
-//   userId: varchar().references(() => members.userId, {
-//     onDelete: "cascade",
-//   }),
-// });
+export const taskAssignees = pgTable("task_assignees", {
+  taskId: uuid().references(() => tasks.id, {
+    onDelete: "cascade",
+  }),
+  userId: varchar().references(() => members.userId, {
+    onDelete: "cascade",
+  }),
+});
 
 // export type TaskAssignee = typeof taskAssignees.$inferSelect;

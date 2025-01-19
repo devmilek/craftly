@@ -40,7 +40,7 @@ export const createClient = async (formData: FormData) => {
 
   let avatarId: string | null | undefined = null;
 
-  if (avatar instanceof File) {
+  if (avatar) {
     const { error, fileId } = await serverAvatarUpload({
       file: avatar,
       organizationId,

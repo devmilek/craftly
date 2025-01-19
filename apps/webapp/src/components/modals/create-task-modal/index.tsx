@@ -15,12 +15,15 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { ProjectsSelect } from "./projects-select";
 import DueDateSelect from "./due-date-select";
 import { AssigneeSelect } from "./assignee-select";
 import PrioritySelect from "./priority-select";
 import StatusSelect from "./status-select";
+import { createTask } from "@/actions/tasks/create-task";
+import { toast } from "sonner";
 
 const CreateTaskModal = () => {
   const { isOpen, onClose } = useModal("create-task");
@@ -36,6 +39,20 @@ const CreateTaskModal = () => {
 
   const assignees = form.watch("assigneesId");
 
+  const onSubmit = async (data: CreateTaskSchema) => {
+    const { error } = await createTask(data);
+
+    if (error) {
+      toast.error(error);
+      return;
+    }
+
+    toast.success("Task created successfully");
+
+    form.reset();
+    onClose();
+  };
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>
@@ -44,7 +61,7 @@ const CreateTaskModal = () => {
           <Dialog.Title className="sr-only">Create Task</Dialog.Title>
           {/* MAIN CONTENT */}
           <Form {...form}>
-            <form className="flex">
+            <form className="flex" onSubmit={form.handleSubmit(onSubmit)}>
               <div className="flex-1 grid p-6">
                 <FormField
                   name="name"
@@ -58,6 +75,7 @@ const CreateTaskModal = () => {
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -74,6 +92,7 @@ const CreateTaskModal = () => {
                           {...field}
                         />
                       </FormControl>
+                      <FormMessage />
                     </FormItem>
                   )}
                 />
@@ -157,7 +176,9 @@ const CreateTaskModal = () => {
                     </FormItem>
                   )}
                 />
-                <Button className="mt-auto">Save</Button>
+                <Button className="mt-auto" type="submit">
+                  Save
+                </Button>
               </div>
             </form>
           </Form>

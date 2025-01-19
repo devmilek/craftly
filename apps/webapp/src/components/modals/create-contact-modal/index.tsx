@@ -21,8 +21,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Label } from "@/components/ui/label";
-import AvatarUploader from "@/components/ui/avatar-uploader";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
@@ -33,6 +31,7 @@ import { createContact } from "@/actions/contacts/create-contact";
 import { toast } from "sonner";
 import { queryClient } from "@/components/providers/query-provider";
 import { useRouter } from "next/navigation";
+import AvatarPicker from "@/components/ui/avatar-picker";
 
 const CreateContactModal = () => {
   const { isOpen, onClose } = useModal("create-contact");
@@ -54,7 +53,18 @@ const CreateContactModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: CreateContactSchema) => {
-    const { error, id } = await createContact(values);
+    const formData = new FormData();
+    if (values.avatar) {
+      formData.append("avatar", values.avatar);
+    }
+    formData.append("name", values.name);
+    formData.append("email", values.email);
+    formData.append("phone", values.phone || "");
+    formData.append("position", values.position);
+    formData.append("clientId", values.clientId || "");
+    formData.append("primary", values.primary.toString());
+
+    const { error, id } = await createContact(formData);
 
     if (error) {
       toast.error(error);
@@ -92,10 +102,24 @@ const CreateContactModal = () => {
         </DialogHeader>
         <Form {...form}>
           <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-2">
-              <Label>Avatar</Label>
-              <AvatarUploader className="size-24" fallback={name} />
-            </div>
+            <FormField
+              name="avatar"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Avatar</FormLabel>
+                  <FormControl>
+                    <AvatarPicker
+                      onValueChange={field.onChange}
+                      value={field.value}
+                      disabled={isLoading}
+                      fallback={name}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               name="name"
               control={form.control}

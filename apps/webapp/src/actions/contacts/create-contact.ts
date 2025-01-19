@@ -1,15 +1,13 @@
 "use server";
 
-import {
-  createContactSchema,
-  CreateContactSchema,
-} from "@/components/modals/create-contact-modal/schema";
+import { createContactSchema } from "@/components/modals/create-contact-modal/schema";
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { contacts } from "@/lib/db/schemas";
 import { v4 as uuid } from "uuid";
+import { serverAvatarUpload } from "../storage";
 
-export const createContact = async (values: CreateContactSchema) => {
+export const createContact = async (formData: FormData) => {
   const { session, organizationId } = await getCurrentSession();
 
   if (!session) {
@@ -26,17 +24,46 @@ export const createContact = async (values: CreateContactSchema) => {
     };
   }
 
-  const validatedData = createContactSchema.safeParse(values);
+  const validatedData = createContactSchema.safeParse({
+    avatar: formData.get("avatar"),
+    name: formData.get("name"),
+    email: formData.get("email"),
+    phone: formData.get("phone"),
+    position: formData.get("position"),
+    clientId: formData.get("clientId") || null,
+    primary: formData.get("primary") === "true",
+  });
 
   if (!validatedData.success) {
+    console.log(validatedData.error);
     return {
       success: false,
       error: "Invalid data",
     };
   }
 
-  const { name, email, clientId, phone, position, primary } =
+  const { name, email, clientId, phone, position, primary, avatar } =
     validatedData.data;
+
+  console.log("avatar", avatar);
+
+  let avatarId: string | null | undefined = null;
+
+  if (avatar) {
+    const { error, fileId } = await serverAvatarUpload({
+      file: avatar,
+      organizationId,
+    });
+
+    if (error) {
+      return {
+        success: false,
+        error,
+      };
+    }
+
+    avatarId = fileId;
+  }
 
   const contactId = uuid();
 
@@ -50,6 +77,7 @@ export const createContact = async (values: CreateContactSchema) => {
       position,
       organizationId,
       primary,
+      avatarId,
     });
 
     return {

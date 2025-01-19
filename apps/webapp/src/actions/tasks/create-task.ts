@@ -60,21 +60,26 @@ export const createTask = async (values: CreateTaskSchema) => {
       dueDate: dueDate || null,
     });
 
-    if (assigneesId && assigneesId.length > 0) {
-      const mems = await db.query.members.findMany({
-        where: and(
-          inArray(members.userId, assigneesId),
-          eq(members.organizationId, organizationId)
-        ),
-      });
+    // if (assigneesId && assigneesId.length > 0) {
+    //   const mems = await db.query.members.findMany({
+    //     where: and(
+    //       inArray(members.userId, assigneesId),
+    //       eq(members.organizationId, organizationId)
+    //     ),
+    //   });
 
-      await db.insert(taskAssignees).values(
-        mems.map((mem) => ({
-          taskId,
-          userId: mem.userId,
-        }))
-      );
-    }
+    //   await db.insert(taskAssignees).values(
+    //     mems.map((mem) => ({
+    //       taskId,
+    //       userId: mem.userId,
+    //     }))
+    //   );
+    // }
+
+    return {
+      success: true,
+      taskId,
+    };
   } catch (e) {
     console.log(e);
     return {

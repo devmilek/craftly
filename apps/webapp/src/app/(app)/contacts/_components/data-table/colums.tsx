@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useCopyToClipboard } from "usehooks-ts";
 import { ContactsTableProps } from ".";
 import Link from "next/link";
+import Image from "next/image";
 
 const helper = createColumnHelper<ContactsTableProps>();
 
@@ -41,8 +42,21 @@ export const columns = [
     enableHiding: false,
     cell: (info) => (
       <div className="flex items-center gap-3">
-        <div className="size-10 rounded-full border border-dashed bg-white flex items-center justify-center uppercase leading-none font-medium text-sm shadow">
-          {getInitials(info.getValue())}
+        <div className="size-10 p-0.5 rounded-full border border-dashed bg-background flex items-center justify-center uppercase leading-none font-medium text-sm shadow">
+          {info.row.original.avatarSrc ? (
+            <>
+              <Image
+                src={info.row.original.avatarSrc}
+                alt={info.getValue()}
+                width={40}
+                height={40}
+                className="rounded-full object-cover size-full"
+                unoptimized
+              />
+            </>
+          ) : (
+            getInitials(info.getValue())
+          )}
         </div>
         <div>
           <p className="text-sm font-medium">{info.getValue()}</p>

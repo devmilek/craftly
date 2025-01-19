@@ -24,6 +24,7 @@ import { useSearchParams } from "next/navigation";
 export type ContactsTableProps = Contact & {
   clientName: string | null;
   clientId: string | null;
+  avatarSrc: string | null;
 };
 
 const DataTable = () => {

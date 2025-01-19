@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { ImageIcon, Loader2Icon, TrashIcon } from "lucide-react";
+import { ImageIcon, TrashIcon } from "lucide-react";
 import { cn, formatBytes, getInitials } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useDropzone } from "react-dropzone";
@@ -14,18 +14,18 @@ const AvatarPicker = ({
   value,
   onValueChange,
   className,
+  disabled,
 }: {
   fallback: string;
   value?: File | null;
   onValueChange: (value: File | null) => void;
   className?: string;
+  disabled?: boolean;
 }) => {
-  const [uploading, setUploading] = useState(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      setUploading(true);
       const file = acceptedFiles[0];
       if (!file) return;
       if (file.size > MAX_AVATAR_SIZE) {
@@ -41,8 +41,6 @@ const AvatarPicker = ({
           )}.`
         );
       }
-
-      setUploading(false);
       onValueChange(file);
     },
     [onValueChange]
@@ -65,7 +63,10 @@ const AvatarPicker = ({
     }
   }, [value]);
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    disabled,
+  });
 
   return (
     <div className="relative w-max">
@@ -100,11 +101,6 @@ const AvatarPicker = ({
             className="size-full rounded-full object-cover"
           />
         )}
-        {uploading && (
-          <div className="size-full absolute inset-0 z-10 bg-accent/50 rounded-full leading-none flex items-center justify-center uppercase">
-            <Loader2Icon className="size-4 animate-spin" />
-          </div>
-        )}
       </div>
       {value && (
         <Button
@@ -112,7 +108,7 @@ const AvatarPicker = ({
             e.stopPropagation();
             onRemove();
           }}
-          disabled={uploading}
+          disabled={disabled}
           variant="outline"
           size="icon"
           className="border-dashed rounded-full right-0 bottom-0 absolute hover:border-primary transition"

@@ -7,6 +7,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { clients } from "./clients";
 import { organizations } from "./users";
+import { files } from "./files";
 
 export const contacts = pgTable("contacts", {
   id: uuid().primaryKey().defaultRandom(),
@@ -26,6 +27,7 @@ export const contacts = pgTable("contacts", {
   clientId: uuid().references(() => clients.id, {
     onDelete: "cascade",
   }),
+  avatarId: uuid().references(() => files.id),
   organizationId: varchar()
     .notNull()
     .references(() => organizations.id),
