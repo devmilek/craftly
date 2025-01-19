@@ -1,6 +1,7 @@
 "use client";
 
 import { removeClient } from "@/actions/clients/remove-client";
+import { queryClient } from "@/components/providers/query-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -44,6 +45,9 @@ export const ClientCard = ({ client }: { client: ClientCardProps }) => {
         }
 
         toast.success("Client removed successfully");
+        queryClient.invalidateQueries({
+          queryKey: ["clients"],
+        });
       },
       onCancel: () => {},
     });
@@ -62,7 +66,7 @@ export const ClientCard = ({ client }: { client: ClientCardProps }) => {
               width={36}
               height={36}
               unoptimized
-              className="size-full object-cover"
+              className="size-full object-cover rounded-md"
             />
           ) : (
             <div className="font-mono">{getInitials(client.name)}</div>

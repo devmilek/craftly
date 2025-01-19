@@ -6,6 +6,8 @@ import React from "react";
 import { getClients } from "../actions";
 import { useSearchParams } from "next/navigation";
 import { parseAsBoolean, useQueryState } from "nuqs";
+import EmptyState from "@/components/ui/empty-state";
+import { UserX } from "lucide-react";
 
 const ClientsFeed = () => {
   const searchParams = useSearchParams();
@@ -23,10 +25,6 @@ const ClientsFeed = () => {
 
   return (
     <>
-      <div>
-        <p>{query}</p>
-        <p>{archived ? "true" : "false"}</p>
-      </div>
       <div className="grid grid-cols-4 gap-4 mt-6">
         {data?.map((client) => <ClientCard key={client.id} client={client} />)}
         {isLoading && (
@@ -37,6 +35,13 @@ const ClientsFeed = () => {
           </>
         )}
       </div>
+      {!data?.length && !isLoading && (
+        <EmptyState
+          icon={UserX}
+          title="No clients"
+          description="Get started by creating a new client."
+        />
+      )}
     </>
   );
 };
