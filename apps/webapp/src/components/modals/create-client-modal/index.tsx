@@ -22,14 +22,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import AvatarUploader from "@/components/ui/avatar-uploader";
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/actions/clients/create-client";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { queryClient } from "@/components/providers/query-provider";
 import { useRouter } from "next/navigation";
+import AvatarPicker from "@/components/ui/avatar-picker";
 
 const CreateClientModal = () => {
   const { isOpen, onClose } = useModal("create-client");
@@ -37,6 +36,7 @@ const CreateClientModal = () => {
   const form = useForm<CreateClientSchema>({
     defaultValues: {
       name: "",
+      avatar: null,
     },
     resolver: zodResolver(createClientSchema),
   });
@@ -46,7 +46,15 @@ const CreateClientModal = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: CreateClientSchema) => {
-    const { error, id } = await createClient(values);
+    const formData = new FormData();
+
+    formData.append("name", values.name);
+
+    if (values.avatar) {
+      formData.append("avatar", values.avatar);
+    }
+
+    const { error, id } = await createClient(formData);
 
     if (error) {
       toast.error(error);
@@ -89,10 +97,23 @@ const CreateClientModal = () => {
         </DialogHeader>
         <Form {...form}>
           <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
-            <div className="space-y-2">
-              <Label>Logo</Label>
-              <AvatarUploader className="size-24" fallback={name} />
-            </div>
+            <FormField
+              name="avatar"
+              control={form.control}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Logo *</FormLabel>
+                  <FormControl>
+                    <AvatarPicker
+                      value={field.value}
+                      fallback={name}
+                      onValueChange={field.onChange}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
             <FormField
               name="name"
               control={form.control}

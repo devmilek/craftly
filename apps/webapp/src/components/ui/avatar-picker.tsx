@@ -1,97 +1,69 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ImageIcon, Loader2Icon, TrashIcon } from "lucide-react";
-import { cn, getInitials } from "@/lib/utils";
+import { cn, formatBytes, getInitials } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-
 import { useDropzone } from "react-dropzone";
-import {
-  completeUpload,
-  deleteFile,
-  getPresignedUrl,
-} from "@/actions/storage/upload";
-import { toast } from "sonner";
 import Image from "next/image";
+import { ALLOWED_AVATAR_TYPES, MAX_AVATAR_SIZE } from "@/config";
+import { toast } from "sonner";
 
-const AvatarUploader = ({
+const AvatarPicker = ({
   fallback,
   value,
   onValueChange,
   className,
 }: {
   fallback: string;
-  value?: string | null;
-  onValueChange: (value: string | null) => void;
+  value?: File | null;
+  onValueChange: (value: File | null) => void;
   className?: string;
 }) => {
   const [uploading, setUploading] = useState(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       setUploading(true);
       const file = acceptedFiles[0];
-
       if (!file) return;
-
-      const { error, presignedUrl, fileId, src } = await getPresignedUrl({
-        contentType: file.type,
-        fileName: file.name,
-        size: file.size,
-      });
-
-      if (error || !presignedUrl || !fileId || !src) {
-        toast.error(error || "Error uploading file");
-        setUploading(false);
-        return;
+      if (file.size > MAX_AVATAR_SIZE) {
+        return toast.error(
+          `Image size must be less than ${formatBytes(MAX_AVATAR_SIZE)}.`
+        );
       }
 
-      // upload file
-      const response = await fetch(presignedUrl, {
-        method: "PUT",
-        headers: {
-          "Content-Type": file.type,
-        },
-        body: file,
-      });
-
-      if (!response.ok) {
-        console.error("Error uploading file", response.statusText);
-        toast.error("Error uploading file");
-        setUploading(false);
-        return;
-      }
-
-      const { error: completeError } = await completeUpload(fileId);
-
-      if (completeError) {
-        toast.error(completeError);
-        setUploading(false);
-        return;
+      if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+        return toast.error(
+          `Only the following image types are allowed: ${ALLOWED_AVATAR_TYPES.join(
+            ", "
+          )}.`
+        );
       }
 
       setUploading(false);
-      toast.success("File uploaded successfully");
-      onValueChange(src);
+      onValueChange(file);
     },
     [onValueChange]
   );
 
   const onRemove = async () => {
     if (!value) return;
-    setUploading(true);
-    const { error } = await deleteFile(value);
-
-    if (error) {
-      toast.error(error);
-      setUploading(false);
-      return;
-    }
-
-    setUploading(false);
     onValueChange(null);
-    toast.success("File deleted successfully");
   };
+
+  useEffect(() => {
+    if (value) {
+      const objectUrl = URL.createObjectURL(value);
+      setPreviewUrl(objectUrl);
+
+      // Cleanup function to revoke the URL when component unmounts or file changes
+      return () => URL.revokeObjectURL(objectUrl);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [value]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
 
@@ -118,14 +90,14 @@ const AvatarUploader = ({
             <ImageIcon className="size-4" />
           </div>
         )}
-        {value && (
+        {previewUrl && (
           <Image
             unoptimized
-            src={value}
+            src={previewUrl}
             alt="Avatar"
             height={200}
             width={200}
-            className="size-full rounded-full"
+            className="size-full rounded-full object-cover"
           />
         )}
         {uploading && (
@@ -152,4 +124,4 @@ const AvatarUploader = ({
   );
 };
 
-export default AvatarUploader;
+export default AvatarPicker;

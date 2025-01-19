@@ -1,15 +1,13 @@
 "use server";
 
-import {
-  createClientSchema,
-  CreateClientSchema,
-} from "@/components/modals/create-client-modal/schema";
+import { createClientSchema } from "@/components/modals/create-client-modal/schema";
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { clients } from "@/lib/db/schemas/clients";
 import { v4 as uuid } from "uuid";
+import { serverAvatarUpload } from "../storage";
 
-export const createClient = async (values: CreateClientSchema) => {
+export const createClient = async (formData: FormData) => {
   const { session, organizationId } = await getCurrentSession();
 
   if (!session) {
@@ -26,7 +24,10 @@ export const createClient = async (values: CreateClientSchema) => {
     };
   }
 
-  const validatedData = createClientSchema.safeParse(values);
+  const validatedData = createClientSchema.safeParse({
+    name: formData.get("name"),
+    avatar: formData.get("avatar"),
+  });
 
   if (!validatedData.success) {
     return {
@@ -35,7 +36,25 @@ export const createClient = async (values: CreateClientSchema) => {
     };
   }
 
-  const { name } = validatedData.data;
+  const { name, avatar } = validatedData.data;
+
+  let avatarId: string | null | undefined = null;
+
+  if (avatar instanceof File) {
+    const { error, fileId } = await serverAvatarUpload({
+      file: avatar,
+      organizationId,
+    });
+
+    if (error) {
+      return {
+        success: false,
+        error,
+      };
+    }
+
+    avatarId = fileId;
+  }
 
   const clientId = uuid();
 
@@ -44,6 +63,7 @@ export const createClient = async (values: CreateClientSchema) => {
       id: clientId,
       name,
       organizationId,
+      avatarId,
     });
   } catch (e) {
     console.error(e);

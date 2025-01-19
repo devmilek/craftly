@@ -1,5 +1,6 @@
 "use client";
 
+import { removeClient } from "@/actions/clients/remove-client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,25 +10,62 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Progress } from "@/components/ui/progress";
+import { useAlertModal } from "@/hooks/use-alert-modal";
 import { Client } from "@/lib/db/schemas";
+import { getInitials } from "@/lib/utils";
 import { ArchiveIcon, MoreHorizontal, PenIcon, TrashIcon } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
+import { toast } from "sonner";
 
 type ClientCardProps = Client & {
   projectsCount: number;
   doneProjectsCount: number;
+  avatarSrc: string | null;
 };
 
 const ClientCard = ({ client }: { client: ClientCardProps }) => {
+  const openAlert = useAlertModal((state) => state.open);
+
+  const onRemove = () => {
+    openAlert({
+      title: "Delete Client",
+      description:
+        "Are you sure you want to delete this client? This action cannot be undone.",
+      actionLabel: "Delete",
+      onAction: async () => {
+        const { error } = await removeClient(client.id);
+
+        if (error) {
+          toast.error(error);
+          return;
+        }
+
+        toast.success("Client removed successfully");
+      },
+      onCancel: () => {},
+    });
+  };
   return (
     <Link
       className="px-5 py-4 rounded-xl border hover:border-primary transition-colors"
       href={"/clients/" + client.id}
     >
       <div className="flex justify-between">
-        <div className="size-9 p-1 border border-dashed rounded-lg bg-background shadow leading-none flex items-center justify-center">
-          <div className="font-mono">{client.name[0]}</div>
+        <div className="size-9 p-0.5 border border-dashed rounded-lg bg-background shadow leading-none flex items-center justify-center">
+          {client.avatarSrc ? (
+            <Image
+              src={client.avatarSrc}
+              alt={client.name}
+              width={36}
+              height={36}
+              unoptimized
+              className="size-full object-cover"
+            />
+          ) : (
+            <div className="font-mono">{getInitials(client.name)}</div>
+          )}
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -54,7 +92,13 @@ const ClientCard = ({ client }: { client: ClientCardProps }) => {
               <ArchiveIcon />
               Archive
             </DropdownMenuItem>
-            <DropdownMenuItem className="text-destructive">
+            <DropdownMenuItem
+              className="text-destructive"
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemove();
+              }}
+            >
               <TrashIcon />
               Delete
             </DropdownMenuItem>

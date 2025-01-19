@@ -6,6 +6,7 @@ import CreateClientModal from "../modals/create-client-modal";
 import CreateContactModal from "../modals/create-contact-modal";
 import CreateTaskModal from "../modals/create-task-modal";
 import InviteMembersModal from "../modals/invite-members-modal";
+import { AlertModal } from "../modals/alert-modal";
 
 const ModalProvider = () => {
   return (
@@ -17,6 +18,7 @@ const ModalProvider = () => {
       <CreateContactModal />
       <CreateTaskModal />
       <InviteMembersModal />
+      <AlertModal />
     </>
   );
 };

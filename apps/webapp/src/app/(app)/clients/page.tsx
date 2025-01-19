@@ -2,7 +2,7 @@ import ClientCard from "@/components/cards/client-card";
 import SidebarNavbar from "@/components/global/sidebar/sidebar-navbar";
 import { ensureSessionWithOrganization } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
-import { clients, projects } from "@/lib/db/schemas";
+import { clients, files, projects } from "@/lib/db/schemas";
 import {
   and,
   countDistinct,
@@ -44,6 +44,7 @@ const ClientsPage = async ({
   const data = await db
     .select({
       ...getTableColumns(clients),
+      avatarSrc: files.r2Url,
       projectsCount: countDistinct(projects.id),
       doneProjectsCount: sql<number>`count(distinct CASE WHEN ${projects.completed} = true THEN ${projects.id} END)`,
     })
@@ -56,7 +57,8 @@ const ClientsPage = async ({
       )
     )
     .leftJoin(projects, eq(projects.clientId, clients.id))
-    .groupBy(clients.id);
+    .leftJoin(files, eq(files.id, clients.avatarId))
+    .groupBy(clients.id, files.r2Url);
 
   return (
     <>

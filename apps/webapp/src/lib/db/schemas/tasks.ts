@@ -43,21 +43,13 @@ export const tasks = pgTable("tasks", {
 
 export type Task = typeof tasks.$inferSelect;
 
-export const taskAssignees = pgTable(
-  "task_assignees",
-  {
-    taskId: uuid().references(() => tasks.id, {
-      onDelete: "cascade",
-    }),
-    userId: varchar().references(() => members.userId, {
-      onDelete: "cascade",
-    }),
-  },
-  (t) => [
-    {
-      unq: unique().on(t.taskId, t.userId),
-    },
-  ]
-);
+// export const taskAssignees = pgTable("task_assignees", {
+//   taskId: uuid().references(() => tasks.id, {
+//     onDelete: "cascade",
+//   }),
+//   userId: varchar().references(() => members.userId, {
+//     onDelete: "cascade",
+//   }),
+// });
 
-export type TaskAssignee = typeof taskAssignees.$inferSelect;
+// export type TaskAssignee = typeof taskAssignees.$inferSelect;
