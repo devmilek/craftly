@@ -99,5 +99,5 @@ export const auth = betterAuth({
       },
     },
   },
-  trustedOrigins: ["https://tolerant-hyena-model.ngrok-free.app/"],
+  trustedOrigins: ["http://127.0.0.1:3003"]
 });

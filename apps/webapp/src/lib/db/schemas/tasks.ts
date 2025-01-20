@@ -41,6 +41,7 @@ export const tasks = pgTable("tasks", {
 });
 
 export type Task = typeof tasks.$inferSelect;
+export type TaskInsert = typeof tasks.$inferInsert;
 
 export const taskAssignees = pgTable("task_assignees", {
   taskId: uuid().references(() => tasks.id, {

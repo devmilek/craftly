@@ -5,6 +5,8 @@ import { NextResponse, type NextRequest } from "next/server";
 type Session = typeof auth.$Infer.Session;
 
 export default async function authMiddleware(request: NextRequest) {
+  const response = NextResponse.next();
+
   // const { data: session } = await betterFetch<Session>(
   //   "/api/auth/get-session",
   //   {
@@ -20,7 +22,7 @@ export default async function authMiddleware(request: NextRequest) {
   if (!sessionCookie) {
     return NextResponse.redirect(new URL("/auth/sign-in", request.url));
   }
-  return NextResponse.next();
+  return response;
 }
 
 export const config = {

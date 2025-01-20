@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 
 import {
@@ -7,7 +9,9 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { LifeBuoy, Send } from "lucide-react";
+import { LifeBuoy, PenIcon, Send } from "lucide-react";
+import { toast } from "sonner";
+import { generateData } from "@/actions/seed/data";
 
 const items = [
   {
@@ -29,6 +33,20 @@ export function NavSecondary({
     <SidebarGroup {...props}>
       <SidebarGroupContent>
         <SidebarMenu>
+          <SidebarMenuItem>
+            <SidebarMenuButton
+              size="sm"
+              onClick={() => {
+                toast.promise(generateData, {
+                  success: "Data generated",
+                  error: "Failed to generate data",
+                });
+              }}
+            >
+              <PenIcon />
+              <span>Generate data</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
           {items.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild size="sm">

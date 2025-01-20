@@ -21,10 +21,10 @@ export const {
   changeEmail,
   linkSocial,
   unlinkAccount,
-  useActiveOrganization,
+useActiveOrganization,
   twoFactor,
   passkey,
 } = createAuthClient({
-  baseURL: "http://localhost:3003", // the base url of your auth server
+  baseURL: "http://127.0.0.1:3003", // the base url of your auth server
   plugins: [organizationClient(), twoFactorClient(), passkeyClient()],
 });

@@ -39,3 +39,4 @@ export const contacts = pgTable("contacts", {
 });
 
 export type Contact = typeof contacts.$inferSelect;
+export type ContactInsert = typeof contacts.$inferInsert;
