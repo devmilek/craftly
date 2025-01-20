@@ -1,7 +1,7 @@
 import SidebarNavbar from "@/components/global/sidebar/sidebar-navbar";
 import React from "react";
-import KanbanView from "./_components/kanban";
 import Header from "./_components/header";
+import TaskView from "./_components/tasks-view";
 
 const TasksPage = () => {
   return (
@@ -14,7 +14,7 @@ const TasksPage = () => {
         ]}
       />
       <Header />
-      <KanbanView />
+      <TaskView />
     </>
   );
 };
