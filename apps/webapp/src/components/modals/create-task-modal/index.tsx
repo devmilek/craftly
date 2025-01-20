@@ -24,6 +24,7 @@ import PrioritySelect from "./priority-select";
 import StatusSelect from "./status-select";
 import { createTask } from "@/actions/tasks/create-task";
 import { toast } from "sonner";
+import { queryClient } from "@/components/providers/query-provider";
 
 const CreateTaskModal = () => {
   const { isOpen, onClose } = useModal("create-task");
@@ -46,6 +47,10 @@ const CreateTaskModal = () => {
       toast.error(error);
       return;
     }
+
+    queryClient.invalidateQueries({
+      queryKey: ["tasks", data.status],
+    });
 
     toast.success("Task created successfully");
 

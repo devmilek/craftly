@@ -5,7 +5,7 @@ import { useReadLocalStorage } from "usehooks-ts";
 import KanbanView from "./kanban";
 
 const TaskView = () => {
-  const view = useReadLocalStorage<string>("projects_view", {
+  const view = useReadLocalStorage<string>("tasks_view", {
     initializeWithValue: false,
   });
 

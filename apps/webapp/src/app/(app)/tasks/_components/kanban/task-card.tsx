@@ -24,13 +24,15 @@ const TaskCard = ({
 }) => {
   return (
     <div className="p-5 bg-background border rounded-xl hover:bg-accent/40 transition-colors">
-      <div className="flex gap-2">
-        {status && <Badge variant="secondary">{formatStatus(status)}</Badge>}
-        {dueDate && (
-          <Badge variant="secondary">Due {format(dueDate, "PP")}</Badge>
-        )}
-      </div>
-      <h3 className="font-semibold mt-3">{name}</h3>
+      {(status || dueDate) && (
+        <div className="flex gap-2 mb-3">
+          {status && <Badge variant="secondary">{formatStatus(status)}</Badge>}
+          {dueDate && (
+            <Badge variant="secondary">Due {format(dueDate, "PP")}</Badge>
+          )}
+        </div>
+      )}
+      <h3 className="font-semibold">{name}</h3>
       <div className="flex items-center gap-4 mt-3">
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <CheckCheckIcon className="size-3" />
@@ -42,21 +44,23 @@ const TaskCard = ({
         </div>
       </div>
 
-      <div className="space-y-1 mt-6">
-        {projectName && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <FolderIcon className="size-4" />
-            <span className="truncate">{projectName}</span>
-          </div>
-        )}
+      {(projectName || priority) && (
+        <div className="space-y-1 mt-6">
+          {projectName && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <FolderIcon className="size-4" />
+              <span className="truncate">{projectName}</span>
+            </div>
+          )}
 
-        {priority && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <FlagIcon className="size-4" />
-            <span className="truncate capitalize">{priority}</span>
-          </div>
-        )}
-      </div>
+          {priority && (
+            <div className="flex items-center gap-2 text-sm text-muted-foreground">
+              <FlagIcon className="size-4" />
+              <span className="truncate capitalize">{priority}</span>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

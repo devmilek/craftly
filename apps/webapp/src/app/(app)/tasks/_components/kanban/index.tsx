@@ -18,6 +18,7 @@ import { TaskStatus } from "@/types";
 import { setTaskStatus } from "../../actions";
 import { queryClient } from "@/components/providers/query-provider";
 import { InfiniteData } from "@tanstack/react-query";
+import { formatStatus } from "@/lib/utils";
 
 export type KanbanTask = Task & {
   projectName: string | null;
@@ -101,8 +102,8 @@ const KanbanView = () => {
           ]);
         })(),
         {
-          loading: `Moving task to ${status}...`,
-          success: `Task moved to ${status} successfully`,
+          loading: `Moving task to ${formatStatus(status)}...`,
+          success: `Task moved to ${formatStatus(status)} successfully`,
           error: "Failed to move task",
         }
       );

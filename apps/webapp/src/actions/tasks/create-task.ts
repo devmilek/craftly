@@ -6,8 +6,7 @@ import {
 } from "@/components/modals/create-task-modal/schema";
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
-import { members, taskAssignees, tasks } from "@/lib/db/schemas";
-import { and, eq, inArray } from "drizzle-orm";
+import { tasks } from "@/lib/db/schemas";
 import { v4 as uuid } from "uuid";
 
 export const createTask = async (values: CreateTaskSchema) => {
@@ -36,15 +35,8 @@ export const createTask = async (values: CreateTaskSchema) => {
     };
   }
 
-  const {
-    name,
-    description,
-    status,
-    assigneesId,
-    dueDate,
-    priority,
-    projectId,
-  } = validatedData.data;
+  const { name, description, status, dueDate, priority, projectId } =
+    validatedData.data;
 
   const taskId = uuid();
 

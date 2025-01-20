@@ -8,7 +8,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { projects } from "./projects";
-import { members, organizations } from "./users";
+import { members, organizations, users } from "./users";
 
 export const taskStatus = ["todo", "in-progress", "completed"] as const;
 export const taskStatusEnum = pgEnum("task_status", taskStatus);
@@ -44,10 +44,14 @@ export type Task = typeof tasks.$inferSelect;
 export type TaskInsert = typeof tasks.$inferInsert;
 
 export const taskAssignees = pgTable("task_assignees", {
+  id: uuid().primaryKey().defaultRandom(),
   taskId: uuid().references(() => tasks.id, {
     onDelete: "cascade",
   }),
-  userId: varchar().references(() => members.userId, {
+  userId: varchar().references(() => users.id, {
+    onDelete: "cascade",
+  }),
+  memberId: varchar().references(() => members.id, {
     onDelete: "cascade",
   }),
 });
