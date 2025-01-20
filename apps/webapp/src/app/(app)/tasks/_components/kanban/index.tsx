@@ -5,6 +5,8 @@ import {
   DndContext,
   DragEndEvent,
   DragOverEvent,
+  DragOverlay,
+  DragStartEvent,
   MouseSensor,
   useSensor,
   useSensors,
@@ -12,8 +14,10 @@ import {
 import { toast } from "sonner";
 import { DroppableColumn } from "./droppable-column";
 import { Task, taskStatus } from "@/lib/db/schemas";
+import TaskCard from "./task-card";
 
-const KanbanView = ({ tasks }: { tasks?: Task[] }) => {
+const KanbanView = () => {
+  const [activeTask, setActiveTask] = React.useState<Task | null>(null);
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10,
@@ -21,6 +25,14 @@ const KanbanView = ({ tasks }: { tasks?: Task[] }) => {
   });
 
   const sensors = useSensors(mouseSensor);
+
+  const onDragStart = (e: DragStartEvent) => {
+    const task = e.active.data.current as Task;
+
+    if (task) {
+      setActiveTask(task);
+    }
+  };
 
   const onDragOver = (e: DragOverEvent) => {
     if (e.over?.id) {
@@ -32,6 +44,7 @@ const KanbanView = ({ tasks }: { tasks?: Task[] }) => {
 
   const onDragEnd = (e: DragEndEvent) => {
     const overId = e.over?.id;
+    setActiveTask(null);
     if (overId) {
       // setTasks((prev) => {
       //   const newTasks = [...prev];
@@ -47,17 +60,28 @@ const KanbanView = ({ tasks }: { tasks?: Task[] }) => {
   };
 
   return (
-    <DndContext onDragOver={onDragOver} onDragEnd={onDragEnd} sensors={sensors}>
+    <DndContext
+      onDragOver={onDragOver}
+      onDragEnd={onDragEnd}
+      onDragStart={onDragStart}
+      sensors={sensors}
+      autoScroll={false}
+    >
       <div className="grid grid-cols-3 gap-6">
         {taskStatus.map((status) => (
-          <DroppableColumn
-            key={status}
-            id={status}
-            title={status}
-            tasks={tasks?.filter((task) => task.status === status) || []}
-          />
+          <DroppableColumn key={status} id={status} status={status} />
         ))}
       </div>
+      <DragOverlay>
+        {activeTask && (
+          <TaskCard
+            name={activeTask.name}
+            dueDate={activeTask.dueDate}
+            status={activeTask.status}
+            priority={activeTask.priority}
+          />
+        )}
+      </DragOverlay>
     </DndContext>
   );
 };

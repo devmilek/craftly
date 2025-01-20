@@ -4,34 +4,48 @@ import { DraggableCard } from "./draggable-card";
 import { cn } from "@/lib/utils";
 import { useDroppable } from "@dnd-kit/core";
 import { useModal } from "@/hooks/use-modals-store";
-import { Task } from ".";
+import { TaskStatus } from "@/types";
+import { useQuery } from "@tanstack/react-query";
+import { getTasksByStatus } from "../../actions";
+import { Loader2Icon } from "lucide-react";
 
 export const DroppableColumn = ({
   id,
-  title,
-  tasks,
+  status,
 }: {
   id: string;
-  title: string;
-  tasks: Task[];
+  status: TaskStatus;
 }) => {
   const { onOpen } = useModal("create-task");
   const { isOver, setNodeRef } = useDroppable({
     id,
   });
 
+  const { data, isLoading } = useQuery({
+    queryKey: ["tasks", status],
+    queryFn: async () => await getTasksByStatus(status),
+  });
+
   return (
-    <div>
-      <ColumnHeader status={title} count={tasks.length} />
-      <div ref={setNodeRef} className="relative min-h-96">
+    <div className="">
+      <ColumnHeader status={status} count={data?.length} />
+      <div
+        ref={setNodeRef}
+        className={cn(
+          "relative min-h-96 max-h-[calc(100vh-16rem)] overflow-y-auto"
+        )}
+      >
         <div className="space-y-4">
-          {tasks.map((task) => (
-            <DraggableCard key={task.id} task={task} />
-          ))}
-          {tasks.length === 0 && (
+          {data?.map((task) => <DraggableCard key={task.id} task={task} />)}
+          {data?.length === 0 && (
             <Button className="w-full" variant="secondary" onClick={onOpen}>
               Add a task
             </Button>
+          )}
+          {isLoading && (
+            <div className="flex items-center justify-center h-40 text-muted-foreground">
+              <Loader2Icon className="size-4 animate-spin" />
+            </div>
           )}
         </div>
         <div

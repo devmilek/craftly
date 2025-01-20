@@ -7,30 +7,30 @@ import React from "react";
 
 const TaskCard = ({
   dueDate,
-  title,
+  name,
   subtasksCount,
   filesCount,
   projectName,
   priority,
   status,
 }: {
-  dueDate?: Date;
-  title: string;
+  dueDate?: Date | null;
+  name: string;
   subtasksCount?: number;
   filesCount?: number;
   projectName?: string;
-  priority?: TaskPriority;
+  priority?: TaskPriority | null;
   status?: string;
 }) => {
   return (
-    <div className="p-5 bg-white border rounded-xl hover:bg-accent/40 transition-colors">
+    <div className="p-5 bg-background border rounded-xl hover:bg-accent/40 transition-colors">
       <div className="flex gap-2">
         {status && <Badge variant="secondary">{formatStatus(status)}</Badge>}
         {dueDate && (
           <Badge variant="secondary">Due {format(dueDate, "PP")}</Badge>
         )}
       </div>
-      <h3 className="font-semibold mt-3">{title}</h3>
+      <h3 className="font-semibold mt-3">{name}</h3>
       <div className="flex items-center gap-4 mt-3">
         {subtasksCount && (
           <div className="flex items-center gap-2 text-sm text-muted-foreground">

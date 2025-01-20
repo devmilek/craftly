@@ -13,27 +13,21 @@ const TaskView = () => {
     initializeWithValue: false,
   });
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["projects"],
-    queryFn: getTasks,
-  });
-
   return (
     <div className="mt-5">
-      {isLoading && (
+      {/* {isLoading && (
         <div className="flex items-center justify-center h-40 text-muted-foreground">
           <Loader2Icon className="size-5 animate-spin" />
         </div>
       )}
-      {JSON.stringify(data)}
       {data?.length === 0 && !isLoading && (
         <EmptyState
           icon={FolderX}
           title="No projects"
           description="Get started by creating a new project."
         />
-      )}
-      {view === "kanban" && <KanbanView tasks={data} />}
+      )} */}
+      {view === "kanban" && <KanbanView />}
       {/* {view === "list" && <ProjectsListView data={data} />} */}
     </div>
   );
