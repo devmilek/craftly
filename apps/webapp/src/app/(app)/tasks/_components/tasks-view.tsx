@@ -1,11 +1,7 @@
 "use client";
 
-import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useReadLocalStorage } from "usehooks-ts";
-import { FolderX, Loader2Icon } from "lucide-react";
-import EmptyState from "@/components/ui/empty-state";
-import { getTasks } from "@/app/(app)/tasks/actions";
 import KanbanView from "./kanban";
 
 const TaskView = () => {

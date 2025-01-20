@@ -4,7 +4,6 @@ import React from "react";
 import {
   DndContext,
   DragEndEvent,
-  DragOverEvent,
   DragOverlay,
   DragStartEvent,
   MouseSensor,
@@ -15,9 +14,19 @@ import { toast } from "sonner";
 import { DroppableColumn } from "./droppable-column";
 import { Task, taskStatus } from "@/lib/db/schemas";
 import TaskCard from "./task-card";
+import { TaskStatus } from "@/types";
+import { setTaskStatus } from "../../actions";
+import { queryClient } from "@/components/providers/query-provider";
+import { InfiniteData } from "@tanstack/react-query";
+
+export type KanbanTask = Task & {
+  projectName: string | null;
+};
+
+type TaskInfiniteQueryData = InfiniteData<KanbanTask[]>;
 
 const KanbanView = () => {
-  const [activeTask, setActiveTask] = React.useState<Task | null>(null);
+  const [activeTask, setActiveTask] = React.useState<KanbanTask | null>(null);
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 10,
@@ -27,41 +36,81 @@ const KanbanView = () => {
   const sensors = useSensors(mouseSensor);
 
   const onDragStart = (e: DragStartEvent) => {
-    const task = e.active.data.current as Task;
+    const task = e.active.data.current as KanbanTask;
 
     if (task) {
       setActiveTask(task);
     }
   };
 
-  const onDragOver = (e: DragOverEvent) => {
-    if (e.over?.id) {
-      console.log(
-        `Draggable item ${e.active.id} was moved over droppable area ${e.over.id}.`
-      );
-    }
-  };
-
-  const onDragEnd = (e: DragEndEvent) => {
+  const onDragEnd = async (e: DragEndEvent) => {
     const overId = e.over?.id;
-    setActiveTask(null);
     if (overId) {
-      // setTasks((prev) => {
-      //   const newTasks = [...prev];
-      //   const task = newTasks.find((t) => t.id === e.active.id);
-      //   if (task) {
-      //     task.status = overId as Task["status"];
-      //   }
-      //   return newTasks;
-      // });
+      const taskId = String(e.active.id);
+      const status = overId as TaskStatus;
+      const previousStatus = activeTask?.status;
+      const task = activeTask;
+      setActiveTask(null);
 
-      toast(`Draggable item was dropped over droppable area ${overId}`);
+      if (previousStatus === status) return;
+
+      if (!task) {
+        return;
+      }
+
+      const previousQueryData = queryClient.getQueryData<TaskInfiniteQueryData>(
+        ["tasks", previousStatus]
+      );
+      const queryData = queryClient.getQueryData<TaskInfiniteQueryData>([
+        "tasks",
+        status,
+      ]);
+
+      toast.promise(
+        (async () => {
+          // Update optimistic UI first
+          if (previousQueryData) {
+            queryClient.setQueryData<TaskInfiniteQueryData>(
+              ["tasks", previousStatus],
+              {
+                pages: previousQueryData.pages.map((page) =>
+                  page.filter((t) => t.id !== taskId)
+                ),
+                pageParams: previousQueryData.pageParams,
+              }
+            );
+          }
+
+          if (queryData) {
+            queryClient.setQueryData<TaskInfiniteQueryData>(["tasks", status], {
+              pages: queryData.pages.map((page, index) =>
+                index === 0 ? [task, ...page] : page
+              ),
+              pageParams: queryData.pageParams,
+            });
+          }
+
+          // Perform actual updates
+          await setTaskStatus(taskId, status);
+          await Promise.all([
+            queryClient.invalidateQueries({ queryKey: ["tasks", status] }),
+            previousStatus &&
+              queryClient.invalidateQueries({
+                queryKey: ["tasks", previousStatus],
+              }),
+          ]);
+        })(),
+        {
+          loading: `Moving task to ${status}...`,
+          success: `Task moved to ${status} successfully`,
+          error: "Failed to move task",
+        }
+      );
     }
   };
 
   return (
     <DndContext
-      onDragOver={onDragOver}
       onDragEnd={onDragEnd}
       onDragStart={onDragStart}
       sensors={sensors}
@@ -77,8 +126,8 @@ const KanbanView = () => {
           <TaskCard
             name={activeTask.name}
             dueDate={activeTask.dueDate}
-            status={activeTask.status}
             priority={activeTask.priority}
+            projectName={activeTask.projectName}
           />
         )}
       </DragOverlay>

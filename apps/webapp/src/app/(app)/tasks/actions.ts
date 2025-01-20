@@ -28,15 +28,6 @@ export const getTasksByStatus = async (status: TaskStatus, page: number) => {
     return [];
   }
 
-  // const data = await db.query.tasks.findMany({
-  //   where: and(
-  //     eq(tasks.organizationId, organizationId),
-  //     eq(tasks.status, status)
-  //   ),
-  //   orderBy: desc(tasks.updatedAt),
-  //   limit: 20,
-  // });
-
   const data = await db
     .selectDistinct({
       ...getTableColumns(tasks),
@@ -52,4 +43,17 @@ export const getTasksByStatus = async (status: TaskStatus, page: number) => {
     .offset(page * 20);
 
   return data;
+};
+
+export const setTaskStatus = async (taskId: string, status: TaskStatus) => {
+  const { organizationId, session } = await getCurrentSession();
+
+  if (!session || !organizationId) {
+    return;
+  }
+
+  await db
+    .update(tasks)
+    .set({ status })
+    .where(and(eq(tasks.organizationId, organizationId), eq(tasks.id, taskId)));
 };

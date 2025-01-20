@@ -32,18 +32,14 @@ const TaskCard = ({
       </div>
       <h3 className="font-semibold mt-3">{name}</h3>
       <div className="flex items-center gap-4 mt-3">
-        {subtasksCount && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <CheckCheckIcon className="size-3" />
-            <span>{subtasksCount} Subtasks</span>
-          </div>
-        )}
-        {filesCount && (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <FileIcon className="size-3" />
-            <span>{filesCount} Files</span>
-          </div>
-        )}
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <CheckCheckIcon className="size-3" />
+          <span>{subtasksCount || "0"} Subtasks</span>
+        </div>
+        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+          <FileIcon className="size-3" />
+          <span>{filesCount || "0"} Files</span>
+        </div>
       </div>
 
       <div className="space-y-1 mt-6">
