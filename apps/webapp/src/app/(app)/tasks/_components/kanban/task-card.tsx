@@ -18,7 +18,7 @@ const TaskCard = ({
   name: string;
   subtasksCount?: number;
   filesCount?: number;
-  projectName?: string;
+  projectName?: string | null;
   priority?: TaskPriority | null;
   status?: string;
 }) => {

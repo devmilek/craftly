@@ -1,13 +1,12 @@
-import { Button } from "@/components/ui/button";
 import ColumnHeader from "./column-header";
 import { DraggableCard } from "./draggable-card";
 import { cn } from "@/lib/utils";
 import { useDroppable } from "@dnd-kit/core";
-import { useModal } from "@/hooks/use-modals-store";
 import { TaskStatus } from "@/types";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { getTasksByStatus } from "../../actions";
 import { Loader2Icon } from "lucide-react";
+import { useEffect, useMemo, useRef } from "react";
 
 export const DroppableColumn = ({
   id,
@@ -16,19 +15,47 @@ export const DroppableColumn = ({
   id: string;
   status: TaskStatus;
 }) => {
-  const { onOpen } = useModal("create-task");
+  const bottomRef = useRef<HTMLDivElement>(null);
   const { isOver, setNodeRef } = useDroppable({
     id,
   });
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["tasks", status],
-    queryFn: async () => await getTasksByStatus(status),
-  });
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["tasks", status],
+      initialPageParam: 0,
+      queryFn: async ({ pageParam = 0 }) =>
+        await getTasksByStatus(status, pageParam),
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.length ? allPages.length + 1 : undefined;
+      },
+    });
+
+  const tasks = useMemo(() => {
+    return data?.pages.reduce((acc, page) => [...acc, ...page], []);
+  }, [data]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (bottomRef.current) {
+      observer.observe(bottomRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
     <div className="">
-      <ColumnHeader status={status} count={data?.length} />
+      <ColumnHeader status={status} />
       <div
         ref={setNodeRef}
         className={cn(
@@ -36,17 +63,15 @@ export const DroppableColumn = ({
         )}
       >
         <div className="space-y-4">
-          {data?.map((task) => <DraggableCard key={task.id} task={task} />)}
-          {data?.length === 0 && (
-            <Button className="w-full" variant="secondary" onClick={onOpen}>
-              Add a task
-            </Button>
-          )}
+          {tasks?.map((task) => (
+            <DraggableCard key={task.id + "-" + task.status} task={task} />
+          ))}
           {isLoading && (
             <div className="flex items-center justify-center h-40 text-muted-foreground">
               <Loader2Icon className="size-4 animate-spin" />
             </div>
           )}
+          <div ref={bottomRef} className="h-4" />{" "}
         </div>
         <div
           className={cn(
