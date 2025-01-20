@@ -20,6 +20,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getTableContacts } from "./actions";
 import { Loader2Icon } from "lucide-react";
 import { useSearchParams } from "next/navigation";
+import { parseAsInteger, useQueryState } from "nuqs";
 
 export type ContactsTableProps = Contact & {
   clientName: string | null;
@@ -35,13 +36,15 @@ const DataTable = () => {
   const clientsIds = (searchParams.get("clients") || "")
     .split(",")
     .filter((id) => id !== "");
+  const [page] = useQueryState("page", parseAsInteger.withDefault(1));
 
   const { data: serverData, isLoading } = useQuery({
-    queryKey: ["contacts", query.trim(), clientsParams],
+    queryKey: ["contacts", query.trim(), clientsParams, page],
     queryFn: async () =>
       await getTableContacts({
         clientsIds,
         query: query,
+        page,
       }),
   });
 
@@ -55,13 +58,6 @@ const DataTable = () => {
 
   return (
     <div className="rounded-md border mt-4">
-      {/* <code>
-        <p>Params: {query}</p>
-        <p>Clients ids: {JSON.stringify(clientsIds)}</p>
-        <p>clientsparam: {JSON.stringify(clientsParams)}</p>
-        <pre>{JSON.stringify(data)}</pre>
-        <p>{isLoading ? "lkoading" : "loaded"}</p>
-      </code> */}
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (

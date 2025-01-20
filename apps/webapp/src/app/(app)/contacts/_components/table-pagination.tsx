@@ -29,44 +29,54 @@ const TablePagination = ({
   const isLastPage = page === totalPages;
 
   return (
-    <div className="flex gap-4 items-center justify-end mt-4 mb-8">
-      <p>
-        Page {page} of {totalPages}
+    <div className="flex justify-between items-center">
+      <p className="text-sm text-muted-foreground">
+        Showing{" "}
+        <strong>
+          {itemsPerPage * (page - 1) + 1} -{" "}
+          {Math.min(itemsPerPage * page, itemsCount)}
+        </strong>{" "}
+        of <strong>{itemsCount}</strong> items
       </p>
-      <div className="flex gap-2">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={handleFirstPage}
-          disabled={isFirstPage}
-        >
-          <ChevronsLeft className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={handlePreviousPage}
-          disabled={isFirstPage}
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </Button>
+      <div className="flex gap-4 items-center justify-end mt-4 mb-8">
+        <p className="text-sm text-muted-foreground">
+          Page {page} of {totalPages}
+        </p>
+        <div className="flex gap-2">
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleFirstPage}
+            disabled={isFirstPage}
+          >
+            <ChevronsLeft className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handlePreviousPage}
+            disabled={isFirstPage}
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
 
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={handleNextPage}
-          disabled={isLastPage}
-        >
-          <ChevronRight className="h-4 w-4" />
-        </Button>
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={handleLastPage}
-          disabled={isLastPage}
-        >
-          <ChevronsRight className="h-4 w-4" />
-        </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleNextPage}
+            disabled={isLastPage}
+          >
+            <ChevronRight className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleLastPage}
+            disabled={isLastPage}
+          >
+            <ChevronsRight className="h-4 w-4" />
+          </Button>
+        </div>
       </div>
     </div>
   );

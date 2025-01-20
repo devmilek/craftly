@@ -1,8 +1,7 @@
 import SidebarNavbar from "@/components/global/sidebar/sidebar-navbar";
 import React from "react";
 import Header from "./_components/header";
-import DataTable from "./_components/data-table";
-import TablePagination from "./_components/table-pagination";
+import ContactsView from "./_components/contacts-view";
 
 const ContactsPage = async () => {
   return (
@@ -15,8 +14,7 @@ const ContactsPage = async () => {
         ]}
       />
       <Header />
-      <DataTable />
-      {/* <TablePagination itemsPerPage={10}  /> */}
+      <ContactsView />
     </>
   );
 };

@@ -8,9 +8,11 @@ import { and, count, eq, getTableColumns, ilike, inArray } from "drizzle-orm";
 export const getTableContacts = async ({
   clientsIds,
   query,
+  page,
 }: {
   clientsIds: string[];
   query: string;
+  page: number;
 }) => {
   const { session, organizationId } = await getCurrentSession();
 
@@ -21,6 +23,8 @@ export const getTableContacts = async ({
   if (!organizationId) {
     return [];
   }
+
+  const ITEMS_PER_PAGE = 10;
 
   const data = await db
     .select({
@@ -39,7 +43,30 @@ export const getTableContacts = async ({
       )
     )
     .leftJoin(clients, eq(contacts.clientId, clients.id))
-    .leftJoin(files, eq(contacts.avatarId, files.id));
+    .leftJoin(files, eq(contacts.avatarId, files.id))
+    .orderBy(contacts.updatedAt)
+    .limit(ITEMS_PER_PAGE)
+    .offset((page - 1) * ITEMS_PER_PAGE);
+
+  return data;
+};
+
+export const countTableContacts = async ({
+  clientsIds,
+  query,
+}: {
+  clientsIds: string[];
+  query: string;
+}) => {
+  const { session, organizationId } = await getCurrentSession();
+
+  if (!session) {
+    return 0;
+  }
+
+  if (!organizationId) {
+    return 0;
+  }
 
   const [dataCount] = await db
     .select({
@@ -58,5 +85,5 @@ export const getTableContacts = async ({
     .leftJoin(clients, eq(contacts.clientId, clients.id))
     .leftJoin(files, eq(contacts.avatarId, files.id));
 
-  return data;
+  return dataCount.count;
 };
