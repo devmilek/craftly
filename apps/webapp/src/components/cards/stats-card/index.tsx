@@ -23,9 +23,7 @@ const StatsCard = ({
       <CardContent>
         {heading && <div className="text-2xl font-semibold">{heading}</div>}
         {description && (
-          <p className="text-xs text-muted-foreground">
-            +20.1% from last month
-          </p>
+          <p className="text-xs text-muted-foreground">{description}</p>
         )}
       </CardContent>
     </Card>

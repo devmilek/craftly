@@ -7,6 +7,7 @@ import CreateContactModal from "../modals/create-contact-modal";
 import CreateTaskModal from "../modals/create-task-modal";
 import InviteMembersModal from "../modals/invite-members-modal";
 import { AlertModal } from "../modals/alert-modal";
+import UploadFileModal from "../modals/upload-file-modal";
 
 const ModalProvider = () => {
   return (
@@ -19,6 +20,7 @@ const ModalProvider = () => {
       <CreateTaskModal />
       <InviteMembersModal />
       <AlertModal />
+      <UploadFileModal />
     </>
   );
 };

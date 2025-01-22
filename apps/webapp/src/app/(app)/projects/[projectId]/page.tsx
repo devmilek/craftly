@@ -1,40 +1,15 @@
 import { ensureSessionWithOrganization } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
-import { projects } from "@/lib/db/schemas";
-import { and, eq } from "drizzle-orm";
+import { projects, taskAssignees, tasks } from "@/lib/db/schemas";
+import { and, count, eq, gt, gte, isNull, lte } from "drizzle-orm";
 import { notFound } from "next/navigation";
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import StatsCard from "@/components/cards/stats-card";
-
-const statsCards = [
-  {
-    title: "Unassigned",
-    header: "42 tasks",
-    description: "+38% new tasks this week",
-  },
-  {
-    title: "To Do",
-    header: "58 tasks",
-    description: "38 planned for this week",
-  },
-  {
-    title: "In Progress",
-    header: "12 tasks",
-    description: "+38% increase in activity",
-  },
-  {
-    title: "Overdue",
-    header: "12 tasks",
-    description: "Longest overdue: 12 days",
-  },
-  {
-    title: "Completed",
-    header: "12 tasks",
-    description: "+78% increase in activity",
-  },
-];
+import { endOfWeek, startOfWeek } from "date-fns";
+import RecentFiles from "./_components/recent-files";
+import { Separator } from "@/components/ui/separator";
 
 const ProjectDetailsScreen = async ({
   params,
@@ -56,6 +31,98 @@ const ProjectDetailsScreen = async ({
     notFound();
   }
 
+  const today = new Date();
+
+  const [[unnasignesTasks]] = await Promise.all([
+    await db
+      .select({
+        count: count(),
+      })
+      .from(tasks)
+      .leftJoin(taskAssignees, eq(tasks.id, taskAssignees.taskId))
+      .where(and(eq(tasks.projectId, projectId), isNull(taskAssignees.id))),
+  ]);
+
+  const [[todoTasks], [plannedTasks]] = await Promise.all([
+    await db
+      .select({
+        count: count(),
+      })
+      .from(tasks)
+      .where(and(eq(tasks.projectId, projectId), eq(tasks.status, "todo"))),
+    await db
+      .select({
+        count: count(),
+      })
+      .from(tasks)
+      .where(
+        and(
+          eq(tasks.projectId, projectId),
+          gte(tasks.dueDate, startOfWeek(today)),
+          lte(tasks.dueDate, endOfWeek(today))
+        )
+      ),
+  ]);
+
+  const [[inProgressTasks]] = await Promise.all([
+    await db
+      .select({
+        count: count(),
+      })
+      .from(tasks)
+      .where(
+        and(eq(tasks.projectId, projectId), eq(tasks.status, "in-progress"))
+      ),
+  ]);
+
+  const [[overDueTasks]] = await Promise.all([
+    await db
+      .select({
+        count: count(),
+      })
+      .from(tasks)
+      .where(and(eq(tasks.projectId, projectId), gt(tasks.dueDate, today))),
+  ]);
+
+  const [[completedTasks]] = await Promise.all([
+    await db
+      .select({
+        count: count(),
+      })
+      .from(tasks)
+      .where(
+        and(eq(tasks.projectId, projectId), eq(tasks.status, "completed"))
+      ),
+  ]);
+
+  const statsCards = [
+    {
+      title: "Unassigned",
+      header: unnasignesTasks.count + " tasks",
+      description: "+38% new tasks this week",
+    },
+    {
+      title: "To Do",
+      header: todoTasks.count + " tasks",
+      description: plannedTasks.count + " planned for this week",
+    },
+    {
+      title: "In Progress",
+      header: inProgressTasks.count + " tasks",
+      description: "+38% new tasks this week",
+    },
+    {
+      title: "Overdue",
+      header: overDueTasks.count + " tasks",
+      description: "Longest overdue: 12 days",
+    },
+    {
+      title: "Completed",
+      header: completedTasks.count + " tasks",
+      description: "+78% more than last week",
+    },
+  ];
+
   return (
     <div className="my-8">
       <section>
@@ -75,6 +142,12 @@ const ProjectDetailsScreen = async ({
               key={index}
             />
           ))}
+        </div>
+        <div className="flex gap-8 mt-8">
+          <div className="w-full">
+            <RecentFiles />
+          </div>
+          <div className="w-96 "></div>
         </div>
       </section>
     </div>

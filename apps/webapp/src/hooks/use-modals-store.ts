@@ -5,7 +5,8 @@ export type ModalType =
   | "create-client"
   | "create-contact"
   | "create-task"
-  | "invite-members";
+  | "invite-members"
+  | "upload-file";
 
 import { create } from "zustand";
 
