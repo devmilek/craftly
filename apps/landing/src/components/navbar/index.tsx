@@ -25,10 +25,7 @@ const Navbar = () => {
     <header className="h-16 fixed w-full z-50 inset-x-0 top-0 my-4">
       <div
         className={cn(
-          "container h-full flex flex-row items-center mx-auto border border-transparent rounded-2xl transition duration-300",
-          {
-            "shadow-sm border bg-white border-border": isScrolled,
-          }
+          "container h-full flex flex-row items-center bg-white/80 backdrop-blur-xl border-border mx-auto border rounded-2xl transition duration-300"
         )}
       >
         <Link href="/" className="mr-4">
