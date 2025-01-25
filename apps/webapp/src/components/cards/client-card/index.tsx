@@ -110,11 +110,11 @@ export const ClientCard = ({ client }: { client: ClientCardProps }) => {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <div className="flex items-center gap-2 mt-4">
-        <h3 className="text-xl font-semibold">{client.name}</h3>
+      <div className="flex flex-col items-start gap-2 mt-4">
         <Badge variant="secondary" className="rounded-full">
           {client.archived ? "Archived" : "Active"}
         </Badge>
+        <h3 className="text-xl font-semibold">{client.name}</h3>
       </div>
       <Progress
         className="mt-3"

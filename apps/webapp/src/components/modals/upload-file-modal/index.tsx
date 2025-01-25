@@ -1,5 +1,6 @@
 "use client";
 
+import { getPresignedUrl } from "@/actions/storage/upload";
 import {
   Dialog,
   DialogContent,
@@ -12,14 +13,102 @@ import { cn, formatBytes } from "@/lib/utils";
 import { File, UploadCloud } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import axios from "axios";
+
+interface FileUploadStatus {
+  file: File;
+  fileName: string;
+  size: number;
+  progress: number;
+  presignedUrl?: string;
+  status: "pending" | "uploading" | "completed" | "error";
+}
 
 const UploadFileModal = () => {
   const { isOpen, onClose } = useModal("upload-file");
-  const [files, setFiles] = useState<File[]>([]);
-  const onDrop = useCallback((acceptedFiles: File[]) => {
-    // Do something with the files
+  const [files, setFiles] = useState<FileUploadStatus[]>([]);
+
+  const uploadFileToCloudflare = async (file: FileUploadStatus) => {
+    if (!file.presignedUrl) {
+      const updatedFile = { ...file, status: "error" as const };
+      return setFiles((prev) =>
+        prev.map((f) => (f.fileName === file.fileName ? updatedFile : f))
+      );
+    }
+
+    console.log("Uploading file", file.fileName);
+
+    try {
+      const updatedFile = { ...file, status: "uploading" as const };
+      setFiles((prev) =>
+        prev.map((f) => (f.fileName === file.fileName ? updatedFile : f))
+      );
+
+      await axios.put(file.presignedUrl, file.file, {
+        headers: {
+          "Content-Type": file.file.type,
+        },
+        onUploadProgress: (progressEvent) => {
+          const total = progressEvent.total ?? progressEvent.loaded;
+
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / total
+          );
+
+          console.log(percentCompleted);
+
+          const progressFile: FileUploadStatus = {
+            ...file,
+            progress: percentCompleted,
+            status: percentCompleted === 100 ? "completed" : "uploading",
+          };
+
+          setFiles((prev) =>
+            prev.map((f) => (f.fileName === file.fileName ? progressFile : f))
+          );
+        },
+      });
+    } catch (error) {
+      console.error("Błąd przy uploading pliku", error);
+      const errorFile = { ...file, status: "error" as const };
+      setFiles((prev) =>
+        prev.map((f) => (f.fileName === file.fileName ? errorFile : f))
+      );
+    }
+  };
+
+  const onDrop = useCallback(async (acceptedFiles: File[]) => {
+    const newFiles: FileUploadStatus[] = await Promise.all(
+      acceptedFiles.map(async (file) => {
+        const presignedUrl = await getPresignedUrl({
+          fileName: file.name,
+          contentType: file.type,
+          size: file.size,
+        });
+
+        const fileUploadStatus: FileUploadStatus = {
+          file,
+          fileName: file.name,
+          size: file.size,
+          progress: 0,
+          presignedUrl: presignedUrl.presignedUrl,
+          status: "pending",
+        };
+
+        setFiles((prev) => [...prev, ...newFiles]);
+
+        uploadFileToCloudflare(fileUploadStatus);
+
+        return fileUploadStatus;
+      })
+    );
   }, []);
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop });
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    multiple: true,
+    maxFiles: 5,
+  });
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
@@ -50,8 +139,15 @@ const UploadFileModal = () => {
           </p>
         </div>
         <div className="grid gap-2">
-          <FileItem fileName="file1.jpg" size={1024} progress={50} />
-          <FileItem fileName="file2.jpg" size={1024} progress={100} />
+          {files.map((fileItem) => (
+            <FileItem
+              key={fileItem.fileName}
+              fileName={fileItem.fileName}
+              size={fileItem.size}
+              progress={fileItem.progress}
+              status={fileItem.status}
+            />
+          ))}
         </div>
       </DialogContent>
     </Dialog>
@@ -62,10 +158,12 @@ const FileItem = ({
   fileName,
   size,
   progress,
+  status,
 }: {
   fileName: string;
   size: number;
   progress: number;
+  status: "pending" | "uploading" | "completed" | "error";
 }) => {
   return (
     <div className="border rounded-lg p-4 relative">
