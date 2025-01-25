@@ -40,13 +40,17 @@ const UniqueFeatures = () => {
         title="Powerful Tools for a Streamlined Workflow"
         description="Boost your productivity, stay on top of your tasks, and manage your finances effortlessly with Craftly’s comprehensive business management suite. Our platform is tailored to fit the needs of service providers, freelancers, and businesses looking for a seamless way to manage operations."
       />
-      <div className="grid grid-cols-3 gap-5 mt-12">
+      <div className="grid lg:grid-cols-3 gap-5 mt-12">
         {items.map((item, i) => (
           <div
             key={i}
-            className={cn("rounded-3xl bg-muted/30 border p-5 flex flex-col", {
-              "col-span-2": i === 1,
-            })}
+            className={cn(
+              "rounded-3xl bg-muted/30 border p-5 flex flex-col max-w-[500px] md:max-w-none md:w-full mx-auto",
+              {
+                "lg:col-span-2": i === 1,
+                "md:col-span-2 lg:col-span-1": i === 2,
+              }
+            )}
           >
             <div className="flex items-center gap-4">
               <div>

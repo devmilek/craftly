@@ -30,14 +30,15 @@ const items = [
 const WhyUs = () => {
   const t = useTranslations("why_us");
   return (
-    <section className="section grid grid-cols-2 gap-8">
+    <section className="section grid lg:grid-cols-2 gap-8">
       <div>
         <SectionHeader
           badge={t("badge")}
           title={t("title")}
           description={t("description")}
+          className="text-center md:text-start"
         />
-        <div className="flex mt-8">
+        <div className="flex mt-8 justify-center md:justify-start">
           <div className="pr-8 border-r">
             <h5 className="text-3xl font-bold">5.6k</h5>
             <p className="text-muted-foreground">Active Users</p>
@@ -48,7 +49,7 @@ const WhyUs = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid sm:grid-cols-2 gap-4">
         {items.map((item, i) => (
           <div key={i} className="p-6 border rounded-3xl bg-muted/50">
             <div className="p-2 rounded-2xl bg-lime-200 w-max mb-4">

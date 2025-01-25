@@ -35,13 +35,16 @@ const Pricing = () => {
         title={t("title")}
         description={t("description")}
       />
-      <div className="grid grid-cols-3 gap-6 mt-12">
+      <div className="grid xl:grid-cols-3 gap-6 mt-12">
         {plans.map((plan, i) => (
           <div
             key={i}
-            className={cn("p-7 border rounded-3xl", {
-              "bg-muted/50": i === 1,
-            })}
+            className={cn(
+              "p-7 border rounded-3xl max-w-[500px] mx-auto w-full",
+              {
+                "bg-muted/50": i === 1,
+              }
+            )}
           >
             <div className="flex items-center justify-between">
               <plan.icon className="size-12" weight="light" />

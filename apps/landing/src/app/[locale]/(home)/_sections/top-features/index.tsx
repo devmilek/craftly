@@ -12,6 +12,7 @@ import {
   BellRinging,
 } from "@phosphor-icons/react/dist/ssr";
 import { useTranslations } from "next-intl";
+import { cn } from "@/lib/utils";
 
 const highlights = [
   {
@@ -58,15 +59,16 @@ const features = [
 const TopFeatures = () => {
   const t = useTranslations("top_features");
   return (
-    <section className="grid grid-cols-2 section relative gap-8">
+    <section className="grid lg:grid-cols-2 section relative gap-8">
       <div>
         <div className="sticky top-28">
           <SectionHeader
             badge={t("badge")}
             title={t("title")}
             description={t("description")}
+            className="text-center lg:text-start"
           />
-          <div className="flex flex-col gap-3 items-start mt-8">
+          <div className="flex lg:flex-col gap-3 items-start mt-8 flex-wrap justify-center">
             {highlights.map((highlight, index) => (
               <div
                 key={index}
@@ -82,9 +84,14 @@ const TopFeatures = () => {
           </div>
         </div>
       </div>
-      <div className="grid gap-4">
+      <div className="grid gap-4 grid-cols-2 lg:grid-cols-1">
         {features.map((feature, index) => (
-          <div key={index} className="rounded-3xl border p-6">
+          <div
+            key={index}
+            className={cn("rounded-3xl border p-6", {
+              "col-span-2 lg:col-span-1": index === features.length - 1,
+            })}
+          >
             <div className="flex items-center gap-4">
               <div className="bg-lime-200 p-3 rounded-2xl w-max">
                 <feature.icon className="size-6 text-primary" />

@@ -16,8 +16,10 @@ const SectionHeader = ({
   return (
     <header className={cn(className)}>
       <Badge variant="outline">{badge}</Badge>
-      <h2 className="font-bold text-4xl mt-6">{title}</h2>
-      <p className="text-muted-foreground mt-4">{description}</p>
+      <h2 className="font-bold text-3xl lg:text-3xl mt-6">{title}</h2>
+      <p className="text-muted-foreground mt-4 text-sm md:text-base">
+        {description}
+      </p>
     </header>
   );
 };

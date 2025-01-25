@@ -34,15 +34,16 @@ const ProductHighlights = () => {
   const t = useTranslations("product_highlights");
   return (
     <section className="section">
-      <div className="grid grid-cols-2 gap-8">
-        <div className="bg-muted/50 border rounded-3xl"></div>
+      <div className="grid lg:grid-cols-2 gap-8">
+        <div className="bg-muted/50 border rounded-3xl order-last lg:order-first min-h-[400px]"></div>
         <div>
           <SectionHeader
             badge={t("badge")}
             title={t("title")}
             description={t("description")}
+            className="text-center lg:text-start"
           />
-          <div className="flex flex-col gap-4 mt-8">
+          <div className="flex gap-4 mt-8 flex-wrap justify-center lg:justify-start">
             {highlights.map((highlight, index) => (
               <div
                 key={index}
@@ -57,7 +58,7 @@ const ProductHighlights = () => {
           </div>
         </div>
       </div>
-      <div className="grid grid-cols-3 gap-6 mt-16">
+      <div className="grid md:grid-cols-3 gap-6 mt-8 lg:mt-16">
         {cards.map((card, index) => (
           <div key={index} className="rounded-3xl border p-5">
             <div className="flex items-center gap-4">

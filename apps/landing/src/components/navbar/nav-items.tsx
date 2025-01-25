@@ -15,9 +15,9 @@ import {
 } from "@/components/ui/navigation-menu";
 import Logo from "../icons";
 
-export function NavItems() {
+export function NavItems({ className }: { className?: string }) {
   return (
-    <NavigationMenu>
+    <NavigationMenu className={className}>
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Product</NavigationMenuTrigger>

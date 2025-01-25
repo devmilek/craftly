@@ -54,8 +54,8 @@ const Benefits = () => {
         description={t("description")}
         className="mb-12 text-center"
       />
-      <div className="grid grid-cols-3 gap-4 mt-12">
-        <div className="grid gap-4">
+      <div className="grid lg:grid-cols-3 gap-4 mt-12">
+        <div className="grid gap-4 max-w-[500px] mx-auto">
           {benefits.slice(0, benefits.length / 2).map((benefit) => (
             <BenefitCard
               key={benefit.key}
@@ -65,8 +65,8 @@ const Benefits = () => {
             />
           ))}
         </div>
-        <div className="rounded-3xl bg-muted/50 border"></div>
-        <div className="grid gap-4">
+        <div className="rounded-3xl bg-muted/50 border hidden lg:block"></div>
+        <div className="grid gap-4 max-w-[500px] mx-auto">
           {benefits
             .slice(benefits.length / 2, benefits.length)
             .map((benefit) => (

@@ -77,7 +77,7 @@ const Hero = () => {
         width={400}
         src="/hero-card2.png"
         alt=""
-        className="w-72 absolute bottom-[41%] z-10 drop-shadow-2xl left-40"
+        className="w-72 absolute bottom-[41%] z-10 drop-shadow-2xl left-40 hidden lg:block"
       />
       <Image
         unoptimized
@@ -85,7 +85,7 @@ const Hero = () => {
         width={400}
         src="/hero-card.png"
         alt=""
-        className="w-72 absolute bottom-1/4 z-10 drop-shadow-2xl right-40"
+        className="w-72 absolute bottom-1/4 z-10 drop-shadow-2xl right-40 hidden lg:block"
       />
     </div>
   );
