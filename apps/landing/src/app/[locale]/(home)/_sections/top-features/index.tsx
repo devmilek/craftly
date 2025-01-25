@@ -11,68 +11,60 @@ import {
   Users,
   BellRinging,
 } from "@phosphor-icons/react/dist/ssr";
+import { useTranslations } from "next-intl";
 
 const highlights = [
   {
     icon: Layout,
-    text: "Intuitive User Interface for smooth navigation",
+    key: "1",
   },
   {
     icon: CursorClick,
-    text: "Real-time collaboration for better teamwork",
+    key: "2",
   },
   {
     icon: ChartDonut,
-    text: "Advanced analytics for data-driven decisions",
+    key: "3",
   },
   {
     icon: HardDrive,
-    text: "Secure cloud storage for essential documents",
+    key: "4",
   },
-];
+] as const;
 
 const features = [
   {
     icon: Checks,
-    title: "Smart Task Management",
-    description:
-      "Easily create, assign, and track tasks, ensuring nothing falls through the cracks.",
+    key: "smart_task_management",
   },
   {
     icon: ChatCircle,
-    title: "Seamless Communication",
-    description:
-      "Collaborate effectively with clients and team members through an integrated messaging system.",
+    key: "seamless_communication",
   },
   {
     icon: ArrowsClockwise,
-    title: "Automated Data Syncing",
-    description:
-      "Ensure that all your important data remains up to date across multiple devices.",
+    key: "automated_data_syncing",
   },
   {
     icon: Users,
-    title: "Simplified Contact Management",
-    description:
-      "Keep all your business contacts in one place for easy organization and access.",
+    key: "simplified_contact_management",
   },
   {
     icon: BellRinging,
-    title: "Deadline Tracking",
-    description:
-      "Set reminders, track deadlines, and ensure timely project completion.",
+    key: "deadline_tracking",
   },
-];
+] as const;
 
 const TopFeatures = () => {
+  const t = useTranslations("top_features");
   return (
-    <section className="grid grid-cols-2 section relative">
+    <section className="grid grid-cols-2 section relative gap-8">
       <div>
         <div className="sticky top-28">
           <SectionHeader
-            badge="Top Features"
-            title="Unlock the Full Potential of Your Business"
-            description="Craftly is designed to provide everything you need to manage clients, projects, and finances efficiently."
+            badge={t("badge")}
+            title={t("title")}
+            description={t("description")}
           />
           <div className="flex flex-col gap-3 items-start mt-8">
             {highlights.map((highlight, index) => (
@@ -84,7 +76,7 @@ const TopFeatures = () => {
                   className="size-5 text-primary"
                   weight="light"
                 />
-                <p className="text-sm">{highlight.text}</p>
+                <p className="text-sm">{t(`highlights.${highlight.key}`)}</p>
               </div>
             ))}
           </div>
@@ -97,9 +89,13 @@ const TopFeatures = () => {
               <div className="bg-lime-200 p-3 rounded-2xl w-max">
                 <feature.icon className="size-6 text-primary" />
               </div>
-              <h3 className="font-bold">{feature.title}</h3>
+              <h3 className="font-bold">
+                {t(`features.${feature.key}.title`)}
+              </h3>
             </div>
-            <p className="text-muted-foreground mt-4">{feature.description}</p>
+            <p className="text-muted-foreground mt-4">
+              {t(`features.${feature.key}.description`)}
+            </p>
           </div>
         ))}
       </div>

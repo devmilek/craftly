@@ -6,45 +6,41 @@ import {
   HeadCircuit,
   PuzzlePiece,
 } from "@phosphor-icons/react/dist/ssr";
+import { useTranslations } from "next-intl";
 
 const highlights = [
-  "Intuitive Task Management for a streamlined workflow",
-  "Real-time Collaboration Tools for seamless teamwork",
-  "Customizable Dashboards for quick insights",
-  "Secure Document Storage for easy access anytime, anywhere",
-];
+  "task_management",
+  "collaboration_tools",
+  "customizable_dashboards",
+  "document_storage",
+] as const;
 
 const cards = [
   {
     icon: PuzzlePiece,
-    title: "Dynamic Project Management",
-    description:
-      "Plan, track, and execute projects with full visibility and control.",
+    key: "dynamic_project_management",
   },
   {
     icon: Coins,
-    title: "Integrated Financial Tools",
-    description:
-      "Manage invoices, track expenses, and stay on top of cash flow with ease.",
+    key: "integrated_financial_tools",
   },
   {
     icon: HeadCircuit,
-    title: "AI-Driven Insights",
-    description:
-      "Leverage artificial intelligence to optimize workflows and automate repetitive tasks.",
+    key: "ai_driven_insights",
   },
-];
+] as const;
 
 const ProductHighlights = () => {
+  const t = useTranslations("product_highlights");
   return (
     <section className="section">
       <div className="grid grid-cols-2 gap-8">
         <div className="bg-muted/50 border rounded-3xl"></div>
         <div>
           <SectionHeader
-            badge="Product Highlights"
-            title="The Essential Business Toolkit"
-            description="Craftly delivers a feature-rich experience to help businesses and freelancers streamline their day-to-day operations with ease."
+            badge={t("badge")}
+            title={t("title")}
+            description={t("description")}
           />
           <div className="flex flex-col gap-4 mt-8">
             {highlights.map((highlight, index) => (
@@ -55,7 +51,7 @@ const ProductHighlights = () => {
                 <div className="bg-lime-200 p-2 rounded-full w-max">
                   <Check className="size-3" weight="light" />
                 </div>
-                <p>{highlight}</p>
+                <p>{t(`highlights.${highlight}`)}</p>
               </div>
             ))}
           </div>
@@ -68,10 +64,10 @@ const ProductHighlights = () => {
               <div className="bg-lime-200 p-3 rounded-2xl w-max">
                 <card.icon className="size-6 text-primary" weight="light" />
               </div>
-              <h3 className="font-bold">{card.title}</h3>
+              <h3 className="font-bold">{t(`cards.${card.key}.title`)}</h3>
             </div>
             <p className="text-muted-foreground mt-4 text-sm">
-              {card.description}
+              {t(`cards.${card.key}.description`)}
             </p>
           </div>
         ))}

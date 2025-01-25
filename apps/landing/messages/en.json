@@ -1,0 +1,148 @@
+{
+  "hero": {
+    "heading": "All-in-One Platform for Organize Your Work",
+    "description": "Simplify your workflow, manage projects effortlessly, and keep track of clients and finances—all in one intuitive platform."
+  },
+  "top_features": {
+    "badge": "Top Features",
+    "title": "Unlock the Full Potential of Your Business",
+    "description": "Craftly is designed to provide everything you need to manage clients, projects, and finances efficiently.",
+    "highlights": {
+      "1": "Intuitive User Interface for smooth navigation",
+      "2": "Real-time collaboration for better teamwork",
+      "3": "Advanced analytics for data-driven decisions",
+      "4": "Secure cloud storage for essential documents"
+    },
+    "features": {
+      "smart_task_management": {
+        "title": "Smart Task Management",
+        "description": "Easily create, assign, and track tasks, ensuring nothing falls through the cracks."
+      },
+      "seamless_communication": {
+        "title": "Seamless Communication",
+        "description": "Collaborate effectively with clients and team members through an integrated messaging system."
+      },
+      "automated_data_syncing": {
+        "title": "Automated Data Syncing",
+        "description": "Ensure that all your important data remains up to date across multiple devices."
+      },
+      "simplified_contact_management": {
+        "title": "Simplified Contact Management",
+        "description": "Keep all your business contacts in one place for easy organization and access."
+      },
+      "deadline_tracking": {
+        "title": "Deadline Tracking",
+        "description": "Set reminders, track deadlines, and ensure timely project completion."
+      }
+    }
+  },
+  "product_highlights": {
+    "badge": "Product Highlights",
+    "title": "The Essential Business Toolkit",
+    "description": "Craftly delivers a feature-rich experience to help businesses and freelancers streamline their day-to-day operations with ease.",
+    "highlights": {
+      "task_management": "Intuitive Task Management for a streamlined workflow",
+      "collaboration_tools": "Real-time Collaboration Tools for seamless teamwork",
+      "customizable_dashboards": "Customizable Dashboards for quick insights",
+      "document_storage": "Secure Document Storage for easy access anytime, anywhere"
+    },
+    "cards": {
+      "dynamic_project_management": {
+        "title": "Dynamic Project Management",
+        "description": "Plan, track, and execute projects with full visibility and control."
+      },
+      "integrated_financial_tools": {
+        "title": "Integrated Financial Tools",
+        "description": "Manage invoices, track expenses, and stay on top of cash flow with ease."
+      },
+      "ai_driven_insights": {
+        "title": "AI-Driven Insights",
+        "description": "Leverage artificial intelligence to optimize workflows and automate repetitive tasks."
+      }
+    }
+  },
+  "why_us": {
+    "badge": "Why Craftly?",
+    "title": "Designed for Freelancers and Businesses Alike",
+    "description": "Craftly is built for service providers who need a reliable and efficient way to manage their business without the complexity of traditional management tools.",
+    "items": {
+      "all_in_one_solution": {
+        "title": "All-in-One Solution",
+        "description": "No need for multiple apps—everything is built in."
+      },
+      "reliable_support": {
+        "title": "Reliable Support",
+        "description": "Dedicated customer support to help you every step of the way."
+      },
+      "secure_scalable": {
+        "title": "Secure & Scalable",
+        "description": "Grow your business with confidence using our secure infrastructure."
+      },
+      "proven_success": {
+        "title": "Proven Success",
+        "description": "Designed with industry best practices to help you thrive."
+      }
+    }
+  },
+  "benefits": {
+    "badge": "Benefits",
+    "title": "What You Gain with Craftly",
+    "description": "Discover how Craftly transforms business operations, helping you work smarter and more efficiently.",
+    "items": {
+      "enhanced_productivity": {
+        "title": "Enhanced Productivity",
+        "description": "Streamline your workflows, automate tasks, and reduce manual effort to focus on what matters most."
+      },
+      "improved_client_relationships": {
+        "title": "Improved Client Relationships",
+        "description": "Keep all client interactions, documents, and invoices in one place for seamless communication and service delivery."
+      },
+      "real_time_insights": {
+        "title": "Real-time Insights",
+        "description": "Access up-to-the-minute financial data, project performance reports, and task progress updates instantly."
+      },
+      "faster_payments": {
+        "title": "Faster Payments",
+        "description": "Create and send professional invoices with automated tracking, ensuring you get paid on time."
+      },
+      "scalability": {
+        "title": "Scalability",
+        "description": "As your business grows, Craftly grows with you, offering flexible tools and features that adapt to your evolving needs."
+      },
+      "data_security": {
+        "title": "Data Security",
+        "description": "Protect your sensitive business information with cutting-edge security and compliance measures."
+      }
+    }
+  },
+  "pricing": {
+    "badge": "Pricing",
+    "title": "Our Pricing Plans",
+    "description": "Discover Craftly, your ultimate solution for seamless project management. With cutting-edge tools and intuitive features.",
+    "get_started": "Get Started",
+    "per_organization_per_month": "Per Organization Per Month",
+    "plans": {
+      "starter_plan": {
+        "title": "Starter",
+        "price": "0",
+        "badge": "Free",
+        "description": "Perfect for freelancers and individuals managing their own projects, as well as members of organizations using the free plan.",
+        "features": "Unlimited clients, Unlimited projects, Unlimited invoices, Full task and project management, Basic expense tracking, 1 GB file storage, Basic analytics, 1 organization member"
+      },
+      "pro_plan": {
+        "title": "Pro",
+        "price": "7",
+        "badge": "For Individuals",
+        "description": "For professionals looking for better organization and automation.",
+        "features": "Unlimited clients, Unlimited projects, Unlimited invoices, Full task and project management, Basic expense tracking, 10 GB file storage, Basic analytics, Up to 15 organization members, AI-driven insights"
+      },
+      "business_plan": {
+        "title": "Business",
+        "price": "25",
+        "badge": "For Business",
+        "description": "For businesses requiring full control over the platform.",
+        "features": "Unlimited clients, Unlimited projects, Unlimited invoices, Full task and project management, Basic expense tracking, 10 GB file storage, Basic analytics, Up to 25 organization members, AI-driven insights, Priority support, Automated workflows"
+      }
+    }
+  }
+}

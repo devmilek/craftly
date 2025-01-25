@@ -6,40 +6,36 @@ import {
   Trophy,
   Vault,
 } from "@phosphor-icons/react/dist/ssr";
+import { useTranslations } from "next-intl";
 
 const items = [
   {
     icon: Sparkle,
-    title: "All-in-One Solution",
-    description: "No need for multiple apps—everything is built in.",
+    key: "all_in_one_solution",
   },
   {
     icon: Headset,
-    title: "Reliable Support",
-    description:
-      "Dedicated customer support to help you every step of the way.",
+    key: "reliable_support",
   },
   {
     icon: Vault,
-    title: "Secure & Scalable",
-    description:
-      "Grow your business with confidence using our secure infrastructure.",
+    key: "secure_scalable",
   },
   {
     icon: Trophy,
-    title: "Proven Success",
-    description: "Designed with industry best practices to help you thrive.",
+    key: "proven_success",
   },
-];
+] as const;
 
 const WhyUs = () => {
+  const t = useTranslations("why_us");
   return (
     <section className="section grid grid-cols-2 gap-8">
       <div>
         <SectionHeader
-          badge="Why Craftly?"
-          title="Designed for Freelancers and Businesses Alike"
-          description="Craftly is built for service providers who need a reliable and efficient way to manage their business without the complexity of traditional management tools."
+          badge={t("badge")}
+          title={t("title")}
+          description={t("description")}
         />
         <div className="flex mt-8">
           <div className="pr-8 border-r">
@@ -58,9 +54,9 @@ const WhyUs = () => {
             <div className="p-2 rounded-2xl bg-lime-200 w-max mb-4">
               <item.icon className="size-6" weight="light" />
             </div>
-            <h3 className="font-semibold">{item.title}</h3>
+            <h3 className="font-semibold">{t(`items.${item.key}.title`)}</h3>
             <p className="text-muted-foreground text-sm mt-2">
-              {item.description}
+              {t(`items.${item.key}.description`)}
             </p>
           </div>
         ))}

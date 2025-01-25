@@ -1,18 +1,17 @@
+import { MousePointer2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 import Image from "next/image";
 import React from "react";
 
 const Hero = () => {
+  const t = useTranslations("hero");
+
   return (
     <div className="overflow-hidden w-full relative">
       <section className="container relative pt-20">
         <header className="max-w-3xl mx-auto text-center space-y-5">
-          <h1 className="font-bold text-5xl">
-            All-in-One Platform for Organize Your Work
-          </h1>
-          <p className="text-muted-foreground">
-            Simplify your workflow, manage projects effortlessly, and keep track
-            of clients and finances—all in one intuitive platform.
-          </p>
+          <h1 className="font-bold text-5xl">{t("heading")}</h1>
+          <p className="text-muted-foreground">{t("description")}</p>
         </header>
         <div className="bg-foreground rounded-3xl max-w-4xl mx-auto mt-10 border-foreground border-[16px] relative z-10">
           <Image
@@ -65,6 +64,12 @@ const Hero = () => {
           boxShadow: "0px -10px 20px rgba(0, 0, 0, 0.1)",
         }}
       />
+      <div className="absolute bottom-[40%] left-1/2 transform -translate-x-1/2 shadow-2xl z-10">
+        <MousePointer2 className="fill-foreground" />
+        <div className="bg-foreground text-background px-2 py-1 rounded-md leading-none ml-6">
+          John
+        </div>
+      </div>
       {/* Interactive cards */}
       <Image
         unoptimized
@@ -72,7 +77,7 @@ const Hero = () => {
         width={400}
         src="/hero-card2.png"
         alt=""
-        className="w-80 absolute bottom-[41%] z-10 drop-shadow-2xl left-40"
+        className="w-72 absolute bottom-[41%] z-10 drop-shadow-2xl left-40"
       />
       <Image
         unoptimized
@@ -80,7 +85,7 @@ const Hero = () => {
         width={400}
         src="/hero-card.png"
         alt=""
-        className="w-80 absolute bottom-1/4 z-10 drop-shadow-2xl right-40"
+        className="w-72 absolute bottom-1/4 z-10 drop-shadow-2xl right-40"
       />
     </div>
   );
