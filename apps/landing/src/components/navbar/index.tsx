@@ -19,7 +19,7 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import MobileMenu from "./mobile-menu";
 
-import { motion, AnimatePresence } from "motion/react";
+import { motion, AnimatePresence, Variants } from "motion/react";
 import { Portal } from "@radix-ui/react-portal";
 
 export const features = [
@@ -95,7 +95,7 @@ export const productItems = [
   },
 ];
 
-const menuVariants = {
+const menuVariants: Variants = {
   hidden: {
     opacity: 0,
     y: -20,
@@ -137,7 +137,7 @@ const Navbar = () => {
   }, []);
   return (
     <>
-      <header className="h-16 fixed w-full z-50 inset-x-0 top-0 my-4">
+      <header className="h-16 fixed w-full z-50 inset-x-0 top-0 mt-2 md:mt-4">
         <div className="container">
           <div
             className={cn(

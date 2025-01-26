@@ -1,44 +1,38 @@
+"use client";
+
 import React from "react";
 import SectionHeader from "../section-header";
 import { cn } from "@/lib/utils";
 import { ArrowUpRight } from "@phosphor-icons/react/dist/ssr";
+import { useTranslations } from "next-intl";
 
 const items = [
   {
-    title: "Effortless Client Management",
-    description:
-      "Store, track, and manage all client details in one organized and easily accessible dashboard.",
+    key: "effortless_client_management",
   },
   {
-    title: "Seamless Project Tracking",
-    description:
-      "Stay ahead of deadlines with an intuitive project management system that keeps your tasks and milestones in check.",
+    key: "seamless_project_tracking",
   },
   {
-    title: "Automated Invoicing",
-    description:
-      "Generate, send, and track invoices with ease, ensuring timely payments and professional billing.",
+    key: "automated_invoicing",
   },
   {
-    title: "Smart Expense Tracking",
-    description:
-      "Monitor your spending, track expenses, and optimize your financial management for better decision-making.",
+    key: "smart_expense_tracking",
   },
   {
-    title: "AI-Powered Assistance",
-    description:
-      "Utilize AI-driven insights, task automation, and workflow suggestions to streamline operations and save time.",
+    key: "ai_powered_assistance",
   },
-];
+] as const;
 
 const UniqueFeatures = () => {
+  const t = useTranslations("unique_features");
   return (
     <section className="section">
       <SectionHeader
         className="text-center"
-        badge="Unique Features"
-        title="Powerful Tools for a Streamlined Workflow"
-        description="Boost your productivity, stay on top of your tasks, and manage your finances effortlessly with Craftly’s comprehensive business management suite. Our platform is tailored to fit the needs of service providers, freelancers, and businesses looking for a seamless way to manage operations."
+        badge={t("badge")}
+        title={t("title")}
+        description={t("description")}
       />
       <div className="grid lg:grid-cols-3 gap-5 mt-12">
         {items.map((item, i) => (
@@ -54,9 +48,11 @@ const UniqueFeatures = () => {
           >
             <div className="flex items-center gap-4">
               <div>
-                <h4 className="text-lg font-semibold">{item.title}</h4>
+                <h4 className="text-lg font-semibold">
+                  {t(`features.${item.key}.title`)}
+                </h4>
                 <p className="text-muted-foreground text-sm">
-                  {item.description}
+                  {t(`features.${item.key}.description`)}
                 </p>
               </div>
               <button className="border rounded-full p-2 text-muted-foreground hover:bg-muted transition">

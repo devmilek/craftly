@@ -1,7 +1,38 @@
 {
   "hero": {
+    "badge_title": "New",
+    "badge_content": "We just launched our new product!",
+    "watch_video": "Watch Video",
+    "get_started": "Get Started",
     "heading": "All-in-One Platform for Organize Your Work",
     "description": "Simplify your workflow, manage projects effortlessly, and keep track of clients and finances—all in one intuitive platform."
+  },
+  "unique_features": {
+    "badge": "Unique Features",
+    "title": "Powerful Tools for a Streamlined Workflow",
+    "description": "Boost your productivity, stay on top of your tasks, and manage your finances effortlessly with Craftly’s comprehensive business management suite. Our platform is tailored to fit the needs of service providers, freelancers, and businesses looking for a seamless way to manage operations.",
+    "features": {
+      "effortless_client_management": {
+        "title": "Effortless Client Management",
+        "description": "Store, track, and manage all client details in one organized and easily accessible dashboard."
+      },
+      "seamless_project_tracking": {
+        "title": "Seamless Project Tracking",
+        "description": "Stay ahead of deadlines with an intuitive project management system that keeps your tasks and milestones in check."
+      },
+      "automated_invoicing": {
+        "title": "Automated Invoicing",
+        "description": "Generate, send, and track invoices with ease, ensuring timely payments and professional billing."
+      },
+      "smart_expense_tracking": {
+        "title": "Smart Expense Tracking",
+        "description": "Monitor your spending, track expenses, and optimize your financial management for better decision-making."
+      },
+      "ai_powered_assistance": {
+        "title": "AI-Powered Assistance",
+        "description": "Utilize AI-driven insights, task automation, and workflow suggestions to streamline operations and save time."
+      }
+    }
   },
   "top_features": {
     "badge": "Top Features",

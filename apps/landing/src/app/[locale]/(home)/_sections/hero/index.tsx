@@ -7,13 +7,13 @@ const Hero = () => {
   const t = useTranslations("hero");
 
   return (
-    <div className="overflow-hidden w-full relative">
-      <section className="container relative pt-20">
+    <div className="overflow-hidden w-full relative min-h-screen">
+      <section className="container relative pt-10 sm:pt-20">
         <header className="max-w-3xl mx-auto text-center space-y-5">
           <h1 className="font-bold text-5xl">{t("heading")}</h1>
           <p className="text-muted-foreground">{t("description")}</p>
         </header>
-        <div className="bg-foreground rounded-3xl max-w-4xl mx-auto mt-10 border-foreground border-[16px] relative z-10">
+        <div className="bg-foreground rounded-3xl max-w-4xl mx-auto mt-10 border-foreground border-8 sm:border-[16px] relative z-10">
           <Image
             src="/hero.png"
             width={1400}
@@ -64,7 +64,7 @@ const Hero = () => {
           boxShadow: "0px -10px 20px rgba(0, 0, 0, 0.1)",
         }}
       />
-      <div className="absolute bottom-[40%] left-1/2 transform -translate-x-1/2 shadow-2xl z-10">
+      <div className="absolute bottom-[40%] left-1/2 transform -translate-x-1/2 drop-shadow-2xl z-10">
         <MousePointer2 className="fill-foreground" />
         <div className="bg-foreground text-background px-2 py-1 rounded-md leading-none ml-6">
           John

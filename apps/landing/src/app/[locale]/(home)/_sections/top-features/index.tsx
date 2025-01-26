@@ -84,12 +84,12 @@ const TopFeatures = () => {
           </div>
         </div>
       </div>
-      <div className="grid gap-4 grid-cols-2 lg:grid-cols-1">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
         {features.map((feature, index) => (
           <div
             key={index}
             className={cn("rounded-3xl border p-6", {
-              "col-span-2 lg:col-span-1": index === features.length - 1,
+              "sm:col-span-2 lg:col-span-1": index === features.length - 1,
             })}
           >
             <div className="flex items-center gap-4">

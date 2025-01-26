@@ -16,7 +16,7 @@ const MobileMenu = ({ onClose }: { onClose: () => void }) => {
       <Button
         size="icon"
         variant="default"
-        className="ml-auto lg:hidden relative z-[60] mb-6"
+        className="ml-auto lg:hidden relative z-[60] mb-6 shrink-0"
         onClick={() => onClose()}
       >
         <XIcon />
