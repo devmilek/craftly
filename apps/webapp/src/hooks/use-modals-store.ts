@@ -14,6 +14,9 @@ type ModalData = {
   "upload-file": {
     projectId?: string;
   };
+  "create-task": {
+    projectId?: string;
+  };
 };
 
 type ModalsState = {

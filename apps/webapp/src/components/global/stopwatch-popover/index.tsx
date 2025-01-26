@@ -17,12 +17,12 @@ import { Separator } from "@/components/ui/separator";
 import { PauseIcon, PlayIcon, TimerIcon } from "lucide-react";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useStopwatch } from "react-timer-hook";
 import { timerSchema, TimerSchema } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { ProjectsCombobox } from "../project-combobox";
+import { useStopwatch } from "@/hooks/use-stopwatch";
 
 const StopwatchPopover = () => {
   const {
@@ -34,7 +34,7 @@ const StopwatchPopover = () => {
     isRunning,
     totalSeconds,
     reset,
-  } = useStopwatch({});
+  } = useStopwatch();
   const form = useForm<TimerSchema>({
     resolver: zodResolver(timerSchema),
     defaultValues: {
@@ -126,7 +126,7 @@ const StopwatchPopover = () => {
             </form>
           </Form>
           <div className="grid grid-cols-2 gap-2">
-            <Button variant="outline" onClick={() => reset(undefined, false)}>
+            <Button variant="outline" onClick={() => reset()}>
               Reset
             </Button>
             <Button>Save</Button>

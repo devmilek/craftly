@@ -4,7 +4,7 @@ import { v4 as uuid, v4 } from "uuid";
 import { ALLOWED_AVATAR_TYPES, MAX_AVATAR_SIZE } from "@/config";
 import sharp from "sharp";
 import { db } from "@/lib/db";
-import { files } from "@/lib/db/schemas";
+import { avatars } from "@/lib/db/schemas";
 
 export const S3 = new S3Client({
   region: "auto",
@@ -93,15 +93,13 @@ export const serverAvatarUpload = async ({
 
     const fileId = v4();
 
-    await db.insert(files).values({
+    await db.insert(avatars).values({
       id: fileId,
-      filename: optimizedImage.name,
-      mimeType: "image/webp",
+      fileName: optimizedImage.name,
       r2Key: r2Key,
       organizationId,
-      r2Url: src,
+      url: src,
       size: optimizedImage.size,
-      status: "ready",
     });
 
     return {

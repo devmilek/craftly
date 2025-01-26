@@ -2,7 +2,7 @@
 
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
-import { clients, contacts, files } from "@/lib/db/schemas";
+import { avatars, clients, contacts } from "@/lib/db/schemas";
 import { and, count, eq, getTableColumns, ilike, inArray } from "drizzle-orm";
 
 export const getTableContacts = async ({
@@ -30,7 +30,7 @@ export const getTableContacts = async ({
     .select({
       ...getTableColumns(contacts),
       clientName: clients.name,
-      avatarSrc: files.r2Url,
+      avatarSrc: avatars.url,
     })
     .from(contacts)
     .where(
@@ -43,7 +43,7 @@ export const getTableContacts = async ({
       )
     )
     .leftJoin(clients, eq(contacts.clientId, clients.id))
-    .leftJoin(files, eq(contacts.avatarId, files.id))
+    .leftJoin(avatars, eq(contacts.avatarId, avatars.id))
     .orderBy(contacts.updatedAt)
     .limit(ITEMS_PER_PAGE)
     .offset((page - 1) * ITEMS_PER_PAGE);
@@ -81,9 +81,7 @@ export const countTableContacts = async ({
           : undefined,
         query ? ilike(contacts.name, `%${query}%`) : undefined
       )
-    )
-    .leftJoin(clients, eq(contacts.clientId, clients.id))
-    .leftJoin(files, eq(contacts.avatarId, files.id));
+    );
 
   return dataCount.count;
 };

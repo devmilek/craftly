@@ -4,16 +4,18 @@ import { cn } from "@/lib/utils";
 import { useDroppable } from "@dnd-kit/core";
 import { TaskStatus } from "@/types";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { getTasksByStatus } from "../../actions";
 import { Loader2Icon } from "lucide-react";
 import { useEffect, useMemo, useRef } from "react";
+import { getTasksByStatus } from "@/app/(app)/tasks/actions";
 
 export const DroppableColumn = ({
   id,
   status,
+  projectId,
 }: {
   id: string;
   status: TaskStatus;
+  projectId?: string;
 }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const { isOver, setNodeRef } = useDroppable({
@@ -22,10 +24,10 @@ export const DroppableColumn = ({
 
   const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteQuery({
-      queryKey: ["tasks", status],
+      queryKey: ["tasks", status, projectId],
       initialPageParam: 0,
       queryFn: async ({ pageParam = 0 }) =>
-        await getTasksByStatus(status, pageParam),
+        await getTasksByStatus(status, pageParam, projectId),
       getNextPageParam: (lastPage, allPages) => {
         return lastPage.length ? allPages.length + 1 : undefined;
       },

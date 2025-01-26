@@ -13,56 +13,60 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useModal } from "@/hooks/use-modals-store";
+import { Tabs } from "@radix-ui/react-tabs";
 import { KanbanIcon, ListIcon, PlusCircleIcon, PlusIcon } from "lucide-react";
 import { parseAsBoolean, useQueryState } from "nuqs";
 import React from "react";
 import { useLocalStorage } from "usehooks-ts";
+import KanbanView from "./kanban";
 
-const Header = () => {
-  const { onOpen } = useModal("create-project");
-  const [value, setValue] = useLocalStorage("projects_view", "kanban", {
+const TasksView = ({ projectId }: { projectId?: string }) => {
+  const { onOpen } = useModal("create-task");
+  const [value, setValue] = useLocalStorage("tasks_view", "kanban", {
     initializeWithValue: false,
   });
 
   return (
-    <header>
-      <h1 className="text-2xl font-semibold mb-4">Projects</h1>
-      <div className="flex justify-between">
-        <div className="flex gap-3">
-          <SearchInput />
-          <StatusDropdown />
-        </div>
-        <div className="flex gap-3">
-          <Tabs value={value} onValueChange={setValue}>
-            <TabsList>
-              <TabsTrigger value="kanban">
-                <KanbanIcon className="size-4 mr-2" />
-                Kanban
-              </TabsTrigger>
-              <TabsTrigger value="list">
-                <ListIcon className="size-4 mr-2" />
-                List
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-          <Button onClick={onOpen}>
-            New project
-            <PlusIcon />
-          </Button>
+    <>
+      <div>
+        <div className="flex justify-between">
+          <div className="flex gap-3">
+            <SearchInput />
+            <StatusDropdown />
+          </div>
+          <div className="flex gap-3">
+            <Tabs value={value} onValueChange={setValue}>
+              <TabsList>
+                <TabsTrigger value="kanban">
+                  <KanbanIcon className="size-4 mr-2" />
+                  Kanban
+                </TabsTrigger>
+                <TabsTrigger value="list">
+                  <ListIcon className="size-4 mr-2" />
+                  List
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+            <Button onClick={() => onOpen()}>
+              New Task
+              <PlusIcon />
+            </Button>
+          </div>
         </div>
       </div>
-    </header>
+      <div className="mt-5">
+        {value === "kanban" && <KanbanView projectId={projectId} />}
+      </div>
+    </>
   );
 };
 
 const StatusDropdown = () => {
   const [status, setStatus] = useQueryState(
     "archived",
-    parseAsBoolean.withDefault(false).withOptions({
-      shallow: false,
-    })
+    parseAsBoolean.withDefault(false)
   );
 
   const handleStatusChange = (value: string) => {
@@ -98,4 +102,4 @@ const StatusDropdown = () => {
   );
 };
 
-export default Header;
+export default TasksView;

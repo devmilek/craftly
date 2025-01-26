@@ -47,8 +47,8 @@ export const getTasksByStatus = async (
     )
     .leftJoin(projects, eq(tasks.projectId, projects.id))
     .orderBy(desc(tasks.updatedAt))
-    .limit(10)
-    .offset(page * 10);
+    .limit(20)
+    .offset(page * 20);
 
   return data;
 };

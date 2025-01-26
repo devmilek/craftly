@@ -5,14 +5,14 @@ import { getInitials } from "@/lib/utils";
 import { format } from "date-fns";
 import { CalendarIcon, CheckCheck, ChevronRight } from "lucide-react";
 import React from "react";
-import ProjectStatusDropdown from "./project-status-dropdown";
+import ProjectStatusDropdown from "../project-status-dropdown";
 import Link from "next/link";
 
 type ProjectData = Project & {
   client: Client | null;
 };
 
-const ProjectsListView = ({ data }: { data: ProjectData[] | undefined }) => {
+const ListView = ({ data }: { data: ProjectData[] | undefined }) => {
   return (
     <div>
       {data?.map((project) => (
@@ -79,4 +79,4 @@ const ProjectsListView = ({ data }: { data: ProjectData[] | undefined }) => {
   );
 };
 
-export default ProjectsListView;
+export default ListView;

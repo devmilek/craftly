@@ -6,7 +6,7 @@ import { db } from "@/lib/db";
 import { projects } from "@/lib/db/schemas";
 import { and, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import ProjectStatusDropdown from "../_components/project-status-dropdown";
+import ProjectStatusDropdown from "../../../../components/views/projects-view/project-status-dropdown";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
 import ProjectTabs from "./_components/project-tabs";
