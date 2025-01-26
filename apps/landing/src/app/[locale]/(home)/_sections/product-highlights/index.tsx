@@ -7,6 +7,7 @@ import {
   PuzzlePiece,
 } from "@phosphor-icons/react/dist/ssr";
 import { useTranslations } from "next-intl";
+import Image from "next/image";
 
 const highlights = [
   "task_management",
@@ -35,7 +36,15 @@ const ProductHighlights = () => {
   return (
     <section className="section">
       <div className="grid lg:grid-cols-2 gap-8">
-        <div className="bg-muted/50 border rounded-3xl order-last lg:order-first min-h-[400px]"></div>
+        <div className="bg-muted/50 border rounded-3xl order-last lg:order-first min-h-[340px] relative overflow-hidden">
+          <Image
+            src="/app_screen.png"
+            height={600}
+            width={600}
+            alt=""
+            className="absolute left-16 -bottom-2 shadow-2xl"
+          />
+        </div>
         <div>
           <SectionHeader
             badge={t("badge")}
@@ -43,11 +52,11 @@ const ProductHighlights = () => {
             description={t("description")}
             className="text-center lg:text-start"
           />
-          <div className="flex gap-4 mt-8 flex-wrap justify-center lg:justify-start">
+          <div className="flex gap-3 mt-8 flex-wrap justify-center lg:justify-start">
             {highlights.map((highlight, index) => (
               <div
                 key={index}
-                className="rounded-full py-3 pl-3 pr-4 border flex gap-4 items-center"
+                className="rounded-full py-2 pl-2 pr-4 border flex gap-4 items-center"
               >
                 <div className="bg-lime-200 p-2 rounded-full w-max">
                   <Check className="size-3" weight="light" />

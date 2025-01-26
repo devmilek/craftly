@@ -16,13 +16,15 @@ import {
 import Logo from "../icons";
 import FeaturesDropdown from "./features-dropdown";
 import { productItems } from ".";
+import { useTranslations } from "next-intl";
 
 export function NavItems({ className }: { className?: string }) {
+  const t = useTranslations("navbar.items");
   return (
     <NavigationMenu className={className}>
       <NavigationMenuList>
         <NavigationMenuItem>
-          <NavigationMenuTrigger>Product</NavigationMenuTrigger>
+          <NavigationMenuTrigger>{t("product.title")}</NavigationMenuTrigger>
           <NavigationMenuContent>
             <ul className="grid gap-3 p-6 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
               <li className="row-span-3">
@@ -34,15 +36,18 @@ export function NavItems({ className }: { className?: string }) {
                     <Logo className="h-7" />
                     <div className="mb-2 mt-4 text-lg font-medium">Craftly</div>
                     <p className="text-sm leading-tight text-muted-foreground">
-                      All-in-one platform that simplifies client management,
-                      project tracking, and finances.
+                      {t("product.description")}
                     </p>
                   </Link>
                 </NavigationMenuLink>
               </li>
               {productItems.map((item, index) => (
-                <ListItem href={item.href} title={item.title} key={index}>
-                  {item.description}
+                <ListItem
+                  href={item.href}
+                  title={t(`product.sub_items.${item.key}.title`)}
+                  key={index}
+                >
+                  {t(`product.sub_items.${item.key}.description`)}
                 </ListItem>
               ))}
             </ul>
@@ -52,14 +57,14 @@ export function NavItems({ className }: { className?: string }) {
         <NavigationMenuItem>
           <Link href="/docs" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Use cases
+              {t("use_cases")}
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <Link href="/docs" legacyBehavior passHref>
             <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-              Pricing
+              {t("pricing")}
             </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>

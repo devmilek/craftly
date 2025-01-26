@@ -1,146 +1,240 @@
 {
+  "navbar": {
+    "join_waitlist": "Dołącz do listy oczekujących",
+    "items": {
+      "pricing": "Cennik",
+      "use_cases": "Przypadki użycia",
+      "product": {
+        "title": "Produkt",
+        "description": "Wszechstronna platforma, która upraszcza zarządzanie klientami, śledzenie projektów i finanse.",
+        "sub_items": {
+          "why_craftly": {
+            "title": "Dlaczego Craftly?",
+            "description": "Zobacz, dlaczego Craftly przewyższa konkurencję dzięki prawdziwym historiom sukcesu."
+          },
+          "how_it_works": {
+            "title": "Jak to działa",
+            "description": "Poznaj kluczowe funkcje Craftly w interaktywnym przewodniku."
+          },
+          "benefits": {
+            "title": "Korzyści",
+            "description": "Zwiększ produktywność, usprawnij przepływ pracy i rozwijaj swoją firmę bez wysiłku."
+          }
+        }
+      },
+      "features": {
+        "title": "Funkcje",
+        "sub_items": {
+          "crm": {
+            "title": "CRM",
+            "description": "Zachowaj porządek i dostępność w relacjach z klientami."
+          },
+          "projects": {
+            "title": "Projekty",
+            "description": "Planuj i realizuj projekty efektywnie z pełną widocznością."
+          },
+          "tasks": {
+            "title": "Zadania",
+            "description": "Organizuj, ustalaj priorytety i kontroluj swoje codzienne zadania."
+          },
+          "invoices": {
+            "title": "Faktury",
+            "description": "Twórz i śledź faktury z łatwością i profesjonalizmem."
+          },
+          "expenses": {
+            "title": "Wydatki",
+            "description": "Łatwo zarządzaj i śledź wydatki swojej organizacji."
+          },
+          "contacts": {
+            "title": "Kontakty",
+            "description": "Przechowuj i zarządzaj wszystkimi kontaktami biznesowymi w jednym miejscu."
+          },
+          "storage": {
+            "title": "Przechowywanie",
+            "description": "Bezpiecznie przechowuj i uzyskuj dostęp do ważnych plików w dowolnym miejscu i czasie."
+          },
+          "notes": {
+            "title": "Notatki",
+            "description": "Szybko zapisuj i organizuj swoje pomysły, aby łatwo się do nich odwoływać."
+          }
+        }
+      }
+    }
+  },
   "hero": {
-    "heading": "Platforma All-in-One do Organizowania Twojej Pracy",
+    "badge_title": "Nowość",
+    "badge_content": "Właśnie uruchomiliśmy nasz nowy produkt!",
+    "watch_video": "Obejrzyj film",
+    "get_started": "Rozpocznij",
+    "heading": "Wszechstronna platforma do organizacji pracy",
     "description": "Uprość swój przepływ pracy, zarządzaj projektami bez wysiłku i śledź klientów oraz finanse — wszystko w jednej intuicyjnej platformie."
   },
+  "unique_features": {
+    "badge": "Unikalne funkcje",
+    "title": "Potężne narzędzia do usprawnienia przepływu pracy",
+    "description": "Zwiększ swoją produktywność, kontroluj zadania i zarządzaj finansami bez wysiłku dzięki kompleksowemu zestawowi do zarządzania biznesem Craftly. Nasza platforma jest dostosowana do potrzeb dostawców usług, freelancerów i firm poszukujących bezproblemowego sposobu zarządzania operacjami.",
+    "features": {
+      "effortless_client_management": {
+        "title": "Bezwysiłkowe zarządzanie klientami",
+        "description": "Przechowuj, śledź i zarządzaj wszystkimi danymi klientów w jednym zorganizowanym i łatwo dostępnym panelu."
+      },
+      "seamless_project_tracking": {
+        "title": "Bezproblemowe śledzenie projektów",
+        "description": "Bądź na bieżąco z terminami dzięki intuicyjnemu systemowi zarządzania projektami, który kontroluje Twoje zadania i kamienie milowe."
+      },
+      "automated_invoicing": {
+        "title": "Automatyczne fakturowanie",
+        "description": "Generuj, wysyłaj i śledź faktury z łatwością, zapewniając terminowe płatności i profesjonalne rozliczenia."
+      },
+      "smart_expense_tracking": {
+        "title": "Inteligentne śledzenie wydatków",
+        "description": "Monitoruj swoje wydatki, śledź koszty i optymalizuj zarządzanie finansami, aby podejmować lepsze decyzje."
+      },
+      "ai_powered_assistance": {
+        "title": "Wsparcie oparte na AI",
+        "description": "Wykorzystaj oparte na sztucznej inteligencji analizy, automatyzację zadań i sugestie przepływu pracy, aby usprawnić operacje i zaoszczędzić czas."
+      }
+    }
+  },
   "top_features": {
-    "badge": "Najważniejsze Funkcje",
-    "title": "Odkryj Pełny Potencjał Swojego Biznesu",
-    "description": "Craftly zostało zaprojektowane, aby zapewnić wszystko, czego potrzebujesz do efektywnego zarządzania klientami, projektami i finansami.",
+    "badge": "Najlepsze funkcje",
+    "title": "Odkryj pełny potencjał swojej firmy",
+    "description": "Craftly został zaprojektowany, aby zapewnić wszystko, czego potrzebujesz do efektywnego zarządzania klientami, projektami i finansami.",
     "highlights": {
-      "1": "Intuicyjny interfejs użytkownika dla łatwej nawigacji",
+      "1": "Intuicyjny interfejs użytkownika dla płynnej nawigacji",
       "2": "Współpraca w czasie rzeczywistym dla lepszej pracy zespołowej",
-      "3": "Zaawansowana analiza dla podejmowania decyzji opartych na danych",
+      "3": "Zaawansowana analityka dla decyzji opartych na danych",
       "4": "Bezpieczne przechowywanie w chmurze dla ważnych dokumentów"
     },
     "features": {
       "smart_task_management": {
-        "title": "Inteligentne Zarządzanie Zadaniami",
-        "description": "Łatwo twórz, przypisuj i śledź zadania, upewniając się, że nic nie umknie."
+        "title": "Inteligentne zarządzanie zadaniami",
+        "description": "Łatwo twórz, przypisuj i śledź zadania, aby nic nie umknęło."
       },
       "seamless_communication": {
-        "title": "Bezproblemowa Komunikacja",
-        "description": "Skutecznie współpracuj z klientami i członkami zespołu za pomocą zintegrowanego systemu wiadomości."
+        "title": "Bezproblemowa komunikacja",
+        "description": "Skutecznie współpracuj z klientami i członkami zespołu dzięki zintegrowanemu systemowi wiadomości."
       },
       "automated_data_syncing": {
-        "title": "Automatyczne Synchronizowanie Danych",
-        "description": "Upewnij się, że wszystkie ważne dane są aktualizowane na różnych urządzeniach."
+        "title": "Automatyczna synchronizacja danych",
+        "description": "Zapewnij, że wszystkie ważne dane pozostaną aktualne na wielu urządzeniach."
       },
       "simplified_contact_management": {
-        "title": "Uproszczone Zarządzanie Kontaktami",
-        "description": "Przechowuj wszystkie swoje kontakty biznesowe w jednym miejscu, dla łatwej organizacji i dostępu."
+        "title": "Uproszczone zarządzanie kontaktami",
+        "description": "Przechowuj wszystkie kontakty biznesowe w jednym miejscu, aby łatwo je organizować i uzyskiwać do nich dostęp."
       },
       "deadline_tracking": {
-        "title": "Śledzenie Terminów",
-        "description": "Ustawiaj przypomnienia, śledź terminy i zapewnij terminowe ukończenie projektów."
+        "title": "Śledzenie terminów",
+        "description": "Ustaw przypomnienia, śledź terminy i zapewnij terminowe zakończenie projektów."
       }
     }
   },
   "product_highlights": {
     "badge": "Najważniejsze cechy produktu",
-    "title": "Podstawowy Zestaw Narzędzi Biznesowych",
-    "description": "Craftly oferuje bogate w funkcje doświadczenie, które pomaga firmom i freelancerom uprościć codzienne operacje z łatwością.",
+    "title": "Niezbędny zestaw narzędzi biznesowych",
+    "description": "Craftly oferuje bogate w funkcje doświadczenie, które pomaga firmom i freelancerom usprawnić codzienne operacje z łatwością.",
     "highlights": {
-      "task_management": "Intuicyjne zarządzanie zadaniami dla płynnego przepływu pracy",
-      "collaboration_tools": "Narzędzia współpracy w czasie rzeczywistym dla płynnej pracy zespołowej",
-      "customizable_dashboards": "Personalizowane panele sterowania dla szybkich informacji",
-      "document_storage": "Bezpieczne przechowywanie dokumentów dla łatwego dostępu w dowolnym miejscu"
+      "task_management": "Intuicyjne zarządzanie zadaniami dla usprawnionego przepływu pracy",
+      "collaboration_tools": "Narzędzia do współpracy w czasie rzeczywistym dla bezproblemowej pracy zespołowej",
+      "customizable_dashboards": "Konfigurowalne pulpity nawigacyjne dla szybkich informacji",
+      "document_storage": "Bezpieczne przechowywanie dokumentów dla łatwego dostępu w dowolnym miejscu i czasie"
     },
     "cards": {
       "dynamic_project_management": {
-        "title": "Dynamiczne Zarządzanie Projektami",
+        "title": "Dynamiczne zarządzanie projektami",
         "description": "Planuj, śledź i realizuj projekty z pełną widocznością i kontrolą."
       },
       "integrated_financial_tools": {
-        "title": "Zintegrowane Narzędzia Finansowe",
-        "description": "Zarządzaj fakturami, śledź wydatki i kontroluj przepływ gotówki z łatwością."
+        "title": "Zintegrowane narzędzia finansowe",
+        "description": "Zarządzaj fakturami, śledź wydatki i kontroluj przepływy pieniężne z łatwością."
       },
       "ai_driven_insights": {
-        "title": "Wnioski Oparte na AI",
-        "description": "Wykorzystaj sztuczną inteligencję do optymalizacji przepływów pracy i automatyzacji powtarzających się zadań."
+        "title": "Analizy oparte na AI",
+        "description": "Wykorzystaj sztuczną inteligencję do optymalizacji przepływów pracy i automatyzacji powtarzalnych zadań."
       }
     }
   },
   "why_us": {
     "badge": "Dlaczego Craftly?",
-    "title": "Zapewnione dla Freelancerów i Firm",
-    "description": "Craftly zostało stworzone z myślą o usługodawcach, którzy potrzebują niezawodnego i efektywnego sposobu zarządzania swoim biznesem, bez złożoności tradycyjnych narzędzi zarządzania.",
+    "title": "Zaprojektowany dla freelancerów i firm",
+    "description": "Craftly został stworzony dla dostawców usług, którzy potrzebują niezawodnego i efektywnego sposobu zarządzania swoją firmą bez złożoności tradycyjnych narzędzi zarządzania.",
     "items": {
       "all_in_one_solution": {
-        "title": "Rozwiązanie All-in-One",
-        "description": "Nie musisz korzystać z wielu aplikacji — wszystko jest wbudowane."
+        "title": "Wszechstronne rozwiązanie",
+        "description": "Nie potrzebujesz wielu aplikacji — wszystko jest wbudowane."
       },
       "reliable_support": {
-        "title": "Niezawodna Obsługa",
-        "description": "Dedykowana obsługa klienta, która pomoże Ci na każdym etapie."
+        "title": "Niezawodne wsparcie",
+        "description": "Dedykowane wsparcie klienta, które pomoże Ci na każdym kroku."
       },
       "secure_scalable": {
-        "title": "Bezpieczne i Skalowalne",
-        "description": "Rozwijaj swój biznes z pewnością dzięki naszej bezpiecznej infrastrukturze."
+        "title": "Bezpieczne i skalowalne",
+        "description": "Rozwijaj swoją firmę z pewnością, korzystając z naszej bezpiecznej infrastruktury."
       },
       "proven_success": {
-        "title": "Udowodniony Sukces",
-        "description": "Zaprojektowane zgodnie z najlepszymi praktykami branżowymi, aby pomóc Ci się rozwijać."
+        "title": "Sprawdzony sukces",
+        "description": "Zaprojektowany z najlepszymi praktykami branżowymi, aby pomóc Ci osiągnąć sukces."
       }
     }
   },
   "benefits": {
     "badge": "Korzyści",
-    "title": "Co Zyskujesz z Craftly",
-    "description": "Odkryj, jak Craftly zmienia operacje biznesowe, pomagając Ci pracować mądrze i efektywnie.",
+    "title": "Co zyskujesz z Craftly",
+    "description": "Odkryj, jak Craftly transformuje operacje biznesowe, pomagając Ci pracować mądrzej i bardziej efektywnie.",
     "items": {
       "enhanced_productivity": {
-        "title": "Zwiększona Produktywność",
-        "description": "Uprość swoje przepływy pracy, automatyzuj zadania i redukuj ręczną pracę, aby skupić się na tym, co najważniejsze."
+        "title": "Zwiększona produktywność",
+        "description": "Usprawnij swoje przepływy pracy, automatyzuj zadania i zmniejsz wysiłek manualny, aby skupić się na tym, co najważniejsze."
       },
       "improved_client_relationships": {
-        "title": "Poprawione Relacje z Klientami",
-        "description": "Trzymaj wszystkie interakcje z klientami, dokumenty i faktury w jednym miejscu, aby zapewnić płynną komunikację i realizację usług."
+        "title": "Lepsze relacje z klientami",
+        "description": "Przechowuj wszystkie interakcje z klientami, dokumenty i faktury w jednym miejscu, aby zapewnić bezproblemową komunikację i dostarczanie usług."
       },
       "real_time_insights": {
-        "title": "Wnioski w Czasie Rzeczywistym",
-        "description": "Uzyskaj dostęp do aktualnych danych finansowych, raportów wydajności projektów i postępów w zadaniach."
+        "title": "Analizy w czasie rzeczywistym",
+        "description": "Uzyskuj dostęp do najnowszych danych finansowych, raportów wydajności projektów i aktualizacji postępów zadań natychmiast."
       },
       "faster_payments": {
-        "title": "Szybsze Płatności",
-        "description": "Twórz i wysyłaj profesjonalne faktury z automatycznym śledzeniem, zapewniając, że otrzymasz płatność na czas."
+        "title": "Szybsze płatności",
+        "description": "Twórz i wysyłaj profesjonalne faktury z automatycznym śledzeniem, aby otrzymywać płatności na czas."
       },
       "scalability": {
         "title": "Skalowalność",
-        "description": "W miarę jak Twój biznes rośnie, Craftly rośnie razem z Tobą, oferując elastyczne narzędzia i funkcje, które dostosowują się do Twoich zmieniających się potrzeb."
+        "description": "Gdy Twoja firma rośnie, Craftly rośnie razem z Tobą, oferując elastyczne narzędzia i funkcje, które dostosowują się do zmieniających się potrzeb."
       },
       "data_security": {
-        "title": "Bezpieczeństwo Danych",
-        "description": "Chroń swoje wrażliwe informacje biznesowe za pomocą najnowszych technologii zabezpieczeń i środków zgodności."
+        "title": "Bezpieczeństwo danych",
+        "description": "Chroń swoje wrażliwe informacje biznesowe za pomocą najnowocześniejszych środków bezpieczeństwa i zgodności."
       }
     }
   },
   "pricing": {
     "badge": "Cennik",
-    "title": "Nasze Plany Cennikowe",
-    "description": "Odkryj Craftly, Twoje ostateczne rozwiązanie do bezproblemowego zarządzania projektami. Z zaawansowanymi narzędziami i intuicyjnymi funkcjami.",
-    "get_started": "Zacznij",
+    "title": "Nasze plany cenowe",
+    "description": "Odkryj Craftly, Twoje ostateczne rozwiązanie do bezproblemowego zarządzania projektami. Z najnowocześniejszymi narzędziami i intuicyjnymi funkcjami.",
+    "get_started": "Rozpocznij",
+    "per_organization_per_month": "Na organizację miesięcznie",
     "plans": {
       "starter_plan": {
         "title": "Starter",
         "price": "0",
         "badge": "Darmowy",
-        "description": "Idealny dla freelancerów i osób zarządzających własnymi projektami, a także członków organizacji korzystających z planu darmowego.",
-        "features": "Nieograniczeni klienci, Nieograniczone projekty, Nieograniczone faktury, Pełne zarządzanie zadaniami i projektami, Podstawowe śledzenie wydatków, 1 GB przechowywania plików, Podstawowa analiza, 1 członek organizacji"
+        "description": "Idealny dla freelancerów i osób zarządzających własnymi projektami, a także członków organizacji korzystających z darmowego planu.",
+        "features": "Nielimitowani klienci, Nielimitowane projekty, Nielimitowane faktury, Pełne zarządzanie zadaniami i projektami, Podstawowe śledzenie wydatków, 1 GB przechowywania plików, Podstawowa analityka, 1 członek organizacji"
       },
       "pro_plan": {
         "title": "Pro",
         "price": "7",
-        "badge": "Dla Profesjonalistów",
-        "description": "Dla profesjonalistów szukających lepszej organizacji i automatyzacji.",
-        "features": "Nieograniczeni klienci, Nieograniczone projekty, Nieograniczone faktury, Pełne zarządzanie zadaniami i projektami, Podstawowe śledzenie wydatków, 10 GB przechowywania plików, Podstawowa analiza, Do 15 członków organizacji, Wnioski oparte na AI"
+        "badge": "Dla osób indywidualnych",
+        "description": "Dla profesjonalistów poszukujących lepszej organizacji i automatyzacji.",
+        "features": "Nielimitowani klienci, Nielimitowane projekty, Nielimitowane faktury, Pełne zarządzanie zadaniami i projektami, Podstawowe śledzenie wydatków, 10 GB przechowywania plików, Podstawowa analityka, Do 15 członków organizacji, Analizy oparte na AI"
       },
       "business_plan": {
-        "title": "Business",
+        "title": "Biznes",
         "price": "25",
-        "badge": "Dla Firm",
+        "badge": "Dla firm",
         "description": "Dla firm wymagających pełnej kontroli nad platformą.",
-        "features": "Nieograniczeni klienci, Nieograniczone projekty, Nieograniczone faktury, Pełne zarządzanie zadaniami i projektami, Podstawowe śledzenie wydatków, 10 GB przechowywania plików, Podstawowa analiza, Do 25 członków organizacji, Wnioski oparte na AI, Priorytetowa obsługa, Zautomatyzowane procesy"
+        "features": "Nielimitowani klienci, Nielimitowane projekty, Nielimitowane faktury, Pełne zarządzanie zadaniami i projektami, Podstawowe śledzenie wydatków, 10 GB przechowywania plików, Podstawowa analityka, Do 25 członków organizacji, Analizy oparte na AI, Priorytetowe wsparcie, Automatyzacja przepływów pracy"
       }
     }
   }

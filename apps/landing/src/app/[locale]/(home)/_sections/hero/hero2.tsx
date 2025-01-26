@@ -90,7 +90,7 @@ const Hero2 = () => {
             alt=""
             className="object-top object-cover"
           />
-          <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-3 bg-lime-200 ring-8 ring-lime-200/30 drop-shadow-2xl">
+          <button className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full p-5 hover:scale-110 transition bg-lime-200 ring-8 ring-lime-200/30 drop-shadow-2xl">
             <Play />
           </button>
         </motion.div>

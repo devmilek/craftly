@@ -21,79 +21,65 @@ import MobileMenu from "./mobile-menu";
 
 import { motion, AnimatePresence, Variants } from "motion/react";
 import { Portal } from "@radix-ui/react-portal";
+import { useTranslations } from "next-intl";
 
 export const features = [
   {
     icon: Users,
-    title: "CRM",
-    description: "Keep your client relationships organized and accessible.",
+    key: "crm",
     href: "/",
   },
   {
     icon: Folders,
-    title: "Projects",
-    description: "Plan and execute projects efficiently with full visibility.",
+    key: "projects",
     href: "/",
   },
   {
     icon: Checks,
-    title: "Tasks",
-    description: "Organize, prioritize, and stay on top of your daily tasks.",
+    key: "tasks",
     href: "/",
   },
   {
     icon: Invoice,
-    title: "Invoices",
-    description: "Create and track invoices with ease and professionalism.",
+    key: "invoices",
     href: "/",
   },
   {
     icon: Receipt,
-    title: "Expenses",
-    description: "Easily manage and track your organization’s spending.",
+    key: "expenses",
     href: "/",
   },
   {
     icon: AddressBook,
-    title: "Contacts",
-    description: "Store and manage all your business contacts in one place.",
+    key: "contacts",
     href: "/",
   },
   {
     icon: HardDrives,
-    title: "Storage",
-    description:
-      "Securely store and access your important files anytime, anywhere.",
+    key: "storage",
     href: "/",
   },
   {
     icon: Note,
-    title: "Notes",
-    description: "Quickly jot down and organize your ideas for easy reference.",
+    key: "notes",
     href: "/",
   },
-];
+] as const;
 
 export const productItems = [
   {
-    title: "Why Craftly?",
-    description:
-      "See why Craftly outperforms competitors with real success stories.",
+    key: "why_craftly",
     href: "/",
   },
   {
-    title: "How It Works",
-    description:
-      "Explore Craftly’s key features in an interactive walkthrough.",
+    key: "how_it_works",
     href: "/",
   },
   {
-    title: "Benefits",
-    description:
-      "Boost productivity, streamline workflows, and grow your business effortlessly.",
+    key: "benefits",
     href: "/",
   },
-];
+] as const;
 
 const menuVariants: Variants = {
   hidden: {
@@ -122,6 +108,7 @@ const menuVariants: Variants = {
 };
 
 const Navbar = () => {
+  const t = useTranslations("navbar");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -129,6 +116,8 @@ const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
     };
+
+    handleScroll();
 
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -152,7 +141,7 @@ const Navbar = () => {
             </Link>
             <NavItems className="hidden lg:flex" />
             <Button className="ml-auto hidden lg:flex rounded-xl">
-              Join waitlist <PlusIcon className="" />
+              {t("join_waitlist")} <PlusIcon className="" />
             </Button>
             <Button
               size="icon"
