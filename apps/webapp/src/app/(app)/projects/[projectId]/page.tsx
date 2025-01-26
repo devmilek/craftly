@@ -9,7 +9,6 @@ import { PlusIcon } from "lucide-react";
 import StatsCard from "@/components/cards/stats-card";
 import { endOfWeek, startOfWeek } from "date-fns";
 import RecentFiles from "./_components/recent-files";
-import { Separator } from "@/components/ui/separator";
 
 const ProjectDetailsScreen = async ({
   params,
@@ -145,9 +144,9 @@ const ProjectDetailsScreen = async ({
         </div>
         <div className="flex gap-8 mt-8">
           <div className="w-full">
-            <RecentFiles />
+            <RecentFiles projectId={project.id} />
           </div>
-          <div className="w-96 "></div>
+          <div className="w-[600px]"></div>
         </div>
       </section>
     </div>

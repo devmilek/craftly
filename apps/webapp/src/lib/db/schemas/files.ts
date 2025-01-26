@@ -1,7 +1,5 @@
 import {
-  boolean,
   integer,
-  jsonb,
   pgEnum,
   pgTable,
   text,
@@ -10,6 +8,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { organizations, users } from "./users";
+import { projects } from "./projects";
 
 export const fileStatus = ["processing", "ready", "error"] as const;
 export const fileStatusEnum = pgEnum("file_status", fileStatus);
@@ -24,25 +23,47 @@ export const files = pgTable("files", {
 
   // Ścieżki i URL-e
   r2Key: text("r2_key").notNull().unique(), // klucz w R2 storage
-  r2Url: text("r2_url").notNull(), // publiczny URL do pliku
+  url: text("url").notNull(), // publiczny URL do pliku
 
-  // Metadane
   uploadedBy: varchar("uploaded_by").references(() => users.id, {
     onDelete: "set null",
   }),
   organizationId: varchar("organization_id")
+    .notNull()
     .references(() => organizations.id, {
       onDelete: "restrict",
     })
     .notNull(),
-
-  // Status i flagi
-  isPublic: boolean("is_public").default(true).notNull(),
+  projectId: uuid("project_id").references(() => projects.id, {
+    onDelete: "restrict",
+  }),
   status: fileStatusEnum("status").notNull().default("processing"),
 
-  // Opcjonalne metadane
-  description: text("description"),
-  metadata: jsonb("metadata").default({}), // dowolne dodatkowe metadane
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+export const avatars = pgTable("avatars", {
+  id: uuid("id").defaultRandom().primaryKey(),
+
+  fileName: text("fileName").notNull(),
+  size: integer("size").notNull(),
+
+  r2Key: text("r2_key").notNull().unique(),
+  url: text("url").notNull(),
+
+  uploadedBy: varchar("uploaded_by").references(() => users.id, {
+    onDelete: "set null",
+  }),
+  organizationId: varchar("organization_id")
+    .notNull()
+    .references(() => organizations.id, {
+      onDelete: "restrict",
+    })
+    .notNull(),
 
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")

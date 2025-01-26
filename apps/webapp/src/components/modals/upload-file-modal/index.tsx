@@ -15,7 +15,7 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { toast } from "sonner";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { queryClient } from "@/components/providers/query-provider";
 
 interface FileUploadStatus {
   file: File;
@@ -28,22 +28,18 @@ interface FileUploadStatus {
 }
 
 const UploadFileModal = () => {
-  const { isOpen, onClose } = useModal("upload-file");
-  const [files, setFiles] = useState<FileUploadStatus[]>([]);
+  const { isOpen, onClose, data } = useModal("upload-file");
+  const [file, setFile] = useState<FileUploadStatus>();
 
   const uploadFileToCloudflare = async (file: FileUploadStatus) => {
     if (!file.presignedUrl) {
       const updatedFile = { ...file, status: "error" as const };
-      return setFiles((prev) =>
-        prev.map((f) => (f.fileName === file.fileName ? updatedFile : f))
-      );
+      return setFile(updatedFile);
     }
 
     try {
       const updatedFile = { ...file, status: "uploading" as const };
-      setFiles((prev) =>
-        prev.map((f) => (f.fileName === file.fileName ? updatedFile : f))
-      );
+      setFile(updatedFile);
 
       await axios.put(file.presignedUrl, file.file, {
         headers: {
@@ -59,72 +55,76 @@ const UploadFileModal = () => {
           const progressFile: FileUploadStatus = {
             ...file,
             progress: percentCompleted,
-            status: percentCompleted === 100 ? "completed" : "uploading",
           };
 
-          if (percentCompleted === 100) {
-            await completeUpload(file.fileId);
-          }
-
-          setFiles((prev) =>
-            prev.map((f) => (f.fileName === file.fileName ? progressFile : f))
-          );
+          setFile(progressFile);
         },
       });
+
+      const completedFile = { ...file, status: "completed" as const };
+      await completeUpload(file.fileId);
+      queryClient.invalidateQueries({
+        queryKey: ["files", data?.projectId],
+      });
+      setFile(completedFile);
+      setFile(undefined);
+      onClose();
+      toast.success("File uploaded successfully");
     } catch (error) {
       console.error("Błąd przy uploading pliku", error);
       const errorFile = { ...file, status: "error" as const };
-      setFiles((prev) =>
-        prev.map((f) => (f.fileName === file.fileName ? errorFile : f))
-      );
+      setFile(errorFile);
     }
   };
 
-  const onDrop = useCallback(async (acceptedFiles: File[]) => {
-    const newFiles: FileUploadStatus[] = await Promise.all(
-      acceptedFiles.map(async (file) => {
-        const { presignedUrl, error, fileId } = await getPresignedUrl({
-          fileName: file.name,
-          contentType: file.type,
-          size: file.size,
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      const newFile = acceptedFiles[0];
+      const { presignedUrl, error, fileId } = await getPresignedUrl({
+        fileName: newFile.name,
+        size: newFile.size,
+        projectId: data?.projectId,
+      });
+
+      if (error || !presignedUrl || !fileId) {
+        toast.error("Upload failded", {
+          description: error
+            ? `${error} during uploading ${newFile.name}`
+            : `Upload ${newFile.name} failed, please try again`,
         });
+        return;
+      }
 
-        if (error || !presignedUrl || !fileId) {
-          toast.error("Upload failded", {
-            description: error
-              ? `${error} during uploading ${file.name}`
-              : `Upload ${file.name} failed, please try again`,
-          });
-        }
+      const newFileItem: FileUploadStatus = {
+        file: newFile,
+        fileId: fileId,
+        fileName: newFile.name,
+        size: newFile.size,
+        progress: 0,
+        presignedUrl: presignedUrl,
+        status: "pending",
+      };
 
-        return {
-          file,
-          fileId: fileId,
-          fileName: file.name,
-          size: file.size,
-          progress: 0,
-          presignedUrl: presignedUrl,
-          status: "pending",
-        } as FileUploadStatus;
-      })
-    );
-
-    // Update files state after all files are processed
-    setFiles((prev) => [...prev, ...newFiles]);
-
-    // Start uploading each file
-    newFiles.forEach((fileStatus) => {
-      uploadFileToCloudflare(fileStatus);
-    });
-  }, []);
+      setFile(newFileItem);
+      uploadFileToCloudflare(newFileItem);
+    },
+    [data?.projectId]
+  );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    multiple: true,
-    maxFiles: 5,
+    multiple: false,
+    maxFiles: 1,
   });
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={() => {
+        if (file?.status === "pending") return;
+        setFile(undefined);
+        onClose();
+      }}
+    >
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Upload file</DialogTitle>
@@ -152,19 +152,14 @@ const UploadFileModal = () => {
               : "Drag 'n' drop some files here, or click to select files"}
           </p>
         </div>
-        <ScrollArea className="max-h-96">
-          <div className="grid gap-2">
-            {files.map((fileItem, index) => (
-              <FileItem
-                key={index}
-                fileName={fileItem.fileName}
-                size={fileItem.size}
-                progress={fileItem.progress}
-                status={fileItem.status}
-              />
-            ))}
-          </div>
-        </ScrollArea>
+        {file && (
+          <FileItem
+            fileName={file.fileName}
+            size={file.size}
+            progress={file.progress}
+            status={file.status}
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

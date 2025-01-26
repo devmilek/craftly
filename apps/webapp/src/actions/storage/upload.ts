@@ -7,31 +7,32 @@ import { v4 as uuid } from "uuid";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import { S3 } from ".";
 import { db } from "@/lib/db";
-import { files } from "@/lib/db/schemas";
+import { files, projects } from "@/lib/db/schemas";
 import { and, eq } from "drizzle-orm";
+import mime from "mime-types";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_TYPES = [
-  "image/jpeg",
-  "image/png",
-  "image/webp",
-  "application/pdf",
-];
+// const ALLOWED_TYPES = [
+//   "image/jpeg",
+//   "image/png",
+//   "image/webp",
+//   "application/pdf",
+// ];
 
 const generateR2Key = (filename: string, organizationId: string) => {
   const id = uuid();
   const extension = filename.split(".").pop();
-  return `org-${organizationId}/public/${id}.${extension}`;
+  return `org-${organizationId}/${id}.${extension}`;
 };
 
 export const getPresignedUrl = async ({
   fileName,
-  contentType,
   size,
+  projectId,
 }: {
   fileName: string;
-  contentType: string;
   size: number;
+  projectId?: string;
 }) => {
   const { session, organizationId } = await getCurrentSession();
 
@@ -49,10 +50,9 @@ export const getPresignedUrl = async ({
     };
   }
 
-  if (!fileName || !contentType || !size) {
+  if (!fileName || !size) {
     console.error("Missing required parameters", {
       fileName,
-      contentType,
       size,
     });
     return {
@@ -68,19 +68,30 @@ export const getPresignedUrl = async ({
     };
   }
 
-  if (!ALLOWED_TYPES.includes(contentType)) {
-    return {
-      success: false,
-      error: "Invalid file type",
-    };
+  if (projectId) {
+    const project = await db.query.projects.findFirst({
+      where: and(
+        eq(projects.organizationId, organizationId),
+        eq(projects.id, projectId)
+      ),
+    });
+
+    if (!project) {
+      return {
+        success: false,
+        error: "You don't have access to this project",
+      };
+    }
   }
+
+  const mimeType = mime.lookup(fileName) || "application/octet-stream";
 
   const r2Key = generateR2Key(fileName, organizationId);
 
   const putObjectCommand = new PutObjectCommand({
     Bucket: process.env.R2_BUCKET_NAME,
     Key: r2Key,
-    ContentType: contentType,
+    ContentType: mimeType,
   });
 
   const fileId = uuid();
@@ -93,11 +104,12 @@ export const getPresignedUrl = async ({
     await db.insert(files).values({
       id: fileId,
       filename: fileName,
-      mimeType: contentType,
+      mimeType,
       size,
       r2Key,
-      r2Url: `${process.env.NEXT_PUBLIC_R2_DOMAIN}/${r2Key}`,
+      url: `${process.env.NEXT_PUBLIC_R2_DOMAIN}/${r2Key}`,
       uploadedBy: session.userId,
+      projectId,
       organizationId,
     });
 
@@ -197,7 +209,7 @@ export const deleteFile = async (fileSrc: string) => {
 
   const dbFile = await db.query.files.findFirst({
     where: and(
-      eq(files.r2Url, fileSrc),
+      eq(files.url, fileSrc),
       eq(files.organizationId, organizationId)
     ),
   });
