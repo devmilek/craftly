@@ -50,6 +50,11 @@ export const getPresignedUrl = async ({
   }
 
   if (!fileName || !contentType || !size) {
+    console.error("Missing required parameters", {
+      fileName,
+      contentType,
+      size,
+    });
     return {
       success: false,
       error: "Missing required parameters",

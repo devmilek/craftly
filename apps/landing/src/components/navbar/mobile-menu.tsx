@@ -1,4 +1,3 @@
-import { Portal } from "@radix-ui/react-portal";
 import React from "react";
 import { Button } from "../ui/button";
 import { XIcon } from "lucide-react";

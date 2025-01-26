@@ -1,6 +1,6 @@
 "use client";
 
-import { getPresignedUrl } from "@/actions/storage/upload";
+import { completeUpload, getPresignedUrl } from "@/actions/storage/upload";
 import {
   Dialog,
   DialogContent,
@@ -14,13 +14,16 @@ import { File, UploadCloud } from "lucide-react";
 import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
+import { toast } from "sonner";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface FileUploadStatus {
   file: File;
+  fileId: string;
   fileName: string;
   size: number;
   progress: number;
-  presignedUrl?: string;
+  presignedUrl: string;
   status: "pending" | "uploading" | "completed" | "error";
 }
 
@@ -36,8 +39,6 @@ const UploadFileModal = () => {
       );
     }
 
-    console.log("Uploading file", file.fileName);
-
     try {
       const updatedFile = { ...file, status: "uploading" as const };
       setFiles((prev) =>
@@ -48,20 +49,22 @@ const UploadFileModal = () => {
         headers: {
           "Content-Type": file.file.type,
         },
-        onUploadProgress: (progressEvent) => {
+        onUploadProgress: async (progressEvent) => {
           const total = progressEvent.total ?? progressEvent.loaded;
 
           const percentCompleted = Math.round(
             (progressEvent.loaded * 100) / total
           );
 
-          console.log(percentCompleted);
-
           const progressFile: FileUploadStatus = {
             ...file,
             progress: percentCompleted,
             status: percentCompleted === 100 ? "completed" : "uploading",
           };
+
+          if (percentCompleted === 100) {
+            await completeUpload(file.fileId);
+          }
 
           setFiles((prev) =>
             prev.map((f) => (f.fileName === file.fileName ? progressFile : f))
@@ -80,28 +83,39 @@ const UploadFileModal = () => {
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const newFiles: FileUploadStatus[] = await Promise.all(
       acceptedFiles.map(async (file) => {
-        const presignedUrl = await getPresignedUrl({
+        const { presignedUrl, error, fileId } = await getPresignedUrl({
           fileName: file.name,
           contentType: file.type,
           size: file.size,
         });
 
-        const fileUploadStatus: FileUploadStatus = {
+        if (error || !presignedUrl || !fileId) {
+          toast.error("Upload failded", {
+            description: error
+              ? `${error} during uploading ${file.name}`
+              : `Upload ${file.name} failed, please try again`,
+          });
+        }
+
+        return {
           file,
+          fileId: fileId,
           fileName: file.name,
           size: file.size,
           progress: 0,
-          presignedUrl: presignedUrl.presignedUrl,
+          presignedUrl: presignedUrl,
           status: "pending",
-        };
-
-        setFiles((prev) => [...prev, ...newFiles]);
-
-        uploadFileToCloudflare(fileUploadStatus);
-
-        return fileUploadStatus;
+        } as FileUploadStatus;
       })
     );
+
+    // Update files state after all files are processed
+    setFiles((prev) => [...prev, ...newFiles]);
+
+    // Start uploading each file
+    newFiles.forEach((fileStatus) => {
+      uploadFileToCloudflare(fileStatus);
+    });
   }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -138,17 +152,19 @@ const UploadFileModal = () => {
               : "Drag 'n' drop some files here, or click to select files"}
           </p>
         </div>
-        <div className="grid gap-2">
-          {files.map((fileItem) => (
-            <FileItem
-              key={fileItem.fileName}
-              fileName={fileItem.fileName}
-              size={fileItem.size}
-              progress={fileItem.progress}
-              status={fileItem.status}
-            />
-          ))}
-        </div>
+        <ScrollArea className="max-h-96">
+          <div className="grid gap-2">
+            {files.map((fileItem, index) => (
+              <FileItem
+                key={index}
+                fileName={fileItem.fileName}
+                size={fileItem.size}
+                progress={fileItem.progress}
+                status={fileItem.status}
+              />
+            ))}
+          </div>
+        </ScrollArea>
       </DialogContent>
     </Dialog>
   );
@@ -168,12 +184,26 @@ const FileItem = ({
   return (
     <div className="border rounded-lg p-4 relative">
       <div className="relative z-10 flex items-center gap-2">
-        <FileIcon extenstion="jpg" />
+        <FileIcon extenstion={fileName.split(".").pop() || "File"} />
         <div>
           <p className="text-sm font-medium">{fileName}</p>
-          <p className="text-sm text-muted-foreground">
-            {formatBytes(size)} - {progress}% uploaded
-          </p>
+          {status === "uploading" && (
+            <>
+              <p className="text-sm text-muted-foreground">
+                {formatBytes(size)} - {progress}% uploaded {status}
+              </p>
+            </>
+          )}
+          {status === "error" && (
+            <p className="text-sm text-destructive">
+              Upload failed, please try again
+            </p>
+          )}
+          {status === "completed" && (
+            <p className="text-sm text-success-foreground">
+              {formatBytes(size)} - Uploaded
+            </p>
+          )}
         </div>
       </div>
       <div
