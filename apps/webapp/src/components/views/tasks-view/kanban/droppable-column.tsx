@@ -73,6 +73,11 @@ export const DroppableColumn = ({
               <Loader2Icon className="size-4 animate-spin" />
             </div>
           )}
+          {tasks?.length === 0 && !isLoading && (
+            <div className="flex items-center justify-center h-32 text-muted-foreground border border-dashed rounded-xl">
+              No tasks found
+            </div>
+          )}
           <div ref={bottomRef} className="h-4" />{" "}
         </div>
         <div

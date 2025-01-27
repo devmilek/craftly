@@ -58,23 +58,27 @@ const Hero2 = () => {
           </motion.p>
           <motion.div
             variants={itemVariants}
-            className="grid gap-2 w-full sm:grid-cols-2 max-w-md mt-10"
+            className="flex gap-2 w-full flex-col sm:flex-row max-w-md mt-10"
           >
-            <button
+            {/* <button
               className={cn(
                 "flex items-center group gap-2 w-full border hover:bg-muted transition-colors bg-background justify-center rounded-2xl p-3 font-medium"
               )}
             >
               <Play weight="light" />
               {t("watch_video")}
-            </button>
+            </button> */}
+            <input
+              placeholder="Enter Your Email..."
+              className="py-3 px-5 border rounded-2xl focus-visible:ring-4 ring-offset-0 outline-none ring-foreground/20 focus-visible:border-foreground/70 transition"
+            />
             <button
               className={cn(
-                "flex items-center bg-foreground group gap-2 text-background w-full hover:bg-foreground/90 transition-colors justify-center rounded-2xl p-3 font-medium"
+                "flex items-center text-nowrap bg-foreground group gap-2 text-background w-full hover:bg-foreground/90 transition-colors justify-center rounded-2xl py-3 px-5 shadow-inner shadow-gray-600 font-medium"
               )}
             >
-              <ArrowUpRight weight="light" />
-              {t("get_started")}
+              <ArrowUpRight weight="light" className="shrink-0" />
+              {t("join_waitlist")}
             </button>
           </motion.div>
         </header>

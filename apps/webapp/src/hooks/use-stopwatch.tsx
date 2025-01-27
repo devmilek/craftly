@@ -8,6 +8,9 @@ interface StopwatchState {
   setTotalSeconds: (updater: (prev: number) => number) => void;
   setIsRunning: (isRunning: boolean) => void;
   reset: () => void;
+  setSeconds: (seconds: number) => void;
+  setMinutes: (minutes: number) => void;
+  setHours: (hours: number) => void;
 }
 
 const useStopwatchStore = create<StopwatchState>()(
@@ -19,6 +22,30 @@ const useStopwatchStore = create<StopwatchState>()(
         set((state) => ({ totalSeconds: updater(state.totalSeconds) })),
       setIsRunning: (isRunning) => set({ isRunning }),
       reset: () => set({ totalSeconds: 0, isRunning: false }),
+      setSeconds: (seconds) =>
+        set((state) => {
+          const currentHours = Math.floor(state.totalSeconds / 3600);
+          const currentMinutes = Math.floor((state.totalSeconds % 3600) / 60);
+          return {
+            totalSeconds: currentHours * 3600 + currentMinutes * 60 + seconds,
+          };
+        }),
+      setMinutes: (minutes) =>
+        set((state) => {
+          const currentHours = Math.floor(state.totalSeconds / 3600);
+          const currentSeconds = state.totalSeconds % 60;
+          return {
+            totalSeconds: currentHours * 3600 + minutes * 60 + currentSeconds,
+          };
+        }),
+      setHours: (hours) =>
+        set((state) => {
+          const currentMinutes = Math.floor((state.totalSeconds % 3600) / 60);
+          const currentSeconds = state.totalSeconds % 60;
+          return {
+            totalSeconds: hours * 3600 + currentMinutes * 60 + currentSeconds,
+          };
+        }),
     }),
     {
       name: "stopwatch-storage",
@@ -63,5 +90,8 @@ export const useStopwatch = () => {
     start,
     pause,
     reset,
+    setSeconds: store.setSeconds,
+    setMinutes: store.setMinutes,
+    setHours: store.setHours,
   };
 };

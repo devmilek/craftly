@@ -1,8 +1,8 @@
 import { z } from "zod";
 
 export const timerSchema = z.object({
-  projectId: z.string().uuid().optional(),
-  taskId: z.string().uuid().optional(),
+  projectId: z.string().uuid().optional().nullable(),
+  taskId: z.string().uuid().optional().nullable(),
   description: z.string().optional(),
 });
 

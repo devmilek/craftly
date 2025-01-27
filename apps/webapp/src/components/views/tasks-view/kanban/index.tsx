@@ -88,7 +88,7 @@ const KanbanView = ({ projectId }: { projectId?: string }) => {
               ["tasks", status, projectId],
               {
                 pages: queryData.pages.map((page, index) =>
-                  index === 0 ? [task, ...page] : page
+                  index === 0 ? [{ ...task, status }, ...page] : page
                 ),
                 pageParams: queryData.pageParams,
               }
@@ -96,16 +96,22 @@ const KanbanView = ({ projectId }: { projectId?: string }) => {
           }
 
           // Perform actual updates
-          await setTaskStatus(taskId, status);
-          await Promise.all([
-            queryClient.invalidateQueries({
-              queryKey: ["tasks", status, projectId],
-            }),
-            previousStatus &&
+
+          try {
+            await setTaskStatus(taskId, status);
+          } catch {
+            console.error("Failed to move task");
+            await Promise.all([
               queryClient.invalidateQueries({
-                queryKey: ["tasks", previousStatus, projectId],
+                queryKey: ["tasks", status, projectId],
               }),
-          ]);
+              previousStatus &&
+                queryClient.invalidateQueries({
+                  queryKey: ["tasks", previousStatus, projectId],
+                }),
+            ]);
+            throw new Error("Failed to move task");
+          }
         })(),
         {
           loading: `Moving task to ${formatStatus(status)}...`,

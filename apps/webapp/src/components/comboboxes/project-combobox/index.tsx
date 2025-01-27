@@ -64,7 +64,7 @@ export function ProjectsCombobox({
           className="justify-between flex min-w-0"
         >
           <span className="truncate">
-            {project ? project.name : "Select projects..."}
+            {project ? project.name : "Select project..."}
           </span>
           <ChevronsUpDown className="opacity-50" />
         </Button>
@@ -72,7 +72,7 @@ export function ProjectsCombobox({
       <PopoverContent className="w-[200px] p-0">
         <Command shouldFilter={false}>
           <CommandInput
-            placeholder="Search projects..."
+            placeholder="Search project..."
             value={inputValue}
             onValueChange={(val) => {
               setInputValue(val);
