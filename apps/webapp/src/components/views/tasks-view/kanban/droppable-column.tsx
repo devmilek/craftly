@@ -89,7 +89,7 @@ export const DroppableColumn = ({
           )}
         >
           <span className="text-sm opacity-70">
-            The layout is ordered by <strong>Last Created</strong>
+            The layout is ordered by <strong>Last Updated</strong>
           </span>
         </div>
       </div>

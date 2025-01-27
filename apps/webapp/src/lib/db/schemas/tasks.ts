@@ -10,7 +10,7 @@ import {
 import { projects } from "./projects";
 import { members, organizations, users } from "./users";
 
-export const taskStatus = ["todo", "in-progress", "completed"] as const;
+export const taskStatus = ["todo", "in_progress", "completed"] as const;
 export const taskStatusEnum = pgEnum("task_status", taskStatus);
 
 export const taskPriority = ["low", "medium", "high"] as const;

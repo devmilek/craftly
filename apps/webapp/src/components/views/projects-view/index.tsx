@@ -8,6 +8,7 @@ import React from "react";
 import { useReadLocalStorage } from "usehooks-ts";
 import Header from "./header";
 import { getProjects } from "./actions";
+import Kanban from "./kanban";
 
 const ProjectsView = () => {
   const view = useReadLocalStorage<string>("projects_view", {
@@ -35,7 +36,7 @@ const ProjectsView = () => {
             description="Get started by creating a new project."
           />
         )}
-        {view === "kanban" && <div></div>}
+        {view === "kanban" && <Kanban />}
         {view === "list" && <ListView data={data} />}
       </div>
     </>

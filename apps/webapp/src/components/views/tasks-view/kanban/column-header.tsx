@@ -13,24 +13,22 @@ const ColumnHeader = ({
   const getColor = (status: string) => {
     switch (status) {
       case "new":
-        return "bg-info-foreground";
+        return "bg-status-new";
       case "proposal_sent":
-        return "";
+        return "bg-status-proposal-sent";
       case "in_progress":
-        return "";
+        return "bg-status-in-progress";
       case "in_review":
-        return "";
+        return "bg-status-in-review";
       case "completed":
-        return "bg-success-foreground";
-      case "in-progress":
-        return "bg-progress-foreground";
+        return "bg-status-completed";
       case "todo":
-        return "bg-info-foreground";
+        return "bg-status-todo";
     }
   };
 
   return (
-    <header className="rounded mb-6">
+    <header className="rounded">
       <div className="flex items-center gap-3 mb-3">
         <div
           className={cn("size-2 rounded-full bg-border", getColor(status))}
@@ -41,6 +39,7 @@ const ColumnHeader = ({
         {count && <Badge variant="secondary">{count}</Badge>}
       </div>
       <Separator className={cn("h-0.5 rounded-xl", getColor(status))} />
+      {/* <div className="h-6 bg-gradient-to-b from-background to-background/0" /> */}
     </header>
   );
 };

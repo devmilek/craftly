@@ -2,8 +2,9 @@
 
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
-import { projects } from "@/lib/db/schemas";
-import { and, desc, eq } from "drizzle-orm";
+import { clients, projects, tasks } from "@/lib/db/schemas";
+import { ProjectStatus } from "@/types";
+import { and, countDistinct, desc, eq, sql } from "drizzle-orm";
 
 export const getProjects = async () => {
   const { organizationId, session } = await getCurrentSession();
@@ -22,3 +23,40 @@ export const getProjects = async () => {
 
   return data;
 };
+
+export async function getProjectsByStatus({
+  status,
+}: {
+  status: ProjectStatus;
+}) {
+  const { organizationId, session } = await getCurrentSession();
+
+  if (!session || !organizationId) {
+    return [];
+  }
+
+  const data = await db
+    .select({
+      id: projects.id,
+      name: projects.name,
+      status: projects.status,
+      dueDate: projects.dueDate,
+      clientId: projects.clientId,
+      clientName: clients.name,
+      tasksCount: countDistinct(tasks.id),
+      tasksCompleted: sql<number>`count(distinct CASE WHEN ${tasks.status} = 'completed' THEN ${tasks.id} END)`,
+    })
+    .from(projects)
+    .where(
+      and(
+        eq(projects.organizationId, organizationId),
+        eq(projects.status, status)
+      )
+    )
+    .leftJoin(clients, eq(projects.clientId, clients.id))
+    .leftJoin(tasks, eq(tasks.projectId, projects.id))
+    .groupBy(projects.id, clients.name)
+    .orderBy(desc(projects.updatedAt));
+
+  return data;
+}
