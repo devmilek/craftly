@@ -62,6 +62,7 @@ const KanbanView = ({ projectId }: { projectId?: string }) => {
       const previousQueryData = queryClient.getQueryData<TaskInfiniteQueryData>(
         ["tasks", previousStatus, projectId]
       );
+
       const queryData = queryClient.getQueryData<TaskInfiniteQueryData>([
         "tasks",
         status,

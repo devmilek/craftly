@@ -39,7 +39,6 @@ const ColumnHeader = ({
         {count && <Badge variant="secondary">{count}</Badge>}
       </div>
       <Separator className={cn("h-0.5 rounded-xl", getColor(status))} />
-      {/* <div className="h-6 bg-gradient-to-b from-background to-background/0" /> */}
     </header>
   );
 };

@@ -14,6 +14,9 @@ import React, { useState } from "react";
 import Column from "./column";
 import ProjectCard, { ProjectCardProps } from "@/components/cards/project-card";
 import { ProjectStatus } from "@/types";
+import { queryClient } from "@/components/providers/query-provider";
+import { InfiniteData } from "@tanstack/react-query";
+import { KanbanTask } from "../../tasks-view/kanban";
 
 export type KanbanProject = ProjectCardProps;
 
@@ -40,12 +43,41 @@ const Kanban = () => {
     const currentProject = active.data.current as KanbanProject;
     const targetStatus = over?.id as ProjectStatus;
 
+    setActiveProject(null);
+
     if (!targetStatus) return;
     if (!currentProject) return;
 
-    console.log(`Moved project ${currentProject.name} to ${targetStatus}`);
+    const previousStatus = currentProject.status;
+    if (previousStatus === targetStatus) return;
 
-    setActiveProject(null);
+    // Move project to new status
+    const previousStatusData = queryClient.getQueryData<
+      InfiniteData<KanbanTask[]>
+    >(["tasks", previousStatus]);
+
+    const targetStatusData = queryClient.getQueryData<
+      InfiniteData<KanbanTask[]>
+    >(["tasks", targetStatus]);
+
+    if (previousStatusData) {
+      queryClient.setQueryData(["tasks", previousStatus], {
+        pages: previousStatusData.pages.map((page) =>
+          page.filter((task) => task.id !== currentProject.id)
+        ),
+        pageParams: previousStatusData.pageParams,
+      });
+    }
+
+    if (targetStatusData) {
+      queryClient.setQueryData(["tasks", targetStatus], {
+        pages: targetStatusData.pages.map((page) => [
+          { ...currentProject, status: targetStatus },
+          ...page,
+        ]),
+        pageParams: targetStatusData.pageParams,
+      });
+    }
   };
 
   return (

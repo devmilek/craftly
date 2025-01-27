@@ -25,7 +25,7 @@ const ClientsFeed = () => {
 
   return (
     <>
-      <div className="grid grid-cols-4 gap-4 mt-6">
+      <div className="grid grid-cols-3 gap-4 py-6">
         {data?.map((client) => <ClientCard key={client.id} client={client} />)}
         {isLoading && (
           <>

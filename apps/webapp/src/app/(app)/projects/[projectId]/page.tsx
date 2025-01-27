@@ -70,7 +70,7 @@ const ProjectDetailsScreen = async ({
       })
       .from(tasks)
       .where(
-        and(eq(tasks.projectId, projectId), eq(tasks.status, "in-progress"))
+        and(eq(tasks.projectId, projectId), eq(tasks.status, "in_progress"))
       ),
   ]);
 

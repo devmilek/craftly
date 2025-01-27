@@ -1,40 +1,81 @@
-import React from "react";
+import React, { useEffect, useMemo, useRef } from "react";
 import ColumnHeader from "../../tasks-view/kanban/column-header";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { ProjectStatus } from "@/types";
 import { getProjectsByStatus } from "../actions";
 import { useDroppable } from "@dnd-kit/core";
 import DraggableCard from "./draggable-card";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Loader2 } from "lucide-react";
 
 const Column = ({ status }: { status: ProjectStatus }) => {
+  const bottomRef = useRef<HTMLDivElement>(null);
   const { setNodeRef, isOver } = useDroppable({
     id: status,
   });
 
-  const { data } = useQuery({
-    queryKey: ["tasks", status],
-    queryFn: async () =>
-      await getProjectsByStatus({
-        status,
-      }),
-  });
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["tasks", status],
+      queryFn: async ({ pageParam = 0 }) =>
+        await getProjectsByStatus({
+          status,
+          page: pageParam,
+        }),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.length ? allPages.length + 1 : undefined;
+      },
+    });
+
+  const projects = useMemo(() => {
+    return data?.pages.reduce((acc, page) => [...acc, ...page], []);
+  }, [data]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (bottomRef.current) {
+      observer.observe(bottomRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   return (
-    <div className="min-w-72">
+    <div className="min-w-72 w-full">
       <ColumnHeader status={status} />
 
-      <div className="relative min-h-96 max-h-[90vh] flex flex-col">
+      <div className="relative min-h-96 max-h-[92vh] flex flex-col">
+        {/* TOP OVERLAY */}
         <div className="h-6 bg-gradient-to-b absolute w-full top-0 from-background z-10 to-background/0" />
-        <ScrollArea ref={setNodeRef} className="grid gap-4 relative flex-1">
+
+        {/* MAIN CONTENT */}
+        <ScrollArea ref={setNodeRef} className="grid relative flex-1">
           <div className="grid gap-4 py-6">
-            {data?.map((project) => (
+            {projects?.map((project) => (
               <DraggableCard key={project.id} project={project} />
             ))}
+            <div ref={bottomRef}>
+              {isFetchingNextPage && (
+                <div className="flex justify-center py-4">
+                  <Loader2 className="animate-spin size-4" />
+                </div>
+              )}
+            </div>
           </div>
         </ScrollArea>
 
+        {/* DRAGGING OVER OVERLAY */}
         <div
           className={cn(
             "absolute py-6 top-0 size-full pointer-events-none opacity-100 transition",

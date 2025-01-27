@@ -26,8 +26,10 @@ export const getProjects = async () => {
 
 export async function getProjectsByStatus({
   status,
+  page,
 }: {
   status: ProjectStatus;
+  page: number;
 }) {
   const { organizationId, session } = await getCurrentSession();
 
@@ -56,7 +58,9 @@ export async function getProjectsByStatus({
     .leftJoin(clients, eq(projects.clientId, clients.id))
     .leftJoin(tasks, eq(tasks.projectId, projects.id))
     .groupBy(projects.id, clients.name)
-    .orderBy(desc(projects.updatedAt));
+    .orderBy(desc(projects.updatedAt))
+    .limit(10)
+    .offset(page * 10);
 
   return data;
 }
