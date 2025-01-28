@@ -36,7 +36,7 @@ const ProjectCard = ({
     tasksCount && tasksCompleted ? (tasksCompleted / tasksCount) * 100 : 0;
   return (
     <div
-      className={cn("rounded-2xl border bg-background", {
+      className={cn("rounded-2xl border border-dashed bg-background", {
         "shadow-lg": overlay,
       })}
     >
@@ -44,7 +44,13 @@ const ProjectCard = ({
         {(dueDate || (status && showStatus)) && (
           <div className="flex gap-2 flex-wrap mb-4">
             {dueDate && (
-              <Badge variant="secondary">{format(dueDate, "MMM dd")}</Badge>
+              <Badge
+                variant={
+                  dueDate > new Date() ? "outline" : "destructive-outline"
+                }
+              >
+                {format(dueDate, "MMM dd")}
+              </Badge>
             )}
             {status && showStatus && (
               <Badge variant="secondary">{formatStatus(status)}</Badge>
@@ -56,7 +62,13 @@ const ProjectCard = ({
         <Progress value={progress} className="mt-4" />
         <div className="flex mt-2">
           <p className="text-sm text-muted-foreground">
-            {tasksCompleted} / {tasksCount} tasks done
+            {tasksCount ? (
+              <>
+                {tasksCompleted} / {tasksCount} tasks done
+              </>
+            ) : (
+              "No tasks"
+            )}
           </p>
         </div>
       </div>

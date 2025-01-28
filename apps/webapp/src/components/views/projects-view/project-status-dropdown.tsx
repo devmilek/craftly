@@ -46,23 +46,22 @@ const ProjectStatusDropdown = ({
           className={cn(
             "px-4 py-2 flex items-center gap-2 rounded-lg text-sm font-medium transition",
             {
-              "bg-info-foreground/10 hover:bg-info-foreground/20":
-                status === "new",
-              "bg-progress-foreground/10 hover:bg-progress-foreground/20":
+              "bg-status-new/10 hover:bg-status-new/20": status === "new",
+              "bg-status-proposal-sent/10 hover:bg-status-proposal-sent/20":
                 status === "proposal_sent",
-              "bg-success-foreground/10 hover:bg-success-foreground/20":
+              "bg-status-in-progress/10 hover:bg-status-in-progress/20":
                 status === "in_progress",
-              "bg-review-foreground/10 hover:bg-review-foreground/20":
+              "bg-status-in-review/10 hover:bg-status-in-review/20":
                 status === "in_review",
             }
           )}
         >
           <div
             className={cn("size-1.5 rounded-full", {
-              "bg-info-foreground": status === "new",
-              "bg-progress-foreground": status === "proposal_sent",
-              "bg-success-foreground": status === "in_progress",
-              "bg-review-foreground": status === "in_review",
+              "bg-status-new": status === "new",
+              "bg-status-proposal-sent": status === "proposal_sent",
+              "bg-status-in-progress": status === "in_progress",
+              "bg-status-in-review": status === "in_review",
             })}
           />
           {formatStatus(status)}

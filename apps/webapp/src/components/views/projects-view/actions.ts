@@ -4,33 +4,19 @@ import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { clients, projects, tasks } from "@/lib/db/schemas";
 import { ProjectStatus } from "@/types";
-import { and, countDistinct, desc, eq, sql } from "drizzle-orm";
+import { and, asc, desc, eq, ilike, sql } from "drizzle-orm";
 
-export const getProjects = async () => {
-  const { organizationId, session } = await getCurrentSession();
-
-  if (!session || !organizationId) {
-    return [];
-  }
-
-  const data = await db.query.projects.findMany({
-    where: and(eq(projects.organizationId, organizationId)),
-    with: {
-      client: true,
-    },
-    orderBy: desc(projects.updatedAt),
-  });
-
-  return data;
-};
-
-export async function getProjectsByStatus({
+export async function getProjects({
   status,
   page,
+  query,
 }: {
-  status: ProjectStatus;
+  status?: ProjectStatus;
+  query?: string | null;
   page: number;
 }) {
+  const ITEMS_PER_PAGE = 10;
+
   const { organizationId, session } = await getCurrentSession();
 
   if (!session || !organizationId) {
@@ -43,24 +29,29 @@ export async function getProjectsByStatus({
       name: projects.name,
       status: projects.status,
       dueDate: projects.dueDate,
-      clientId: projects.clientId,
+      clientId: clients.id,
       clientName: clients.name,
-      tasksCount: countDistinct(tasks.id),
-      tasksCompleted: sql<number>`count(distinct CASE WHEN ${tasks.status} = 'completed' THEN ${tasks.id} END)`,
+      updatedAt: projects.updatedAt,
+      tasksCount: sql<number>`COUNT(${tasks.id})`.as("tasksCount"),
+      tasksCompleted:
+        sql<number>`SUM(CASE WHEN ${tasks.status} = 'completed' THEN 1 ELSE 0 END)`.as(
+          "tasksCompleted"
+        ),
     })
     .from(projects)
     .where(
       and(
         eq(projects.organizationId, organizationId),
-        eq(projects.status, status)
+        status ? eq(projects.status, status) : undefined,
+        query ? ilike(projects.name, `%${query}%`) : undefined
       )
     )
     .leftJoin(clients, eq(projects.clientId, clients.id))
     .leftJoin(tasks, eq(tasks.projectId, projects.id))
-    .groupBy(projects.id, clients.name)
-    .orderBy(desc(projects.updatedAt))
-    .limit(10)
-    .offset(page * 10);
+    .groupBy(projects.id, clients.id)
+    .orderBy(desc(projects.updatedAt), asc(projects.id))
+    .offset(page * ITEMS_PER_PAGE)
+    .limit(ITEMS_PER_PAGE);
 
   return data;
 }

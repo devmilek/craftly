@@ -7,13 +7,16 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getInitials(value: string) {
-  const initials = value
+  const words = value
     .trim()
-    .split(" ")
-    .slice(0, 2) // Take only the first two words
+    .split(/[\s-]+/)
+    .filter((word) => word.length > 0);
+
+  const initials = words
+    .slice(0, 2)
     .map((word, index, array) =>
       array.length === 1 ? word.slice(0, 2) : word[0]
-    ) // If only one word, take first two letters, otherwise take first letter of each word
+    )
     .join("")
     .toUpperCase();
 

@@ -1,80 +1,80 @@
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Client, Project } from "@/lib/db/schemas";
-import { getInitials } from "@/lib/utils";
-import { format } from "date-fns";
-import { CalendarIcon, CheckCheck, ChevronRight } from "lucide-react";
-import React from "react";
-import ProjectStatusDropdown from "../project-status-dropdown";
-import Link from "next/link";
+"use client";
 
-type ProjectData = Project & {
-  client: Client | null;
-};
+import { FolderX, Loader2Icon } from "lucide-react";
+import React, { useEffect, useRef } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getProjects } from "../actions";
+import ListItem from "./list-item";
+import EmptyState from "@/components/ui/empty-state";
+import { useSearchParams } from "next/navigation";
 
-const ListView = ({ data }: { data: ProjectData[] | undefined }) => {
+const ListView = () => {
+  const bottomRef = useRef<HTMLDivElement>(null);
+  const searchParams = useSearchParams();
+
+  const query = searchParams.get("query") || null;
+
+  const { data, hasNextPage, fetchNextPage, isFetchingNextPage, isLoading } =
+    useInfiniteQuery({
+      queryKey: ["tasks", "list", query],
+      queryFn: async ({ pageParam = 0 }) =>
+        await getProjects({
+          page: pageParam,
+          query,
+        }),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages, lastPageParam) => {
+        if (lastPage.length === 0) {
+          return undefined;
+        }
+        return lastPageParam + 1;
+      },
+    });
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const [entry] = entries;
+        if (entry.isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 }
+    );
+
+    if (bottomRef.current) {
+      observer.observe(bottomRef.current);
+    }
+
+    return () => observer.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
   return (
     <div>
-      {data?.map((project) => (
-        <article
-          key={project.id}
-          className="py-8 border-b flex items-center gap-4"
-        >
-          <div className="flex-1">
-            <Link
-              href={`/projects/` + project.id}
-              className="font-semibold hover:underline"
-            >
-              {project.name}
-            </Link>
-            <div className="flex gap-3 flex-wrap mt-2">
-              {/* CLIENT INDICATOR */}
-              {project.client && (
-                <Link
-                  href={`/clients/` + project.client.id}
-                  className="flex items-center gap-2 group"
-                >
-                  <div className="leading-none text-xs uppercase size-5 rounded bg-accent text-foreground flex items-center justify-center">
-                    {getInitials(project.client.name)}
-                  </div>
-                  <p className="text-sm text-muted-foreground group-hover:underline">
-                    {project.client.name}
-                  </p>
-                </Link>
-              )}
-              {/* DUE DATE */}
-              {project.dueDate && (
-                <Badge variant="outline" className="rounded-full">
-                  <CalendarIcon className="size-3 mr-2" />
-                  Due: {format(project.dueDate, "PP")}
-                </Badge>
-              )}
-              <Badge variant="outline" className="rounded-full">
-                <CheckCheck className="size-3 mr-2" />
-                No tasks assigned
-              </Badge>
-            </div>
-          </div>
-          <div className="flex gap-2">
-            {project.status && (
-              <ProjectStatusDropdown
-                status={project.status}
-                projectId={project.id}
-              />
-            )}
-            <Button
-              size="icon"
-              variant="ghost"
-              className="flex-shrink-0"
-              asChild
-            >
-              <Link href={`/projects/` + project.id}>
-                <ChevronRight className="size-4" />
-              </Link>
-            </Button>
-          </div>
-        </article>
+      {data?.pages.map((page, index) => (
+        <React.Fragment key={index}>
+          {page?.map((project) => <ListItem key={project.id} {...project} />)}
+        </React.Fragment>
       ))}
+      {isLoading && (
+        <div className="flex items-center justify-center h-40 text-muted-foreground">
+          <Loader2Icon className="size-5 animate-spin" />
+        </div>
+      )}
+      {data?.pages.length === 0 && !isLoading && (
+        <EmptyState
+          icon={FolderX}
+          title="No projects"
+          description="Get started by creating a new project."
+        />
+      )}
+      <div ref={bottomRef}>
+        {isFetchingNextPage && (
+          <div className="flex justify-center py-8">
+            <Loader2Icon className="animate-spin size-4" />
+          </div>
+        )}
+      </div>
     </div>
   );
 };
