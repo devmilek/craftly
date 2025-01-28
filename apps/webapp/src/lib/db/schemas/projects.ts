@@ -34,10 +34,14 @@ export const projects = pgTable("projects", {
   }),
   archived: boolean().notNull().default(false),
 
-  clientId: uuid().references(() => clients.id),
+  clientId: uuid().references(() => clients.id, {
+    onDelete: "set null",
+  }),
   organizationId: varchar()
     .notNull()
-    .references(() => organizations.id),
+    .references(() => organizations.id, {
+      onDelete: "cascade",
+    }),
 
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at")

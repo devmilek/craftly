@@ -61,7 +61,7 @@ const ListView = () => {
           <Loader2Icon className="size-5 animate-spin" />
         </div>
       )}
-      {data?.pages.length === 0 && !isLoading && (
+      {data?.pages[0].length === 0 && !isLoading && (
         <EmptyState
           icon={FolderX}
           title="No projects"

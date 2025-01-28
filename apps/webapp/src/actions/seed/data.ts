@@ -16,7 +16,9 @@ import {
 } from "@/lib/db/schemas";
 import { timeTrackings } from "@/lib/db/schemas/time-trackings";
 import { faker } from "@faker-js/faker";
+import axios from "axios";
 import { v4 } from "uuid";
+import { serverAvatarUpload } from "../storage";
 
 export const generateData = async () => {
   const { organizationId, session } = await getCurrentSession();
@@ -56,20 +58,38 @@ export const generateData = async () => {
       id: clientId,
     });
 
-    // insert contacts
-    const contacts: ContactInsert[] = Array.from(
-      { length: faker.number.int(contactsPerClient) },
-      () => ({
+    for (let i = 0; i < faker.number.int(contactsPerClient); i++) {
+      const avatarUrl = "https://i.pravatar.cc/300";
+
+      const avatarData = await axios.get(avatarUrl, {
+        responseType: "arraybuffer",
+      });
+
+      const avatar = Buffer.from(avatarData.data);
+
+      const { fileId, error } = await serverAvatarUpload({
+        file: new File([avatar], "avatar.jpeg"),
+        organizationId,
+      });
+
+      if (error) {
+        console.error(error);
+      }
+
+      const contactId = v4();
+      const contact: ContactInsert = {
         name: faker.person.fullName(),
         email: faker.internet.email(),
         phone: faker.phone.number(),
         position: faker.person.jobTitle(),
         organizationId,
         clientId,
-      })
-    );
+        id: contactId,
+        avatarId: fileId,
+      };
 
-    await db.insert(dbContacts).values(contacts);
+      await db.insert(dbContacts).values(contact);
+    }
 
     for (let i = 0; i < faker.number.int(projectsPerClient); i++) {
       const projectId = v4();
@@ -108,7 +128,9 @@ export const generateData = async () => {
             organizationId,
             projectId,
             taskId,
-            date: faker.date.recent(),
+            date: faker.date.recent({
+              days: 90,
+            }),
             totalSeconds: faker.number.int({ min: 60 * 30, max: 60 * 60 * 8 }),
           });
         }

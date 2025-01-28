@@ -25,6 +25,14 @@ const ClientsFeed = () => {
 
   return (
     <>
+      {!data?.length && !isLoading && (
+        <EmptyState
+          className="mt-6"
+          icon={UserX}
+          title="No clients"
+          description="Get started by creating a new client."
+        />
+      )}
       <div className="grid grid-cols-3 gap-4 py-6">
         {data?.map((client) => <ClientCard key={client.id} client={client} />)}
         {isLoading && (
@@ -35,13 +43,6 @@ const ClientsFeed = () => {
           </>
         )}
       </div>
-      {!data?.length && !isLoading && (
-        <EmptyState
-          icon={UserX}
-          title="No clients"
-          description="Get started by creating a new client."
-        />
-      )}
     </>
   );
 };

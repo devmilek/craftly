@@ -1,7 +1,7 @@
 import "server-only";
 import { PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { v4 as uuid, v4 } from "uuid";
-import { ALLOWED_AVATAR_TYPES, MAX_AVATAR_SIZE } from "@/config";
+import { MAX_AVATAR_SIZE } from "@/config";
 import sharp from "sharp";
 import { db } from "@/lib/db";
 import { avatars } from "@/lib/db/schemas";
@@ -48,12 +48,12 @@ export const serverAvatarUpload = async ({
     };
   }
 
-  if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
-    return {
-      success: false,
-      error: "Invalid file type",
-    };
-  }
+  // if (!ALLOWED_AVATAR_TYPES.includes(file.type)) {
+  //   return {
+  //     success: false,
+  //     error: "Invalid file type",
+  //   };
+  // }
 
   try {
     // Convert image to buffer

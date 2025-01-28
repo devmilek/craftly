@@ -24,7 +24,9 @@ export const tasks = pgTable("tasks", {
   description: text(),
   status: taskStatusEnum("status").notNull().default("todo"),
   priority: taskPriorityEnum("priority"),
-  projectId: uuid().references(() => projects.id),
+  projectId: uuid().references(() => projects.id, {
+    onDelete: "cascade",
+  }),
   organizationId: varchar()
     .notNull()
     .references(() => organizations.id),

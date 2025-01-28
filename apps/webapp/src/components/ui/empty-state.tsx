@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { LucideIcon } from "lucide-react";
 import React from "react";
 
@@ -5,14 +6,16 @@ const EmptyState = ({
   icon,
   title,
   description,
+  className,
 }: {
   icon: LucideIcon;
   title: string;
   description: string;
+  className?: string;
 }) => {
   const Icon = icon;
   return (
-    <div className="border rounded-xl p-10">
+    <div className={cn("border rounded-xl p-10", className)}>
       <div className="flex items-center justify-center">
         <Icon className="size-5" />
       </div>

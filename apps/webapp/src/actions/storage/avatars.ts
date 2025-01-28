@@ -94,7 +94,7 @@ export const uploadAvatar = async (formData: FormData) => {
       mimeType: "image/webp",
       r2Key: r2Key,
       organizationId,
-      r2Url: src,
+      url: src,
       size: optimizedImage.size,
       status: "ready",
     });
