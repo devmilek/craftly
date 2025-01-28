@@ -4,6 +4,7 @@ import { Progress } from "@/components/ui/progress";
 import { cn, formatStatus, getInitials } from "@/lib/utils";
 import { ProjectStatus } from "@/types";
 import { format } from "date-fns";
+import Link from "next/link";
 import React from "react";
 
 export interface ProjectCardProps {
@@ -23,6 +24,7 @@ export interface ProjectCardProps {
 }
 
 const ProjectCard = ({
+  id,
   name,
   dueDate,
   status,
@@ -35,8 +37,9 @@ const ProjectCard = ({
   const progress =
     tasksCount && tasksCompleted ? (tasksCompleted / tasksCount) * 100 : 0;
   return (
-    <div
-      className={cn("rounded-2xl border border-dashed bg-background", {
+    <Link
+      href={`/projects/${id}`}
+      className={cn("rounded-2xl border border-dashed bg-background block", {
         "shadow-lg": overlay,
       })}
     >
@@ -84,7 +87,7 @@ const ProjectCard = ({
           </p>
         </div>
       )}
-    </div>
+    </Link>
   );
 };
 

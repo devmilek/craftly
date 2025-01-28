@@ -8,6 +8,7 @@ import React from "react";
 import { getRecentFiles } from "./actions";
 import { format } from "date-fns";
 import { formatBytes } from "@/lib/utils";
+import EmptyState from "@/components/ui/empty-state";
 
 const RecentFiles = ({ projectId }: { projectId: string }) => {
   const { onOpen } = useModal("upload-file");
@@ -51,6 +52,13 @@ const RecentFiles = ({ projectId }: { projectId: string }) => {
           <div className="w-full py-10 flex justify-center">
             <Loader2 className="size-4 animate-spin" />
           </div>
+        )}
+        {!isLoading && !data?.length && (
+          <EmptyState
+            icon={FileIcon}
+            title="No files found"
+            description="Upload files to keep track of your project files."
+          />
         )}
       </div>
     </section>

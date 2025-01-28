@@ -14,6 +14,7 @@ import {
   taskStatus,
   taskPriority,
 } from "@/lib/db/schemas";
+import { timeTrackings } from "@/lib/db/schemas/time-trackings";
 import { faker } from "@faker-js/faker";
 import { v4 } from "uuid";
 
@@ -29,11 +30,21 @@ export const generateData = async () => {
   }
 
   const howManyClients = 10;
-  const contactsPerClient = 7;
-  const projectsPerClient = 5;
+  const contactsPerClient = {
+    min: 5,
+    max: 9,
+  };
+  const projectsPerClient = {
+    min: 2,
+    max: 7,
+  };
   const tasksPerProject = {
     min: 4,
     max: 20,
+  };
+  const timeTrackingsPerTask = {
+    min: 1,
+    max: 3,
   };
 
   for (let i = 0; i < howManyClients; i++) {
@@ -47,7 +58,7 @@ export const generateData = async () => {
 
     // insert contacts
     const contacts: ContactInsert[] = Array.from(
-      { length: contactsPerClient },
+      { length: faker.number.int(contactsPerClient) },
       () => ({
         name: faker.person.fullName(),
         email: faker.internet.email(),
@@ -60,22 +71,7 @@ export const generateData = async () => {
 
     await db.insert(dbContacts).values(contacts);
 
-    // insert projects
-    const projects: ProjectInsert[] = Array.from(
-      { length: projectsPerClient },
-      () => ({
-        name: faker.commerce.productName(),
-        description: faker.commerce.productDescription(),
-        clientId,
-        organizationId,
-        status: faker.helpers.arrayElement(projectStatus),
-        dueDate: faker.date.soon(),
-      })
-    );
-
-    await db.insert(dbProjects).values(projects);
-
-    for (let i = 0; i < projectsPerClient; i++) {
+    for (let i = 0; i < faker.number.int(projectsPerClient); i++) {
       const projectId = v4();
       const project: ProjectInsert = {
         name: faker.commerce.productName(),
@@ -89,10 +85,9 @@ export const generateData = async () => {
 
       await db.insert(dbProjects).values(project);
 
-      // insert tasks
-      const tasks: TaskInsert[] = Array.from(
-        { length: faker.number.int(tasksPerProject) },
-        () => ({
+      for (let i = 0; i < faker.number.int(tasksPerProject); i++) {
+        const taskId = v4();
+        const task: TaskInsert = {
           name: faker.commerce.productName(),
           description: faker.commerce.productDescription(),
           organizationId,
@@ -100,10 +95,24 @@ export const generateData = async () => {
           status: faker.helpers.arrayElement(taskStatus),
           priority: faker.helpers.arrayElement(taskPriority),
           projectId,
-        })
-      );
+          id: taskId,
+        };
 
-      await db.insert(dbTasks).values(tasks);
+        await db.insert(dbTasks).values(task);
+
+        // insert time tracking
+
+        for (let i = 0; i < faker.number.int(timeTrackingsPerTask); i++) {
+          await db.insert(timeTrackings).values({
+            userId: session.userId,
+            organizationId,
+            projectId,
+            taskId,
+            date: faker.date.recent(),
+            totalSeconds: faker.number.int({ min: 60 * 30, max: 60 * 60 * 8 }),
+          });
+        }
+      }
     }
   }
 };

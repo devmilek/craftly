@@ -18,6 +18,8 @@ import { queryClient } from "@/components/providers/query-provider";
 import { InfiniteData } from "@tanstack/react-query";
 import { KanbanTask } from "../../tasks-view/kanban";
 import { useSearchParams } from "next/navigation";
+import { updateProjectStatus } from "../actions";
+import { toast } from "sonner";
 
 export type KanbanProject = ProjectCardProps;
 
@@ -83,6 +85,18 @@ const Kanban = () => {
           pageParams: targetStatusData.pageParams,
         });
       }
+
+      toast.promise(
+        updateProjectStatus({
+          status: targetStatus,
+          projectId: currentProject.id,
+        }),
+        {
+          loading: "Updating project status...",
+          success: "Project status updated",
+          error: "Failed to update project status",
+        }
+      );
     },
     [query]
   );

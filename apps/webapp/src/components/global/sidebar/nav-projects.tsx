@@ -41,7 +41,7 @@ export function NavProjects() {
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Projects</SidebarGroupLabel>
-      <SidebarGroupAction name="Create Project" onClick={onOpen}>
+      <SidebarGroupAction name="Create Project" onClick={() => onOpen()}>
         <PlusIcon />
       </SidebarGroupAction>
       <SidebarMenu>

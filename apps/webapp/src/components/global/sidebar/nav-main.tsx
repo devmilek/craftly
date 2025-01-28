@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { useModal } from "@/hooks/use-modals-store";
+import { usePathname } from "next/navigation";
 
 interface NavItem {
   icon: LucideIcon;
@@ -36,12 +37,16 @@ interface NavItem {
 export function NavMain() {
   const { onOpen: onClientOpen } = useModal("create-client");
   const { onOpen: onTaskOpen } = useModal("create-task");
+  const pathname = usePathname();
+
+  const isActive = (itemHref: string) => {
+    if (itemHref === "/") {
+      return pathname === "/";
+    }
+    return pathname.startsWith(itemHref);
+  };
+
   const navItems: NavItem[] = [
-    {
-      icon: HomeIcon,
-      label: "Home",
-      href: "/",
-    },
     {
       icon: CheckCheckIcon,
       label: "Tasks",
@@ -79,26 +84,38 @@ export function NavMain() {
     },
   ];
   return (
-    <SidebarGroup>
-      <SidebarGroupLabel>Platform</SidebarGroupLabel>
-      <SidebarMenu>
-        {navItems.map((item) => (
-          <SidebarMenuItem key={item.href}>
-            <SidebarMenuButton asChild tooltip={item.label}>
-              <Link href={item.href}>
-                <item.icon />
-                <span>{item.label}</span>
-              </Link>
-            </SidebarMenuButton>
-            {item.action && (
-              <SidebarMenuAction showOnHover onClick={item.action.onClick}>
-                <item.action.icon />
-                <span className="sr-only">{item.action.label}</span>
-              </SidebarMenuAction>
-            )}
-          </SidebarMenuItem>
-        ))}
-      </SidebarMenu>
-    </SidebarGroup>
+    <>
+      <SidebarGroup>
+        <SidebarMenuButton asChild isActive={isActive("/")} tooltip="Home">
+          <Link href="/">
+            <HomeIcon />
+            <span>Home</span>
+          </Link>
+        </SidebarMenuButton>
+        <SidebarGroupLabel>Workspace</SidebarGroupLabel>
+        <SidebarMenu>
+          {navItems.map((item) => (
+            <SidebarMenuItem key={item.href}>
+              <SidebarMenuButton
+                asChild
+                tooltip={item.label}
+                isActive={isActive(item.href)}
+              >
+                <Link href={item.href}>
+                  <item.icon />
+                  <span>{item.label}</span>
+                </Link>
+              </SidebarMenuButton>
+              {item.action && (
+                <SidebarMenuAction showOnHover onClick={item.action.onClick}>
+                  <item.action.icon />
+                  <span className="sr-only">{item.action.label}</span>
+                </SidebarMenuAction>
+              )}
+            </SidebarMenuItem>
+          ))}
+        </SidebarMenu>
+      </SidebarGroup>
+    </>
   );
 }

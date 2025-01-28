@@ -55,3 +55,27 @@ export async function getProjects({
 
   return data;
 }
+
+export const updateProjectStatus = async ({
+  status,
+  projectId,
+}: {
+  status: ProjectStatus;
+  projectId: string;
+}) => {
+  const { organizationId, session } = await getCurrentSession();
+
+  if (!session || !organizationId) {
+    return;
+  }
+
+  await db
+    .update(projects)
+    .set({ status })
+    .where(
+      and(
+        eq(projects.organizationId, organizationId),
+        eq(projects.id, projectId)
+      )
+    );
+};
