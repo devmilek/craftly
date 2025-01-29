@@ -21,7 +21,7 @@ export const {
   changeEmail,
   linkSocial,
   unlinkAccount,
-useActiveOrganization,
+  useActiveOrganization,
   twoFactor,
   passkey,
 } = createAuthClient({

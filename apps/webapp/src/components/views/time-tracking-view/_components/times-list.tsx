@@ -8,12 +8,17 @@ import { TimeTracking } from "..";
 
 interface TimesListProps {
   date: Date;
+  projectId?: string;
 }
 
-const TimesList = memo(({ date }: TimesListProps) => {
+const TimesList = memo(({ date, projectId }: TimesListProps) => {
   const { data, isLoading, error } = useQuery({
-    queryKey: ["timeTrackings", date],
-    queryFn: async () => await getTimeTrackingsByDate(date),
+    queryKey: ["timeTrackings", date, projectId],
+    queryFn: async () =>
+      await getTimeTrackingsByDate({
+        date,
+        projectId,
+      }),
   });
 
   if (error) return <div>Error loading time trackings</div>;
@@ -26,26 +31,31 @@ const TimesList = memo(({ date }: TimesListProps) => {
   );
 });
 
-const TimeTrackingItem = memo(({ item }: { item: TimeTracking }) => (
-  <div className="flex items-center py-5 gap-4 border-b">
-    <Avatar>
-      <AvatarFallback>
-        {item.userName ? (
-          getInitials(item.userName)
-        ) : (
-          <UserIcon className="size-4" />
-        )}
-      </AvatarFallback>
-    </Avatar>
-    <div className="flex-1">
-      <p className="text-xs text-muted-foreground">Task</p>
-      <p className="text-base font-semibold">{item.task}</p>
+const TimeTrackingItem = memo(({ item }: { item: TimeTracking }) => {
+  const hours = item.totalSeconds / 60 / 60;
+  const minutes = (hours - Math.floor(hours)) * 60;
+
+  return (
+    <div className="flex items-center pb-5 gap-4 border-b">
+      <Avatar className="size-10">
+        <AvatarFallback>
+          {item.userName ? (
+            getInitials(item.userName)
+          ) : (
+            <UserIcon className="size-4" />
+          )}
+        </AvatarFallback>
+      </Avatar>
+      <div className="flex-1">
+        <p className="text-xs text-muted-foreground">Task</p>
+        <p className="text-sm font-semibold">{item.task}</p>
+      </div>
+      <p className="text-base font-semibold">
+        {Math.floor(hours)}h {Math.round(minutes)}m
+      </p>
     </div>
-    <p className="text-base font-semibold">
-      {(item.totalSeconds / 60 / 60).toFixed(2)}h
-    </p>
-  </div>
-));
+  );
+});
 
 const LoadingState = () => (
   <div className="flex items-center justify-center h-32 ">

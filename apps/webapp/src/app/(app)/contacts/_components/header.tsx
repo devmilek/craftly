@@ -1,6 +1,6 @@
 "use client";
 
-import { ClientFilter } from "@/components/filters/client-filter";
+import { ClientsFilter } from "@/components/filters/clients-filter";
 import SearchInput from "@/components/global/search-input";
 import { Button } from "@/components/ui/button";
 import { useModal } from "@/hooks/use-modals-store";
@@ -16,7 +16,7 @@ const Header = () => {
       <div className="flex justify-between">
         <div className="flex gap-3">
           <SearchInput />
-          <ClientFilter />
+          <ClientsFilter />
         </div>
         <div className="flex gap-3">
           <Button onClick={onOpen}>

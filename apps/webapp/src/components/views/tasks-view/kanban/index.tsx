@@ -11,23 +11,21 @@ import {
   useSensors,
 } from "@dnd-kit/core";
 import { toast } from "sonner";
-import { DroppableColumn } from "./droppable-column";
-import { Task, taskStatus } from "@/lib/db/schemas";
-import TaskCard from "./task-card";
+import { Column } from "./column";
+import { taskStatus } from "@/lib/db/schemas";
 import { TaskStatus } from "@/types";
 import { queryClient } from "@/components/providers/query-provider";
 import { InfiniteData } from "@tanstack/react-query";
 import { formatStatus } from "@/lib/utils";
 import { setTaskStatus } from "@/app/(app)/tasks/actions";
+import TaskCard, { TaskCardProps } from "@/components/cards/task-card";
 
-export type KanbanTask = Task & {
-  projectName: string | null;
-};
-
-type TaskInfiniteQueryData = InfiniteData<KanbanTask[]>;
+type TaskInfiniteQueryData = InfiniteData<TaskCardProps[]>;
 
 const KanbanView = ({ projectId }: { projectId?: string }) => {
-  const [activeTask, setActiveTask] = React.useState<KanbanTask | null>(null);
+  const [activeTask, setActiveTask] = React.useState<TaskCardProps | null>(
+    null
+  );
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: {
       distance: 3,
@@ -37,7 +35,7 @@ const KanbanView = ({ projectId }: { projectId?: string }) => {
   const sensors = useSensors(mouseSensor);
 
   const onDragStart = (e: DragStartEvent) => {
-    const task = e.active.data.current as KanbanTask;
+    const task = e.active.data.current as TaskCardProps;
 
     if (task) {
       setActiveTask(task);
@@ -130,25 +128,20 @@ const KanbanView = ({ projectId }: { projectId?: string }) => {
       sensors={sensors}
       autoScroll={false}
     >
-      <div className="grid grid-cols-3 gap-6">
-        {taskStatus.map((status) => (
-          <DroppableColumn
-            key={status}
-            id={status}
-            status={status}
-            projectId={projectId}
-          />
-        ))}
+      <div className="grid">
+        <div className="flex gap-6 overflow-x-auto">
+          {taskStatus.map((status) => (
+            <Column
+              key={status}
+              id={status}
+              status={status}
+              projectId={projectId}
+            />
+          ))}
+        </div>
       </div>
       <DragOverlay>
-        {activeTask && (
-          <TaskCard
-            name={activeTask.name}
-            dueDate={activeTask.dueDate}
-            priority={activeTask.priority}
-            projectName={activeTask.projectName}
-          />
-        )}
+        {activeTask && <TaskCard {...activeTask} overlay />}
       </DragOverlay>
     </DndContext>
   );

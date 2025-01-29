@@ -22,7 +22,7 @@ export interface TimeTrackingDate {
   totalSeconds: number;
 }
 
-const TimeTrackingView = () => {
+const TimeTrackingView = ({ projectId }: { projectId?: string }) => {
   const bottomRef = useRef<HTMLDivElement>(null);
   const [dateRange] = useQueryStates({
     from: parseAsIsoDate,
@@ -31,12 +31,13 @@ const TimeTrackingView = () => {
 
   const { data, hasNextPage, fetchNextPage, isFetchingNextPage, isLoading } =
     useInfiniteQuery({
-      queryKey: ["timeTrackings", dateRange.from, dateRange.to],
+      queryKey: ["timeTrackings", dateRange.from, dateRange.to, projectId],
       queryFn: async ({ pageParam = 0 }) =>
         await getTimeTrackingsDates({
           page: pageParam,
           from: dateRange.from,
           to: dateRange.to,
+          projectId,
         }),
       initialPageParam: 0,
       getNextPageParam: (lastPage, allPages, lastPageParam) => {
@@ -73,7 +74,11 @@ const TimeTrackingView = () => {
           {data?.pages.map((page, index) => (
             <React.Fragment key={index}>
               {page.map((item) => (
-                <AccordionItem key={item.date.toString()} item={item} />
+                <AccordionItem
+                  key={item.date.toString()}
+                  item={item}
+                  projectId={projectId}
+                />
               ))}
             </React.Fragment>
           ))}

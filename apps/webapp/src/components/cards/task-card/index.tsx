@@ -1,9 +1,28 @@
 import { Badge } from "@/components/ui/badge";
-import { formatStatus } from "@/lib/utils";
-import { TaskPriority } from "@/types";
+import { cn, formatStatus } from "@/lib/utils";
+import { TaskPriority, TaskStatus } from "@/types";
 import { format } from "date-fns";
 import { CheckCheckIcon, FileIcon, FlagIcon, FolderIcon } from "lucide-react";
 import React from "react";
+
+export interface TaskCardProps {
+  id: string;
+  name: string;
+  dueDate?: Date | null;
+  status: TaskStatus;
+  showStatus?: boolean;
+  filesCount?: number;
+  subtasksCount?: number;
+
+  projectName?: string | null;
+  priority?: TaskPriority | null;
+
+  // CLIENT
+  clientName?: string | null;
+  clientId?: string | null;
+
+  overlay?: boolean;
+}
 
 const TaskCard = ({
   dueDate,
@@ -13,17 +32,17 @@ const TaskCard = ({
   projectName,
   priority,
   status,
-}: {
-  dueDate?: Date | null;
-  name: string;
-  subtasksCount?: number;
-  filesCount?: number;
-  projectName?: string | null;
-  priority?: TaskPriority | null;
-  status?: string;
-}) => {
+  overlay = false,
+}: TaskCardProps) => {
   return (
-    <div className="p-5 bg-background border rounded-xl hover:bg-accent/40 transition-colors">
+    <div
+      className={cn(
+        "p-5 bg-background border rounded-xl hover:bg-accent/40 transition-colors",
+        {
+          "shadow-lg bg-background/50 backdrop-blur-md": overlay,
+        }
+      )}
+    >
       {(status || dueDate) && (
         <div className="flex gap-2 mb-3">
           {status && <Badge variant="secondary">{formatStatus(status)}</Badge>}

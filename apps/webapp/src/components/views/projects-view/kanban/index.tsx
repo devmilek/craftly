@@ -16,7 +16,6 @@ import ProjectCard, { ProjectCardProps } from "@/components/cards/project-card";
 import { ProjectStatus } from "@/types";
 import { queryClient } from "@/components/providers/query-provider";
 import { InfiniteData } from "@tanstack/react-query";
-import { KanbanTask } from "../../tasks-view/kanban";
 import { useSearchParams } from "next/navigation";
 import { updateProjectStatus } from "../actions";
 import { toast } from "sonner";
@@ -60,11 +59,11 @@ const Kanban = () => {
 
       // Move project to new status
       const previousStatusData = queryClient.getQueryData<
-        InfiniteData<KanbanTask[]>
+        InfiniteData<ProjectCardProps[]>
       >(query ? ["tasks", previousStatus, query] : ["tasks", previousStatus]);
 
       const targetStatusData = queryClient.getQueryData<
-        InfiniteData<KanbanTask[]>
+        InfiniteData<ProjectCardProps[]>
       >(query ? ["tasks", targetStatus, query] : ["tasks", targetStatus]);
 
       if (previousStatusData) {

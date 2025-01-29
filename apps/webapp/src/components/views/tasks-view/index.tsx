@@ -21,6 +21,7 @@ import { parseAsBoolean, useQueryState } from "nuqs";
 import React from "react";
 import { useLocalStorage } from "usehooks-ts";
 import KanbanView from "./kanban";
+import { AssigneeFilter } from "@/components/filters/assignee-filter";
 
 const TasksView = ({ projectId }: { projectId?: string }) => {
   const { onOpen } = useModal("create-task");
@@ -35,6 +36,7 @@ const TasksView = ({ projectId }: { projectId?: string }) => {
           <div className="flex gap-3">
             <SearchInput />
             <StatusDropdown />
+            <AssigneeFilter />
           </div>
           <div className="flex gap-3">
             <Tabs value={value} onValueChange={setValue}>

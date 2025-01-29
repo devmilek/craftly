@@ -1,9 +1,8 @@
 import { useDraggable } from "@dnd-kit/core";
-import TaskCard from "./task-card";
 import { cn } from "@/lib/utils";
-import { KanbanTask } from ".";
+import TaskCard, { TaskCardProps } from "@/components/cards/task-card";
 
-export const DraggableCard = ({ task }: { task: KanbanTask }) => {
+export const DraggableCard = ({ task }: { task: TaskCardProps }) => {
   const { attributes, listeners, setNodeRef, isDragging } = useDraggable({
     id: task.id,
     data: task,
@@ -13,7 +12,7 @@ export const DraggableCard = ({ task }: { task: KanbanTask }) => {
     <>
       <div
         className={cn("relative", {
-          "opacity-0": isDragging,
+          "opacity-50": isDragging,
         })}
         onClick={() => console.log(`Clicked on task ${task.id}`)}
         {...attributes}
@@ -21,12 +20,7 @@ export const DraggableCard = ({ task }: { task: KanbanTask }) => {
         suppressHydrationWarning
         ref={setNodeRef}
       >
-        <TaskCard
-          name={task.name}
-          dueDate={task.dueDate}
-          priority={task.priority}
-          projectName={task.projectName}
-        />
+        <TaskCard {...task} />
       </div>
     </>
   );

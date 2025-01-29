@@ -28,10 +28,12 @@ export const getTimeTrackingsDates = async ({
   page,
   from,
   to,
+  projectId,
 }: {
   page: number;
   from?: Date | null;
   to?: Date | null;
+  projectId?: string;
 }) => {
   const { organizationId, session } = await getCurrentSession();
 
@@ -49,7 +51,8 @@ export const getTimeTrackingsDates = async ({
       and(
         eq(timeTrackings.organizationId, organizationId),
         from ? gte(timeTrackings.date, from) : undefined,
-        to ? lte(timeTrackings.date, to) : undefined
+        to ? lte(timeTrackings.date, to) : undefined,
+        projectId ? eq(timeTrackings.projectId, projectId) : undefined
       )
     )
     .orderBy(desc(timeTrackings.date))
@@ -60,7 +63,13 @@ export const getTimeTrackingsDates = async ({
   return data;
 };
 
-export const getTimeTrackingsByDate = async (date: Date) => {
+export const getTimeTrackingsByDate = async ({
+  date,
+  projectId,
+}: {
+  date: Date;
+  projectId?: string;
+}) => {
   const { organizationId, session } = await getCurrentSession();
 
   if (!session || !organizationId) {
@@ -78,7 +87,8 @@ export const getTimeTrackingsByDate = async (date: Date) => {
     .where(
       and(
         eq(timeTrackings.organizationId, organizationId),
-        eq(timeTrackings.date, date)
+        eq(timeTrackings.date, date),
+        projectId ? eq(timeTrackings.projectId, projectId) : undefined
       )
     )
     .leftJoin(users, eq(timeTrackings.userId, users.id))

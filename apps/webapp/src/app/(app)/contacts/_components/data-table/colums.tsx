@@ -84,7 +84,7 @@ export const columns = [
           {phoneNumber ? (
             <Badge variant="secondary">
               <PhoneIcon className="size-3 mr-2" />
-              {formatPhoneNumberIntl(phoneNumber)}
+              {formatPhoneNumberIntl(phoneNumber) || phoneNumber}
             </Badge>
           ) : (
             <>-</>

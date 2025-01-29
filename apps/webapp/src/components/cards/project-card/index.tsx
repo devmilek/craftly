@@ -39,9 +39,12 @@ const ProjectCard = ({
   return (
     <Link
       href={`/projects/${id}`}
-      className={cn("rounded-2xl border border-dashed bg-background block", {
-        "shadow-lg": overlay,
-      })}
+      className={cn(
+        "rounded-2xl border border-dashed bg-background block overflow-hidden",
+        {
+          "shadow-lg bg-background/50 backdrop-blur-md": overlay,
+        }
+      )}
     >
       <div className="p-5">
         {(dueDate || (status && showStatus)) && (

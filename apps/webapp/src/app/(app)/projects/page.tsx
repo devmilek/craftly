@@ -1,6 +1,11 @@
 import SidebarNavbar from "@/components/global/sidebar/sidebar-navbar";
 import React from "react";
 import ProjectsView from "@/components/views/projects-view";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Projects",
+};
 
 const ProjectPage = () => {
   return (
