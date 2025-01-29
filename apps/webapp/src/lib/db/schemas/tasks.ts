@@ -4,11 +4,12 @@ import {
   pgTable,
   text,
   timestamp,
+  unique,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
 import { projects } from "./projects";
-import { members, organizations, users } from "./users";
+import { members, organizations } from "./users";
 
 export const taskStatus = ["todo", "in_progress", "completed"] as const;
 export const taskStatusEnum = pgEnum("task_status", taskStatus);
@@ -45,17 +46,23 @@ export const tasks = pgTable("tasks", {
 export type Task = typeof tasks.$inferSelect;
 export type TaskInsert = typeof tasks.$inferInsert;
 
-export const taskAssignees = pgTable("task_assignees", {
-  id: uuid().primaryKey().defaultRandom(),
-  taskId: uuid().references(() => tasks.id, {
-    onDelete: "cascade",
-  }),
-  userId: varchar().references(() => users.id, {
-    onDelete: "cascade",
-  }),
-  memberId: varchar().references(() => members.id, {
-    onDelete: "cascade",
-  }),
-});
+export const taskAssignees = pgTable(
+  "task_assignees",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    taskId: uuid("task_id")
+      .notNull()
+      .references(() => tasks.id, { onDelete: "cascade" }),
+    memberId: text("member_id")
+      .notNull()
+      .references(() => members.id, { onDelete: "cascade" }),
+  },
+  (t) => ({
+    unq: unique().on(t.taskId, t.memberId), // Unikalna kombinacja taskId i memberId
+  })
+);
+
+export type TaskAssignee = typeof taskAssignees.$inferSelect;
+export type TaskAssigneeInsert = typeof taskAssignees.$inferInsert;
 
 // export type TaskAssignee = typeof taskAssignees.$inferSelect;

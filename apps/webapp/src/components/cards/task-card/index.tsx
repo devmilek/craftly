@@ -17,10 +17,6 @@ export interface TaskCardProps {
   projectName?: string | null;
   priority?: TaskPriority | null;
 
-  // CLIENT
-  clientName?: string | null;
-  clientId?: string | null;
-
   overlay?: boolean;
 }
 
@@ -32,52 +28,71 @@ const TaskCard = ({
   projectName,
   priority,
   status,
+  showStatus = true,
   overlay = false,
 }: TaskCardProps) => {
   return (
     <div
       className={cn(
-        "p-5 bg-background border rounded-xl hover:bg-accent/40 transition-colors",
+        "bg-background border border-dashed rounded-xl hover:bg-accent/40 transition-colors",
         {
-          "shadow-lg bg-background/50 backdrop-blur-md": overlay,
+          "shadow-lg bg-background/20 dark:bg-background/50 backdrop-blur-md":
+            overlay,
         }
       )}
     >
-      {(status || dueDate) && (
-        <div className="flex gap-2 mb-3">
-          {status && <Badge variant="secondary">{formatStatus(status)}</Badge>}
-          {dueDate && (
-            <Badge variant="secondary">Due {format(dueDate, "PP")}</Badge>
-          )}
+      <div className="p-5">
+        {((status && showStatus) || dueDate) && (
+          <div className="flex gap-2 mb-3">
+            {status && showStatus && (
+              <Badge variant="secondary">{formatStatus(status)}</Badge>
+            )}
+            {dueDate && (
+              <Badge
+                variant={
+                  dueDate < new Date() ? "destructive-outline" : "secondary"
+                }
+              >
+                Due {format(dueDate, "PP")}
+              </Badge>
+            )}
+          </div>
+        )}
+        <h3 className="font-semibold">{name}</h3>
+        <div className="flex items-center gap-4 mt-3 flex-wrap">
+          <div
+            className={cn(
+              "flex items-center gap-2 text-sm text-muted-foreground",
+              {
+                "text-priority-low": priority === "low",
+                "text-priority-medium": priority === "medium",
+                "text-priority-high": priority === "high",
+              }
+            )}
+          >
+            <FlagIcon className="size-3" />
+            <span className="truncate capitalize">{priority || "none"}</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <CheckCheckIcon className="size-3" />
+            <span>{subtasksCount || "0"} Subtasks</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <FileIcon className="size-3" />
+            <span>{filesCount || "0"} Files</span>
+          </div>
         </div>
-      )}
-      <h3 className="font-semibold">{name}</h3>
-      <div className="flex items-center gap-4 mt-3">
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <CheckCheckIcon className="size-3" />
-          <span>{subtasksCount || "0"} Subtasks</span>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-muted-foreground">
-          <FileIcon className="size-3" />
-          <span>{filesCount || "0"} Files</span>
-        </div>
+        {/* 
+        {(projectName || priority) && (
+          <div className="space-y-1 mt-6">
+            
+          </div>
+        )} */}
       </div>
-
-      {(projectName || priority) && (
-        <div className="space-y-1 mt-6">
-          {projectName && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <FolderIcon className="size-4" />
-              <span className="truncate">{projectName}</span>
-            </div>
-          )}
-
-          {priority && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <FlagIcon className="size-4" />
-              <span className="truncate capitalize">{priority}</span>
-            </div>
-          )}
+      {projectName && (
+        <div className="flex items-center px-5 py-3 border-t gap-2 bg-muted/30 text-sm text-muted-foreground">
+          <FolderIcon className="size-4" />
+          <span className="truncate">{projectName}</span>
         </div>
       )}
     </div>

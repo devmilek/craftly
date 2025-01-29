@@ -141,7 +141,7 @@ const KanbanView = ({ projectId }: { projectId?: string }) => {
         </div>
       </div>
       <DragOverlay>
-        {activeTask && <TaskCard {...activeTask} overlay />}
+        {activeTask && <TaskCard {...activeTask} overlay showStatus={false} />}
       </DragOverlay>
     </DndContext>
   );

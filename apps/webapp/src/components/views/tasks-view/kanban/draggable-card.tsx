@@ -20,7 +20,7 @@ export const DraggableCard = ({ task }: { task: TaskCardProps }) => {
         suppressHydrationWarning
         ref={setNodeRef}
       >
-        <TaskCard {...task} />
+        <TaskCard {...task} showStatus={false} />
       </div>
     </>
   );

@@ -15,7 +15,7 @@ const EmptyState = ({
 }) => {
   const Icon = icon;
   return (
-    <div className={cn("border rounded-xl p-10", className)}>
+    <div className={cn("border border-dashed rounded-xl p-10", className)}>
       <div className="flex items-center justify-center">
         <Icon className="size-5" />
       </div>

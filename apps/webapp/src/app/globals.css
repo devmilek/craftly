@@ -42,12 +42,6 @@ body {
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
 
-    /* Additional colors */
-    /* --info-foreground: 198.6 88.7% 48.4%; */
-    /* --progress-foreground: 45.4 93.4% 47.5%; */
-    /* --success-foreground: 142.1 70.6% 45.3%; */
-    /* --review-foreground: 271.5 81.3% 55.9%; */
-
     /* Project status */
     --status-new: 198.6 88.7% 48.4%;
     --status-todo: 198.6 88.7% 48.4%;
@@ -55,6 +49,11 @@ body {
     --status-in-progress: 330.4 81.2% 60.4%;
     --status-in-review: 270.7 91% 65.1%;
     --status-completed: 142.1 70.6% 45.3%;
+
+    /* PRIORITY STATUS */
+    --priority-low: 200.4 98% 39.4%;
+    --priority-medium: 37.7 92.1% 50.2%;
+    --priority-high: 0 72.2% 50.6%;
   }
   .dark {
     --background: 240 10% 3.9%;

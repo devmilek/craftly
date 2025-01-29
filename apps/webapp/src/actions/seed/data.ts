@@ -13,12 +13,16 @@ import {
   TaskInsert,
   taskStatus,
   taskPriority,
+  members,
+  TaskAssigneeInsert,
+  taskAssignees,
 } from "@/lib/db/schemas";
 import { timeTrackings } from "@/lib/db/schemas/time-trackings";
 import { faker } from "@faker-js/faker";
 import axios from "axios";
 import { v4 } from "uuid";
 import { serverAvatarUpload } from "../storage";
+import { and, eq } from "drizzle-orm";
 
 export const generateData = async () => {
   const { organizationId, session } = await getCurrentSession();
@@ -30,6 +34,13 @@ export const generateData = async () => {
   if (!organizationId) {
     throw new Error("No organizationId found");
   }
+
+  const member = await db.query.members.findFirst({
+    where: and(
+      eq(members.userId, session.userId),
+      eq(members.organizationId, organizationId)
+    ),
+  });
 
   const howManyClients = 10;
   const contactsPerClient = {
@@ -119,6 +130,15 @@ export const generateData = async () => {
         };
 
         await db.insert(dbTasks).values(task);
+
+        if (member) {
+          const taskAssignee: TaskAssigneeInsert = {
+            memberId: member.id,
+            taskId,
+          };
+
+          await db.insert(taskAssignees).values(taskAssignee);
+        }
 
         // insert time tracking
 
