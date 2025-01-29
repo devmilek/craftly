@@ -1,3 +1,4 @@
+import { relations } from "drizzle-orm";
 import {
   pgTable,
   text,
@@ -6,6 +7,7 @@ import {
   boolean,
   unique,
 } from "drizzle-orm/pg-core";
+import { taskAssignees } from "./tasks";
 
 export const users = pgTable("users", {
   id: text("id").primaryKey(),
@@ -89,6 +91,14 @@ export const members = pgTable(
     },
   ]
 );
+
+export const membersRelations = relations(members, ({ one, many }) => ({
+  taskAssignees: many(taskAssignees),
+  user: one(users, {
+    fields: [members.userId],
+    references: [users.id],
+  }),
+}));
 
 export type Member = typeof members.$inferSelect;
 

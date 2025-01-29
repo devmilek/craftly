@@ -44,7 +44,7 @@ export const AssigneeFilter = () => {
 
   const { data, isLoading, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useInfiniteQuery({
-      queryKey: ["clients", "search-clients", inputValue],
+      queryKey: ["members", "search-members", inputValue],
       queryFn: async ({ pageParam = 0 }) =>
         await getOrgMembers({
           page: pageParam,

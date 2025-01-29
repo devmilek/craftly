@@ -22,7 +22,13 @@ import TaskCard, { TaskCardProps } from "@/components/cards/task-card";
 
 type TaskInfiniteQueryData = InfiniteData<TaskCardProps[]>;
 
-const KanbanView = ({ projectId }: { projectId?: string }) => {
+const KanbanView = ({
+  projectId,
+  membersIds,
+}: {
+  projectId?: string;
+  membersIds?: string[];
+}) => {
   const [activeTask, setActiveTask] = React.useState<TaskCardProps | null>(
     null
   );

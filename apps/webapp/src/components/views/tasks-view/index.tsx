@@ -22,12 +22,18 @@ import React from "react";
 import { useLocalStorage } from "usehooks-ts";
 import KanbanView from "./kanban";
 import { AssigneeFilter } from "@/components/filters/assignee-filter";
+import { useSearchParams } from "next/navigation";
 
 const TasksView = ({ projectId }: { projectId?: string }) => {
+  const searchParams = useSearchParams();
   const { onOpen } = useModal("create-task");
   const [value, setValue] = useLocalStorage("tasks_view", "kanban", {
     initializeWithValue: false,
   });
+
+  const membersIds = (searchParams.get("assignees") || "")
+    .split(",")
+    .filter((id) => id !== "");
 
   return (
     <>

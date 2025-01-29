@@ -9,7 +9,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { projects } from "./projects";
-import { members, organizations } from "./users";
+import { members, organizations, users } from "./users";
+import { relations } from "drizzle-orm";
 
 export const taskStatus = ["todo", "in_progress", "completed"] as const;
 export const taskStatusEnum = pgEnum("task_status", taskStatus);
@@ -43,6 +44,14 @@ export const tasks = pgTable("tasks", {
     .$onUpdate(() => new Date()),
 });
 
+export const taskRelations = relations(tasks, ({ one, many }) => ({
+  project: one(projects, {
+    fields: [tasks.projectId],
+    references: [projects.id],
+  }),
+  assignees: many(taskAssignees),
+}));
+
 export type Task = typeof tasks.$inferSelect;
 export type TaskInsert = typeof tasks.$inferInsert;
 
@@ -53,14 +62,25 @@ export const taskAssignees = pgTable(
     taskId: uuid("task_id")
       .notNull()
       .references(() => tasks.id, { onDelete: "cascade" }),
-    memberId: text("member_id")
+    userId: text("user_id")
       .notNull()
-      .references(() => members.id, { onDelete: "cascade" }),
+      .references(() => users.id, { onDelete: "cascade" }),
   },
   (t) => ({
-    unq: unique().on(t.taskId, t.memberId), // Unikalna kombinacja taskId i memberId
+    unq: unique().on(t.taskId, t.userId), // Unikalna kombinacja taskId i memberId
   })
 );
+
+export const taskAssigneesRelations = relations(taskAssignees, ({ one }) => ({
+  task: one(tasks, {
+    fields: [taskAssignees.taskId],
+    references: [tasks.id],
+  }),
+  member: one(users, {
+    fields: [taskAssignees.userId],
+    references: [users.id],
+  }),
+}));
 
 export type TaskAssignee = typeof taskAssignees.$inferSelect;
 export type TaskAssigneeInsert = typeof taskAssignees.$inferInsert;
