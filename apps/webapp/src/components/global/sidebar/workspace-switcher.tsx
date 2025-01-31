@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ChevronDown, FactoryIcon, Plus, UsersRound } from "lucide-react";
+import { ChevronDown, FactoryIcon, Plus, Settings, User2 } from "lucide-react";
 
 import {
   DropdownMenu,
@@ -23,6 +23,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { useModal } from "@/hooks/use-modals-store";
 import Link from "next/link";
+import { getInitials } from "@/lib/utils";
 
 type OrganizationType = {
   id: string;
@@ -79,7 +80,7 @@ export function TeamSwitcher({
             sideOffset={4}
           >
             <DropdownMenuLabel className="text-xs text-muted-foreground">
-              Teams
+              Workspaces
             </DropdownMenuLabel>
             {organizations.map((organization, index) => (
               <DropdownMenuItem
@@ -87,27 +88,42 @@ export function TeamSwitcher({
                 onClick={() => changeOrganization(organization.id)}
                 className="gap-2 p-2"
               >
-                <div className="flex size-6 items-center justify-center rounded-sm border">
-                  <FactoryIcon className="size-4 shrink-0" />
+                <div className="flex size-6 items-center justify-center rounded-sm border text-[10px]">
+                  {getInitials(organization.name)}
                 </div>
                 {organization.name}
                 <DropdownMenuShortcut>⌘{index + 1}</DropdownMenuShortcut>
               </DropdownMenuItem>
             ))}
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2" onClick={onOpen}>
-              <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                <Plus className="size-4" />
-              </div>
-              <div className="font-medium text-muted-foreground">Add team</div>
+            <DropdownMenuItem className="gap-2 p-2" asChild>
+              <Link href="/organization/members">
+                <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                  <User2 className="size-4" />
+                </div>
+                <div className="font-medium text-muted-foreground">
+                  Account Settings
+                </div>
+              </Link>
             </DropdownMenuItem>
             <DropdownMenuItem className="gap-2 p-2" asChild>
               <Link href="/organization/members">
                 <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                  <UsersRound className="size-4" />
+                  <Settings className="size-4" />
                 </div>
-                <div className="font-medium text-muted-foreground">Members</div>
+                <div className="font-medium text-muted-foreground">
+                  Organization Settings
+                </div>
               </Link>
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem className="gap-2 p-2" onClick={() => onOpen()}>
+              <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                <Plus className="size-4" />
+              </div>
+              <div className="font-medium text-muted-foreground">
+                Create Workspace
+              </div>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

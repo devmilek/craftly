@@ -5,16 +5,14 @@ import {
   SidebarFooter,
   SidebarHeader,
 } from "@/components/ui/sidebar";
-import { NavMain } from "./nav-main";
-import { NavProjects } from "./nav-projects";
-import { NavSecondary } from "./nav-secondary";
-import { NavUser } from "./nav-user";
+import { SidebarUserButton } from "./sidebar-user-button";
 import { User } from "better-auth";
-import { TeamSwitcher } from "./team-switcher";
+import { TeamSwitcher } from "./workspace-switcher";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { getCurrentSession } from "@/lib/auth/utils";
 import { redirect } from "next/navigation";
+import SidebarNav from "./sidebar-nav";
 
 export async function AppSidebar({
   user,
@@ -48,12 +46,10 @@ export async function AppSidebar({
         <TeamSwitcher organizations={orgs} activeOrganization={org} />
       </SidebarHeader>
       <SidebarContent>
-        <NavMain />
-        <NavProjects />
-        <NavSecondary className="mt-auto" />
+        <SidebarNav />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={user} />
+        <SidebarUserButton user={user} />
       </SidebarFooter>
     </Sidebar>
   );

@@ -38,7 +38,7 @@ import Link from "next/link";
 import { signOut } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
 
-export function NavUser({ user }: { user: User }) {
+export function SidebarUserButton({ user }: { user: User }) {
   const { isMobile } = useSidebar();
   const { setTheme, theme } = useTheme();
   const router = useRouter();
