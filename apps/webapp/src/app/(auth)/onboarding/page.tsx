@@ -10,6 +10,10 @@ const OnboardingPage = async () => {
     redirect("/sign-in");
   }
 
+  if (user.onboardingCompleted) {
+    redirect("/");
+  }
+
   return (
     <div className="flex items-center flex-col justify-center size-full">
       <div className="max-w-md w-full">

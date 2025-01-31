@@ -1,8 +1,4 @@
-import { betterFetch } from "@better-fetch/fetch";
-import type { auth } from "@/lib/auth";
 import { NextResponse, type NextRequest } from "next/server";
-
-type Session = typeof auth.$Infer.Session;
 
 export default async function authMiddleware(request: NextRequest) {
   const response = NextResponse.next();
@@ -20,7 +16,7 @@ export default async function authMiddleware(request: NextRequest) {
   const sessionCookie = request.cookies.get("craftly.session_token");
 
   if (!sessionCookie) {
-    return NextResponse.redirect(new URL("/auth/sign-in", request.url));
+    return NextResponse.redirect(new URL("/sign-in", request.url));
   }
   return response;
 }
@@ -35,7 +31,8 @@ export const config = {
      * - favicon.ico, sitemap.xml, robots.txt (metadata files)
      * * - auth (authentication routes)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|auth|onboarding|sign-up|sign-in|forgot-password|verify-email).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|auth|sign-in|sign-up|auth|verify-email).*)",
+    // pathPattern,
     // ignore auth
   ],
 };

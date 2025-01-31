@@ -23,6 +23,7 @@ import { organization } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { generateData } from "@/actions/seed/data";
 import { useRouter } from "next/navigation";
+import { completeOnboarding } from "@/actions/users/complete-onboarding";
 
 const schema = z.object({
   image: z.string(),
@@ -66,6 +67,8 @@ export const OrganizationForm = ({ name }: { name: string }) => {
     if (values.addSampleData) {
       await generateData();
     }
+
+    await completeOnboarding();
 
     replace("/");
   };

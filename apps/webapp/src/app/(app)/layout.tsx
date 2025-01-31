@@ -11,6 +11,10 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
     redirect("/auth/sign-in");
   }
 
+  if (!user.onboardingCompleted) {
+    redirect("/onboarding");
+  }
+
   if (!session.activeOrganizationId) {
     redirect("/auth/select-organization");
   }

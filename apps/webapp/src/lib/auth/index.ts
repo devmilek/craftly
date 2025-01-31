@@ -58,6 +58,12 @@ export const auth = betterAuth({
         });
       },
     },
+    additionalFields: {
+      onboardingCompleted: {
+        type: "boolean",
+        default: false,
+      },
+    },
   },
   account: {
     accountLinking: {

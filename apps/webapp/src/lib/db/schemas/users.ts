@@ -18,6 +18,7 @@ export const users = pgTable("users", {
   createdAt: timestamp("created_at").notNull(),
   updatedAt: timestamp("updated_at").notNull(),
   twoFactorEnabled: boolean("two_factor_enabled"),
+  onboardingCompleted: boolean("onboarding_completed").default(false),
 });
 
 export const sessions = pgTable("sessions", {
@@ -30,7 +31,9 @@ export const sessions = pgTable("sessions", {
   userAgent: text("user_agent"),
   userId: text("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, {
+      onDelete: "cascade",
+    }),
   activeOrganizationId: text("active_organization_id"),
 });
 
@@ -40,7 +43,9 @@ export const accounts = pgTable("accounts", {
   providerId: text("provider_id").notNull(),
   userId: text("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, {
+      onDelete: "cascade",
+    }),
   accessToken: text("access_token"),
   refreshToken: text("refresh_token"),
   idToken: text("id_token"),
@@ -78,10 +83,14 @@ export const members = pgTable(
     id: text("id").primaryKey(),
     organizationId: text("organization_id")
       .notNull()
-      .references(() => organizations.id),
+      .references(() => organizations.id, {
+        onDelete: "cascade",
+      }),
     userId: text("user_id")
       .notNull()
-      .references(() => users.id),
+      .references(() => users.id, {
+        onDelete: "cascade",
+      }),
     role: text("role").notNull(),
     createdAt: timestamp("created_at").notNull(),
   },
@@ -106,14 +115,18 @@ export const invitations = pgTable("invitations", {
   id: text("id").primaryKey(),
   organizationId: text("organization_id")
     .notNull()
-    .references(() => organizations.id),
+    .references(() => organizations.id, {
+      onDelete: "cascade",
+    }),
   email: text("email").notNull(),
   role: text("role"),
   status: text("status").notNull(),
   expiresAt: timestamp("expires_at").notNull(),
   inviterId: text("inviter_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, {
+      onDelete: "cascade",
+    }),
 });
 
 export const twoFactors = pgTable("two_factors", {
@@ -122,7 +135,9 @@ export const twoFactors = pgTable("two_factors", {
   backupCodes: text("backup_codes").notNull(),
   userId: text("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, {
+      onDelete: "cascade",
+    }),
 });
 
 export const passkeys = pgTable("passkeys", {
@@ -131,7 +146,9 @@ export const passkeys = pgTable("passkeys", {
   publicKey: text("public_key").notNull(),
   userId: text("user_id")
     .notNull()
-    .references(() => users.id),
+    .references(() => users.id, {
+      onDelete: "cascade",
+    }),
   credentialID: text("credential_i_d").notNull(),
   counter: integer("counter").notNull(),
   deviceType: text("device_type").notNull(),
