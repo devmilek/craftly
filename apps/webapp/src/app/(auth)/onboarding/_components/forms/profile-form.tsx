@@ -17,6 +17,8 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useOnboardingStore } from "@/hooks/use-onboarding-form";
 import AuthHeader from "@/app/(auth)/_components/auth-header";
+import { updateUser } from "@/lib/auth/auth-client";
+import { toast } from "sonner";
 
 const schema = onboardingSchema.pick({
   image: true,
@@ -33,7 +35,7 @@ export const ProfileForm = ({
   email: string;
   name: string;
 }) => {
-  const { setData, setStep } = useOnboardingStore();
+  const { setStep } = useOnboardingStore();
   const form = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: {
@@ -45,10 +47,19 @@ export const ProfileForm = ({
 
   const formName = form.watch("name");
 
-  const onSubmit = (data: Schema) => {
-    setData(data);
+  const onSubmit = async (data: Schema) => {
+    const { error } = await updateUser({
+      name: data.name,
+    });
+
+    if (error) {
+      toast.error(error.message || "Failed to update user");
+      return;
+    }
     setStep("theme");
   };
+
+  const isLoading = form.formState.isSubmitting;
 
   return (
     <div>
@@ -79,7 +90,7 @@ export const ProfileForm = ({
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={isLoading} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -98,7 +109,9 @@ export const ProfileForm = ({
               </FormItem>
             )}
           />
-          <Button type="submit">Continue</Button>
+          <Button type="submit" disabled={isLoading} loading={isLoading}>
+            Continue
+          </Button>
         </form>
       </Form>
     </div>

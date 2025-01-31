@@ -3,18 +3,14 @@
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import {
-  ContactInsert,
   contacts as dbContacts,
   clients as dbClients,
   projects as dbProjects,
   tasks as dbTasks,
-  ProjectInsert,
   projectStatus,
-  TaskInsert,
   taskStatus,
   taskPriority,
   members,
-  TaskAssigneeInsert,
   taskAssignees,
 } from "@/lib/db/schemas";
 import { timeTrackings } from "@/lib/db/schemas/time-trackings";
@@ -27,12 +23,8 @@ import { and, eq } from "drizzle-orm";
 export const generateData = async () => {
   const { organizationId, session } = await getCurrentSession();
 
-  if (!session) {
-    throw new Error("No session found");
-  }
-
-  if (!organizationId) {
-    throw new Error("No organizationId found");
+  if (!session?.userId || !organizationId) {
+    throw new Error("Invalid session or organization");
   }
 
   const member = await db.query.members.findFirst({
@@ -42,69 +34,66 @@ export const generateData = async () => {
     ),
   });
 
-  const howManyClients = 10;
-  const contactsPerClient = {
-    min: 5,
-    max: 9,
-  };
-  const projectsPerClient = {
-    min: 2,
-    max: 7,
-  };
-  const tasksPerProject = {
-    min: 4,
-    max: 20,
-  };
-  const timeTrackingsPerTask = {
-    min: 1,
-    max: 3,
+  const config = {
+    clients: 10,
+    contacts: { min: 5, max: 9 },
+    projects: { min: 2, max: 7 },
+    tasks: { min: 4, max: 20 },
+    timeTracking: { min: 1, max: 3 },
   };
 
-  for (let i = 0; i < howManyClients; i++) {
+  // Prepare batch arrays
+  const clientsBatch = [];
+  const contactsBatch = [];
+  const projectsBatch = [];
+  const tasksBatch = [];
+  const taskAssigneesBatch = [];
+  const timeTrackingsBatch = [];
+
+  // Pre-fetch some avatars to reuse
+  const avatarCount = 10;
+  const avatarUrls = await Promise.all(
+    Array(avatarCount)
+      .fill(0)
+      .map(async () => {
+        const avatarData = await axios.get("https://i.pravatar.cc/300", {
+          responseType: "arraybuffer",
+        });
+        const { fileId } = await serverAvatarUpload({
+          file: new File([Buffer.from(avatarData.data)], "avatar.jpeg"),
+          organizationId,
+        });
+        return fileId;
+      })
+  );
+
+  // Generate all data structures first
+  for (let i = 0; i < config.clients; i++) {
     const clientId = v4();
-
-    await db.insert(dbClients).values({
+    clientsBatch.push({
       name: faker.company.name(),
       organizationId,
       id: clientId,
     });
 
-    for (let i = 0; i < faker.number.int(contactsPerClient); i++) {
-      const avatarUrl = "https://i.pravatar.cc/300";
-
-      const avatarData = await axios.get(avatarUrl, {
-        responseType: "arraybuffer",
-      });
-
-      const avatar = Buffer.from(avatarData.data);
-
-      const { fileId, error } = await serverAvatarUpload({
-        file: new File([avatar], "avatar.jpeg"),
-        organizationId,
-      });
-
-      if (error) {
-        console.error(error);
-      }
-
-      const contactId = v4();
-      const contact: ContactInsert = {
+    const contactCount = faker.number.int(config.contacts);
+    for (let j = 0; j < contactCount; j++) {
+      contactsBatch.push({
         name: faker.person.fullName(),
         email: faker.internet.email(),
         phone: faker.phone.number(),
         position: faker.person.jobTitle(),
         organizationId,
         clientId,
-        id: contactId,
-        avatarId: fileId,
-      };
-
-      await db.insert(dbContacts).values(contact);
+        id: v4(),
+        avatarId: avatarUrls[j % avatarUrls.length],
+      });
     }
 
-    for (let i = 0; i < faker.number.int(projectsPerClient); i++) {
+    const projectCount = faker.number.int(config.projects);
+    for (let j = 0; j < projectCount; j++) {
       const projectId = v4();
-      const project: ProjectInsert = {
+      projectsBatch.push({
         name: faker.commerce.productName(),
         description: faker.commerce.productDescription(),
         clientId,
@@ -112,13 +101,12 @@ export const generateData = async () => {
         status: faker.helpers.arrayElement(projectStatus),
         dueDate: faker.date.soon(),
         id: projectId,
-      };
+      });
 
-      await db.insert(dbProjects).values(project);
-
-      for (let i = 0; i < faker.number.int(tasksPerProject); i++) {
+      const taskCount = faker.number.int(config.tasks);
+      for (let k = 0; k < taskCount; k++) {
         const taskId = v4();
-        const task: TaskInsert = {
+        tasksBatch.push({
           name: faker.commerce.productName(),
           description: faker.commerce.productDescription(),
           organizationId,
@@ -127,34 +115,35 @@ export const generateData = async () => {
           priority: faker.helpers.arrayElement(taskPriority),
           projectId,
           id: taskId,
-        };
-
-        await db.insert(dbTasks).values(task);
+        });
 
         if (member) {
-          const taskAssignee: TaskAssigneeInsert = {
-            memberId: member.id,
+          taskAssigneesBatch.push({
+            userId: member.userId,
             taskId,
-          };
-
-          await db.insert(taskAssignees).values(taskAssignee);
+          });
         }
 
-        // insert time tracking
-
-        for (let i = 0; i < faker.number.int(timeTrackingsPerTask); i++) {
-          await db.insert(timeTrackings).values({
+        const timeTrackingCount = faker.number.int(config.timeTracking);
+        for (let l = 0; l < timeTrackingCount; l++) {
+          timeTrackingsBatch.push({
             userId: session.userId,
             organizationId,
             projectId,
             taskId,
-            date: faker.date.recent({
-              days: 90,
-            }),
+            date: faker.date.recent({ days: 90 }),
             totalSeconds: faker.number.int({ min: 60 * 30, max: 60 * 60 * 8 }),
           });
         }
       }
     }
   }
+
+  // Perform batch inserts
+  await db.insert(dbClients).values(clientsBatch);
+  await db.insert(dbContacts).values(contactsBatch);
+  await db.insert(dbProjects).values(projectsBatch);
+  await db.insert(dbTasks).values(tasksBatch);
+  await db.insert(taskAssignees).values(taskAssigneesBatch);
+  await db.insert(timeTrackings).values(timeTrackingsBatch);
 };

@@ -19,6 +19,7 @@ export const {
   resetPassword,
   organization,
   changeEmail,
+  updateUser,
   linkSocial,
   unlinkAccount,
   useActiveOrganization,

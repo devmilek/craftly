@@ -11,7 +11,7 @@ const steps = ["profile", "theme", "organization"] as const;
 export type OnboardingStep = (typeof steps)[number];
 
 const Stepper = ({ email, name }: { email: string; name: string }) => {
-  const { currentStep } = useOnboardingStore();
+  const { currentStep, setStep } = useOnboardingStore();
   const displayForm = () => {
     switch (currentStep) {
       case "profile":
@@ -19,7 +19,7 @@ const Stepper = ({ email, name }: { email: string; name: string }) => {
       case "theme":
         return <ThemeForm />;
       case "organization":
-        return <OrganizationForm />;
+        return <OrganizationForm name={name} />;
     }
   };
   return (
@@ -30,9 +30,13 @@ const Stepper = ({ email, name }: { email: string; name: string }) => {
       <div className="grid grid-cols-3 gap-2 mt-2">
         {steps.map((step, index) => (
           <div
+            onClick={() => setStep(step)}
             key={index}
-            className={cn("h-1 rounded-xl bg-muted", {
-              "bg-primary": step === currentStep,
+            className={cn("h-1 rounded-xl bg-muted cursor-pointer", {
+              "bg-primary":
+                step === currentStep ||
+                (steps.indexOf(currentStep) === 1 && index <= 1) ||
+                (steps.indexOf(currentStep) === 2 && index <= 2),
             })}
           />
         ))}

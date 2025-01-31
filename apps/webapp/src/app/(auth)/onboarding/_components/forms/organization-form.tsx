@@ -15,11 +15,14 @@ import AvatarUploader from "@/components/ui/avatar-uploader";
 import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { useOnboardingStore } from "@/hooks/use-onboarding-form";
 import AuthHeader from "@/app/(auth)/_components/auth-header";
 import { Switch } from "@/components/ui/switch";
 import { useEffect } from "react";
 import slugify from "@sindresorhus/slugify";
+import { organization } from "@/lib/auth/auth-client";
+import { toast } from "sonner";
+import { generateData } from "@/actions/seed/data";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   image: z.string(),
@@ -30,35 +33,56 @@ const schema = z.object({
 
 type Schema = z.infer<typeof schema>;
 
-export const OrganizationForm = () => {
-  const { setData, setStep } = useOnboardingStore();
+export const OrganizationForm = ({ name }: { name: string }) => {
+  const { replace } = useRouter();
+  const defaultName = name.split(" ")[0] + "'s workspace";
   const form = useForm<Schema>({
     resolver: zodResolver(schema),
     defaultValues: {
       image: "",
-      name: "",
-      slug: "",
+      name: defaultName,
+      slug: slugify(defaultName),
+      addSampleData: true,
     },
   });
 
   const formName = form.watch("name");
 
-  const onSubmit = (data: Schema) => {
-    setData(data);
-    setStep("theme");
+  const onSubmit = async (values: Schema) => {
+    const { error, data } = await organization.create({
+      name: values.name,
+      slug: values.slug,
+    });
+
+    if (error || !data) {
+      toast.error(error?.message || "Failed to create workspace");
+      return;
+    }
+
+    await organization.setActive({
+      organizationId: data.id,
+    });
+
+    if (values.addSampleData) {
+      await generateData();
+    }
+
+    replace("/");
   };
 
-  const organizationName = form.watch("name");
+  const workspaceName = form.watch("name");
 
   useEffect(() => {
-    form.setValue("slug", slugify(organizationName));
-  }, [form, organizationName]);
+    form.setValue("slug", slugify(workspaceName));
+  }, [form, workspaceName]);
+
+  const isLoading = form.formState.isSubmitting;
 
   return (
     <div>
       <AuthHeader
-        title="Create your organization"
-        description="Create your organization to get started. You'll be able to invite your team members later."
+        title="Create your workspace"
+        description="Create your workspace to get started. You'll be able to invite your team members later."
       />
       <Form {...form}>
         <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>
@@ -80,9 +104,9 @@ export const OrganizationForm = () => {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Organization name</FormLabel>
+                <FormLabel>Workspace name</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={isLoading} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -95,7 +119,7 @@ export const OrganizationForm = () => {
               <FormItem>
                 <FormLabel>Slug</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} disabled={isLoading} />
                 </FormControl>
                 <FormDescription>
                   The slug is used to create a unique URL for your organization.
@@ -119,12 +143,15 @@ export const OrganizationForm = () => {
                   <Switch
                     checked={field.value}
                     onCheckedChange={field.onChange}
+                    disabled={isLoading}
                   />
                 </FormControl>
               </FormItem>
             )}
           />
-          <Button type="submit">Continue</Button>
+          <Button type="submit" disabled={isLoading} loading={isLoading}>
+            Continue
+          </Button>
         </form>
       </Form>
     </div>

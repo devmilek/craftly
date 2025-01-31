@@ -1,6 +1,7 @@
 import Image from "next/image";
 import React from "react";
 import image from "../../../public/hero2.png";
+import imageDark from "../../../public/hero-dark2.png";
 
 const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -16,7 +17,15 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
             height={800}
             alt=""
             placeholder="blur"
-            className="size-full object-cover object-top shadow-lg border rounded-xl"
+            className="size-full object-cover object-top shadow-lg border rounded-xl dark:hidden"
+          />
+          <Image
+            src={imageDark}
+            width={1200}
+            height={800}
+            alt=""
+            placeholder="blur"
+            className="size-full object-cover object-top shadow-lg border rounded-xl dark:block hidden"
           />
         </div>
       </section>
