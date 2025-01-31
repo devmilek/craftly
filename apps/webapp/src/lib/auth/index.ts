@@ -48,6 +48,16 @@ export const auth = betterAuth({
         });
       },
     },
+    deleteUser: {
+      enabled: true,
+      sendDeleteAccountVerification: async ({ user, url }) => {
+        await sendMail({
+          to: user.email,
+          subject: `Hi ${user.name}, please confirm your account deletion`,
+          text: `Click the link to confirm: ${url}`,
+        });
+      },
+    },
   },
   account: {
     accountLinking: {

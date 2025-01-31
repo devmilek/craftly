@@ -20,6 +20,7 @@ export const {
   organization,
   changeEmail,
   updateUser,
+  deleteUser,
   linkSocial,
   unlinkAccount,
   useActiveOrganization,
