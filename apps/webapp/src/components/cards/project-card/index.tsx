@@ -6,6 +6,7 @@ import { ProjectStatus } from "@/types";
 import { format } from "date-fns";
 import Link from "next/link";
 import React from "react";
+import ProjectCardDropdown from "./project-card-dropdown";
 
 export interface ProjectCardProps {
   id: string;
@@ -40,12 +41,13 @@ const ProjectCard = ({
     <Link
       href={`/projects/${id}`}
       className={cn(
-        "rounded-2xl border border-dashed bg-background block overflow-hidden",
+        "rounded-2xl border border-dashed bg-background block overflow-hidden relative",
         {
           "shadow-lg bg-background/50 backdrop-blur-md": overlay,
         }
       )}
     >
+      <ProjectCardDropdown projectId={id} />
       <div className="p-5">
         {(dueDate || (status && showStatus)) && (
           <div className="flex gap-2 flex-wrap mb-4">

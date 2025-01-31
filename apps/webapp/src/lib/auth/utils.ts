@@ -33,11 +33,11 @@ export const ensureSessionWithOrganization = async () => {
   });
 
   if (!data) {
-    redirect("/auth/sign-in");
+    redirect("/sign-in");
   }
 
   if (!data.session.activeOrganizationId) {
-    redirect("/auth/select-organization");
+    redirect("/select-organization");
   }
 
   return {

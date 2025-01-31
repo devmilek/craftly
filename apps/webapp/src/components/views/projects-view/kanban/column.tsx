@@ -18,7 +18,7 @@ const Column = memo(
 
     const { data, hasNextPage, fetchNextPage, isFetchingNextPage, isLoading } =
       useInfiniteQuery({
-        queryKey: query ? ["tasks", status, query] : ["tasks", status],
+        queryKey: query ? ["projects", status, query] : ["projects", status],
         queryFn: async ({ pageParam = 0 }) =>
           await getProjects({
             status,
