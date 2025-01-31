@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { signUp } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
-import { Loader2 } from "lucide-react";
+import { Loader2, MailIcon } from "lucide-react";
 import { toast } from "sonner";
 import {
   Form,
@@ -14,10 +14,14 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { signUpSchema } from "./schema";
+import { InputWithAdornments } from "@/components/ui/input-with-adornments";
+import PasswordInput from "@/components/ui/password-input";
+import PasswordRequirements from "@/components/global/password-requirements";
 
 const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
@@ -39,7 +43,7 @@ const SignUpForm = () => {
       email: values.email,
       password: values.password,
       name: `${values.firstName} ${values.lastName}`,
-      callbackURL: "/",
+      callbackURL: "/onboarding",
     });
 
     if (error) {
@@ -51,8 +55,8 @@ const SignUpForm = () => {
     if (!data) {
     }
 
+    push("/verify-email?email=" + values.email);
     setLoading(false);
-    push("/auth/verify-email?email=" + values.email);
   };
 
   return (
@@ -68,6 +72,7 @@ const SignUpForm = () => {
                 <FormControl>
                   <Input {...field} disabled={loading} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -80,6 +85,7 @@ const SignUpForm = () => {
                 <FormControl>
                   <Input {...field} disabled={loading} />
                 </FormControl>
+                <FormMessage />
               </FormItem>
             )}
           />
@@ -91,8 +97,14 @@ const SignUpForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} type="email" disabled={loading} />
+                <InputWithAdornments
+                  startIcon={MailIcon}
+                  {...field}
+                  type="email"
+                  disabled={loading}
+                />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -103,8 +115,10 @@ const SignUpForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input {...field} type="password" disabled={loading} />
+                <PasswordInput {...field} disabled={loading} />
               </FormControl>
+              <PasswordRequirements value={field.value} />
+              <FormMessage />
             </FormItem>
           )}
         />

@@ -25,6 +25,6 @@ export const {
   twoFactor,
   passkey,
 } = createAuthClient({
-  baseURL: "http://localhost:3003", // the base url of your auth server
+  baseURL: process.env.NEXT_PUBLIC_BETTER_AUTH_URL,
   plugins: [organizationClient(), twoFactorClient(), passkeyClient()],
 });

@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { forgetPassword } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
+import { Loader2, Mail } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -15,7 +15,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { InputWithAdornments } from "@/components/ui/input-with-adornments";
 
 const schema = z.object({
   email: z.string().email(),
@@ -56,7 +56,12 @@ const ForgetPasswordForm = () => {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input {...field} type="email" disabled={isLoading} />
+                <InputWithAdornments
+                  startIcon={Mail}
+                  {...field}
+                  type="email"
+                  disabled={isLoading}
+                />
               </FormControl>
             </FormItem>
           )}

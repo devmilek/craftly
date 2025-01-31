@@ -65,16 +65,6 @@ export const auth = betterAuth({
       });
     },
   },
-  socialProviders: {
-    github: {
-      clientId: process.env.GITHUB_CLIENT_ID as string,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
-    },
-    google: {
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    },
-  },
   emailVerification: {
     sendVerificationEmail: async ({ user, url }) => {
       await sendMail({
@@ -85,6 +75,16 @@ export const auth = betterAuth({
     },
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
+  },
+  socialProviders: {
+    github: {
+      clientId: process.env.GITHUB_CLIENT_ID as string,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+    },
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
   },
   rateLimit: {
     enabled: true,
@@ -99,5 +99,5 @@ export const auth = betterAuth({
       },
     },
   },
-  trustedOrigins: ["http://127.0.0.1:3003"]
+  trustedOrigins: ["http://127.0.0.1:3003"],
 });

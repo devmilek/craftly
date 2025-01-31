@@ -35,6 +35,7 @@ export const config = {
      * - favicon.ico, sitemap.xml, robots.txt (metadata files)
      * * - auth (authentication routes)
      */
-    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|auth).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt|auth|onboarding|sign-up|sign-in|forgot-password|verify-email).*)",
+    // ignore auth
   ],
 };
