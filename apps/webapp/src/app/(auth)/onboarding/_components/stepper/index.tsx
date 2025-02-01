@@ -27,7 +27,7 @@ const Stepper = ({ email, name }: { email: string; name: string }) => {
       <p className="text-sm text-muted-foreground">
         Step {steps.indexOf(currentStep) + 1} of {steps.length}
       </p>
-      <div className="grid grid-cols-3 gap-2 mt-2">
+      <div className="grid grid-cols-3 gap-2 mt-2 mb-5">
         {steps.map((step, index) => (
           <div
             onClick={() => setStep(step)}

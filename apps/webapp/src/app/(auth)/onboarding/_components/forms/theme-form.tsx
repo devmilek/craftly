@@ -1,5 +1,6 @@
 "use client";
 
+import AuthHeader from "@/app/(auth)/_components/auth-header";
 import { Button } from "@/components/ui/button";
 import { useOnboardingStore } from "@/hooks/use-onboarding-form";
 import { cn } from "@/lib/utils";
@@ -11,11 +12,12 @@ const ThemeForm = () => {
   const { setStep } = useOnboardingStore();
   return (
     <div>
-      <h1 className="text-xl font-bold mt-4">Choose your theme</h1>
-      <p className="text-sm text-muted-foreground mt-1 mb-4">
-        Select the theme for the application. You’ll be able to change this
-        later.
-      </p>
+      <AuthHeader
+        title="Choose your theme"
+        description="Select the theme for the application. You’ll be able to change this
+        later."
+        showLogo={false}
+      />
       <div className="grid grid-cols-3 gap-4">
         <div
           className={cn(

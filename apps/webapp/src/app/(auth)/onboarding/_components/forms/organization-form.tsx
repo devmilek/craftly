@@ -86,6 +86,7 @@ export const OrganizationForm = ({ name }: { name: string }) => {
       <AuthHeader
         title="Create your workspace"
         description="Create your workspace to get started. You'll be able to invite your team members later."
+        showLogo={false}
       />
       <Form {...form}>
         <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>

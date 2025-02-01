@@ -13,6 +13,7 @@ export const auth = betterAuth({
   appName: "Craftly",
   advanced: {
     cookiePrefix: "craftly",
+    useSecureCookies: false,
   },
   plugins: [
     organization({
@@ -115,5 +116,9 @@ export const auth = betterAuth({
       },
     },
   },
-  trustedOrigins: ["http://127.0.0.1:3003"],
+  trustedOrigins: [
+    "http://127.0.0.1:3003",
+    "https://reasons-oils-tobago-outcome.trycloudflare.com",
+    "https://3003--main--node2--devmilek--hv6c9lv9plcpk.pit-1.try.coder.app",
+  ],
 });

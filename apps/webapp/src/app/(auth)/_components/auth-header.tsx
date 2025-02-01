@@ -14,7 +14,7 @@ const AuthHeader = ({
 }) => {
   return (
     <div className={className}>
-      {showLogo && <Icons.logo className="mb-4" />}
+      {showLogo && <Icons.logo className="mb-4 inline" />}
       <h1 className="text-xl font-bold">{title}</h1>
       <p className="text-sm text-muted-foreground mt-1 mb-4 text-pretty">
         {description}

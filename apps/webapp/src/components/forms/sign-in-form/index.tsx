@@ -49,6 +49,7 @@ const SignInForm = () => {
             console.log("two factor redirect");
             window.location.href = "/two-factor";
           }
+          console.log("success");
           setLoading(false);
           push("/");
         },

@@ -67,6 +67,7 @@ export const ProfileForm = ({
         title="Set up your profile"
         description="Check if the profile information is correct. You'll be able to
         change this later in the account settings page."
+        showLogo={false}
       />
       <Form {...form}>
         <form className="grid gap-4" onSubmit={form.handleSubmit(onSubmit)}>

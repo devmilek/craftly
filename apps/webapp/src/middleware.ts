@@ -16,6 +16,7 @@ export default async function authMiddleware(request: NextRequest) {
   const sessionCookie = request.cookies.get("craftly.session_token");
 
   if (!sessionCookie) {
+    console.log("No session cookie found");
     return NextResponse.redirect(new URL("/sign-in", request.url));
   }
   return response;
