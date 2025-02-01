@@ -24,9 +24,10 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { Passkey } from "better-auth/plugins/passkey";
 import { cn } from "@/lib/utils";
-import { KeyIcon } from "lucide-react";
+import { KeyIcon, ListX } from "lucide-react";
 import { passkey } from "@/lib/auth/auth-client";
 import { useRouter } from "next/navigation";
+import EmptyState from "@/components/ui/empty-state";
 
 const PasskeysCard = ({ passkeys }: { passkeys: Passkey[] }) => {
   const [open, setOpen] = React.useState(false);
@@ -78,6 +79,14 @@ const PasskeysCard = ({ passkeys }: { passkeys: Passkey[] }) => {
             </Button>
           </div>
         ))}
+        {passkeys.length === 0 && (
+          <EmptyState
+            className="mt-4"
+            icon={ListX}
+            title="No Passkeys"
+            description="You don't have any passkeys yet. Add a passkey to secure your account."
+          />
+        )}
       </div>
       <AddPasskeyModal open={open} setOpen={setOpen} />
     </div>

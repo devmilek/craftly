@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { getSession } from "@/lib/auth/auth-client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { personalDetailsFormSchema, PersonalDetailsFormSchema } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -22,24 +22,31 @@ const PersonalDetailsForm = () => {
   const { onOpen } = useModal("change-email");
   const form = useForm<PersonalDetailsFormSchema>({
     resolver: zodResolver(personalDetailsFormSchema),
-    defaultValues: async () => {
+    defaultValues: {
+      image: undefined,
+      email: "",
+      name: "",
+    },
+  });
+
+  useEffect(() => {
+    async function fetchData() {
       const data = await getSession();
 
       if (!data || !data.data?.user) {
-        return {
-          image: undefined,
-          email: "",
-          name: "",
-        };
+        return;
       }
 
-      return {
+      form.reset({
         image: data.data.user.image || undefined,
         email: data.data.user.email,
         name: data.data.user.name,
-      };
-    },
+      });
+    }
+
+    fetchData();
   });
+
   return (
     <Form {...form}>
       <form>

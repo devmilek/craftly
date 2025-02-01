@@ -2,10 +2,7 @@ import { z } from "zod";
 
 export const changePasswordFormSchema = z
   .object({
-    currentPassword: z
-      .string()
-      .min(8, "Password must be at least 8 characters")
-      .optional(),
+    currentPassword: z.string().optional(),
     newPassword: z
       .string()
       .min(8, "Password must be at least 8 characters")

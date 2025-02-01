@@ -45,7 +45,11 @@ export async function AppSidebar({
       <SidebarHeader>
         <TeamSwitcher organizations={orgs} activeOrganization={org} />
       </SidebarHeader>
-      <SidebarContent>
+      <SidebarContent
+        style={{
+          scrollbarWidth: "thin",
+        }}
+      >
         <SidebarNav />
       </SidebarContent>
       <SidebarFooter>

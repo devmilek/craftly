@@ -88,7 +88,7 @@ export function TeamSwitcher({
                 onClick={() => changeOrganization(organization.id)}
                 className="gap-2 p-2"
               >
-                <div className="flex size-6 items-center justify-center rounded-sm border text-[10px]">
+                <div className="flex size-6 items-center justify-center rounded-sm border text-[10px] bg-accent">
                   {getInitials(organization.name)}
                 </div>
                 {organization.name}
@@ -97,9 +97,9 @@ export function TeamSwitcher({
             ))}
             <DropdownMenuSeparator />
             <DropdownMenuItem className="gap-2 p-2" asChild>
-              <Link href="/organization/members">
+              <Link href="/settings">
                 <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                  <User2 className="size-4" />
+                  <User2 className="size-3" />
                 </div>
                 <div className="font-medium text-muted-foreground">
                   Account Settings
@@ -109,10 +109,10 @@ export function TeamSwitcher({
             <DropdownMenuItem className="gap-2 p-2" asChild>
               <Link href="/organization/members">
                 <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                  <Settings className="size-4" />
+                  <Settings className="size-3" />
                 </div>
                 <div className="font-medium text-muted-foreground">
-                  Organization Settings
+                  Workspace Settings
                 </div>
               </Link>
             </DropdownMenuItem>

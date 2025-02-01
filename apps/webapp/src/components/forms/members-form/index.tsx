@@ -31,7 +31,7 @@ const MembersForm = ({ organizationId }: { organizationId: string }) => {
     <div className="">
       <div className="flex items-center gap-2 p-6 pb-2">
         <Input placeholder="Filter by name or email" className="w-full" />
-        <Button onClick={onOpen}>Invite</Button>
+        <Button onClick={() => onOpen()}>Invite</Button>
       </div>
       <div>
         {members.map((member, index) => (

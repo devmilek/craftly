@@ -2,7 +2,7 @@
 
 import React from "react";
 import { useForm } from "react-hook-form";
-import { ChangePasswordFormSchema } from "./schema";
+import { changePasswordFormSchema, ChangePasswordFormSchema } from "./schema";
 import {
   Form,
   FormControl,
@@ -20,10 +20,12 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { setPassword } from "./actions";
 import { Button } from "@/components/ui/button";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const ChangePasswordForm = ({ isPasswordSet }: { isPasswordSet: boolean }) => {
   const router = useRouter();
   const form = useForm<ChangePasswordFormSchema>({
+    resolver: zodResolver(changePasswordFormSchema),
     defaultValues: {
       currentPassword: isPasswordSet ? "" : undefined,
       newPassword: "",
