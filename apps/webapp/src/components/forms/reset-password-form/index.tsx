@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { resetPassword } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
-import { Loader2 } from "lucide-react";
 import { parseAsString, useQueryState } from "nuqs";
 import Link from "next/link";
 import {
@@ -17,7 +16,7 @@ import {
   FormLabel,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import PasswordInput from "@/components/ui/password-input";
 
 const schema = z
   .object({
@@ -47,7 +46,9 @@ const ResetPasswordForm = () => {
     });
 
     if (error) {
-      toast.error(error.message);
+      toast.error(
+        error.message || "An error occurred while resetting password"
+      );
       return;
     }
 
@@ -81,7 +82,7 @@ const ResetPasswordForm = () => {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <Input {...field} type="password" disabled={isLoading} />
+                <PasswordInput {...field} disabled={isLoading} />
               </FormControl>
             </FormItem>
           )}
@@ -93,13 +94,16 @@ const ResetPasswordForm = () => {
             <FormItem>
               <FormLabel>Confirm Password</FormLabel>
               <FormControl>
-                <Input {...field} type="password" disabled={isLoading} />
+                <PasswordInput
+                  {...field}
+                  type="password"
+                  disabled={isLoading}
+                />
               </FormControl>
             </FormItem>
           )}
         />
-        <Button type="submit" disabled={isLoading}>
-          {isLoading && <Loader2 className="animate-spin" />}
+        <Button type="submit" disabled={isLoading} loading={isLoading}>
           Reset Password
         </Button>
       </form>

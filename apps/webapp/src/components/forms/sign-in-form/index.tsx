@@ -47,7 +47,7 @@ const SignInForm = () => {
         onSuccess: (context) => {
           if (context.data.twoFactorRedirect) {
             console.log("two factor redirect");
-            window.location.href = "/auth/two-factor";
+            window.location.href = "/two-factor";
           }
           setLoading(false);
           push("/");
@@ -56,8 +56,7 @@ const SignInForm = () => {
           if (ctx.error.status === 403) {
             const params = new URLSearchParams();
             params.set("email", values.email);
-            console.log("verify email");
-            push(`/auth/verify-email?${params.toString()}`);
+            push(`/verify-email?${params.toString()}`);
             return;
           }
           toast.error(ctx.error.message);

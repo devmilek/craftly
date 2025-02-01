@@ -1,13 +1,11 @@
 "use client";
 
 import {
-  Bell,
   ChevronsUpDown,
-  LockKeyholeIcon,
   LogOut,
+  SettingsIcon,
   Sparkles,
   SunIcon,
-  UserIcon,
 } from "lucide-react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -94,19 +92,9 @@ export function SidebarUserButton({ user }: { user: User }) {
             <DropdownMenuGroup>
               <DropdownMenuItem asChild>
                 <Link href="/settings">
-                  <UserIcon />
-                  Profile
+                  <SettingsIcon />
+                  Settings
                 </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem asChild>
-                <Link href="/settings/security">
-                  <LockKeyholeIcon />
-                  Security
-                </Link>
-              </DropdownMenuItem>
-              <DropdownMenuItem>
-                <Bell />
-                Notifications
               </DropdownMenuItem>
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
@@ -139,7 +127,7 @@ export function SidebarUserButton({ user }: { user: User }) {
                 await signOut({
                   fetchOptions: {
                     onSuccess: () => {
-                      router.push("/auth/sign-in"); // redirect to login page
+                      router.push("/sign-in"); // redirect to login page
                     },
                   },
                 });

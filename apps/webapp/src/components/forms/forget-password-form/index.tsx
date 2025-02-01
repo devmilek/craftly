@@ -13,6 +13,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { InputWithAdornments } from "@/components/ui/input-with-adornments";
@@ -32,11 +33,13 @@ const ForgetPasswordForm = () => {
   const onSubmit = async (values: z.infer<typeof schema>) => {
     const { error } = await forgetPassword({
       email: values.email,
-      redirectTo: "/auth/reset-password",
+      redirectTo: "/reset-password",
     });
 
     if (error) {
-      toast.error(error.message);
+      toast.error(
+        error.message || "An error occurred while sending the reset link"
+      );
       return;
     }
     form.reset();
@@ -63,6 +66,7 @@ const ForgetPasswordForm = () => {
                   disabled={isLoading}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
