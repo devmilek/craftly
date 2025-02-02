@@ -10,6 +10,8 @@ import {
 import {
   ChartConfig,
   ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -113,6 +115,7 @@ export function ChartTest({
                   }}
                 />
               </Pie>
+              <ChartLegend content={<ChartLegendContent />} />
             </PieChart>
           </ChartContainer>
         </CardContent>

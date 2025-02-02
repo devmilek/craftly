@@ -8,7 +8,7 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
   const { user, session } = await getCurrentSession();
 
   if (!session) {
-    redirect("/auth/sign-in");
+    redirect("/sign-in");
   }
 
   if (!user.onboardingCompleted) {
@@ -16,11 +16,11 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!session.activeOrganizationId) {
-    redirect("/auth/select-organization");
+    redirect("/organizations");
   }
 
   return (
-    <SidebarProvider className="">
+    <SidebarProvider>
       <AppSidebar user={user} />
       <main className="w-full px-8">{children}</main>
     </SidebarProvider>

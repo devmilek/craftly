@@ -48,7 +48,7 @@ const ProjectDetailsLayout = async ({
       />
       <header className="flex items-center justify-between pb-8">
         <div className="flex items-center gap-4">
-          <AvatarUploader onValueChange={() => {}} fallback={project.name} className="size-24" />
+          <AvatarUploader fallback={project.name} className="size-24" />
           <h1 className="text-2xl font-semibold max-w-md">{project.name}</h1>
         </div>
         <div className="flex items-center gap-2">

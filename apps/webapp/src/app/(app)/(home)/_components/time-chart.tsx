@@ -43,14 +43,7 @@ export function TimeChart({
           config={chartConfig}
           className="aspect-auto h-[250px] w-full"
         >
-          <AreaChart
-            accessibilityLayer
-            data={data}
-            margin={{
-              left: 12,
-              right: 12,
-            }}
-          >
+          <AreaChart accessibilityLayer data={data}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="date"
@@ -60,10 +53,7 @@ export function TimeChart({
               minTickGap={32}
               tickFormatter={(value) => {
                 const date = new Date(value);
-                return date.toLocaleDateString("en-US", {
-                  month: "short",
-                  day: "numeric",
-                });
+                return format(date, "MMM d");
               }}
             />
             <ChartTooltip
