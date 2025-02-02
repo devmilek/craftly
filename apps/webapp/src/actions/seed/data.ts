@@ -12,6 +12,9 @@ import {
   taskPriority,
   members,
   taskAssignees,
+  invoices,
+  InvoiceInsert,
+  ExpenseInsert,
 } from "@/lib/db/schemas";
 import { timeTrackings } from "@/lib/db/schemas/time-trackings";
 import { faker } from "@faker-js/faker";
@@ -40,6 +43,8 @@ export const generateData = async () => {
     projects: { min: 2, max: 7 },
     tasks: { min: 4, max: 20 },
     timeTracking: { min: 1, max: 3 },
+    invoices: { min: 5, max: 10 },
+    expenses: { min: 5, max: 10 },
   };
 
   // Prepare batch arrays
@@ -49,6 +54,8 @@ export const generateData = async () => {
   const tasksBatch = [];
   const taskAssigneesBatch = [];
   const timeTrackingsBatch = [];
+  const invoicesBatch: InvoiceInsert[] = [];
+  const expensesBatch: ExpenseInsert[] = [];
 
   // Pre-fetch some avatars to reuse
   const avatarCount = 10;
@@ -105,6 +112,34 @@ export const generateData = async () => {
         id: projectId,
       });
 
+      const invoicesCount = faker.number.int(config.invoices);
+      for (let k = 0; k < invoicesCount; k++) {
+        const invoiceId = v4();
+        invoicesBatch.push({
+          organizationId,
+          projectId,
+          amount: faker.finance.amount(),
+          dueDate: faker.date.between({
+            from: faker.date.recent({ days: 30 }),
+            to: faker.date.soon({ days: 30 }),
+          }),
+          id: invoiceId,
+          name: faker.commerce.productName(),
+          paid: faker.datatype.boolean(),
+        });
+      }
+
+      const expensesCount = faker.number.int(config.expenses);
+      for (let k = 0; k < expensesCount; k++) {
+        expensesBatch.push({
+          amount: faker.finance.amount(),
+          name: faker.commerce.productName(),
+          reimbursable: faker.datatype.boolean(),
+          reimbursed: faker.datatype.boolean(),
+          id: v4(),
+        });
+      }
+
       const taskCount = faker.number.int(config.tasks);
       for (let k = 0; k < taskCount; k++) {
         const taskId = v4();
@@ -150,4 +185,5 @@ export const generateData = async () => {
   await db.insert(dbTasks).values(tasksBatch);
   await db.insert(taskAssignees).values(taskAssigneesBatch);
   await db.insert(timeTrackings).values(timeTrackingsBatch);
+  await db.insert(invoices).values(invoicesBatch);
 };

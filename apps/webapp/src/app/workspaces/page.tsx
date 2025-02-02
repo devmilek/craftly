@@ -6,8 +6,8 @@ const OrganizationsPage = () => {
   return (
     <div className="max-w-lg mx-auto px-6 py-10">
       <AuthHeader
-        title="Organizations"
-        description="Jump into existing organization or add a new one"
+        title="Workspaces"
+        description="Jump into existing workspace or add a new one"
         className="text-center"
       />
       <OrganizationsList />
