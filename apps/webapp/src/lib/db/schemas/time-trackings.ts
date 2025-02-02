@@ -1,6 +1,7 @@
 import {
   date,
   integer,
+  numeric,
   pgTable,
   timestamp,
   uuid,
@@ -23,6 +24,11 @@ export const timeTrackings = pgTable("time_trackings", {
     onDelete: "set null",
   }),
 
+  billableRate: numeric("billable_rate", {
+    precision: 10,
+    scale: 2,
+  }),
+
   organizationId: varchar("organization_id")
     .notNull()
     .references(() => organizations.id),
@@ -43,3 +49,4 @@ export const timeTrackings = pgTable("time_trackings", {
 });
 
 export type TimeTracking = typeof timeTrackings.$inferSelect;
+export type TimeTrackingInsert = typeof timeTrackings.$inferInsert;

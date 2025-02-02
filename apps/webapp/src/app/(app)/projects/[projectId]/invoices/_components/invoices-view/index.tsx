@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { Button } from "@/components/ui/button";
 import { MoreVertical } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { InvoicesChart } from "./invoices-chart";
 
 const InvoicesView = ({ projectId }: { projectId?: string }) => {
   const { data } = useQuery({
@@ -19,12 +20,10 @@ const InvoicesView = ({ projectId }: { projectId?: string }) => {
     currency: "PLN",
   });
 
-  const overdue = data?.filter((invoice) => invoice.dueDate < new Date());
-
   return (
-    <div>
-      <div className="grid gap-2">
-        {data?.map((invoice) => (
+    <div className="flex gap-8">
+      <div className="grid gap-2 w-full">
+        {data?.invoices.map((invoice) => (
           <div
             key={invoice.id}
             className="flex items-center border rounded-lg overflow-hidden"
@@ -63,7 +62,13 @@ const InvoicesView = ({ projectId }: { projectId?: string }) => {
           </div>
         ))}
       </div>
-      <div>{JSON.stringify(overdue)}</div>
+      <div className="w-[500px]">
+        <InvoicesChart
+          overdue={data?.stats.overdue || 0}
+          paid={data?.stats.paid || 0}
+          pending={data?.stats.pending || 0}
+        />
+      </div>
     </div>
   );
 };

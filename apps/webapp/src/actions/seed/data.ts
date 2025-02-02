@@ -16,7 +16,10 @@ import {
   InvoiceInsert,
   ExpenseInsert,
 } from "@/lib/db/schemas";
-import { timeTrackings } from "@/lib/db/schemas/time-trackings";
+import {
+  TimeTrackingInsert,
+  timeTrackings,
+} from "@/lib/db/schemas/time-trackings";
 import { faker } from "@faker-js/faker";
 import axios from "axios";
 import { v4 } from "uuid";
@@ -53,7 +56,7 @@ export const generateData = async () => {
   const projectsBatch = [];
   const tasksBatch = [];
   const taskAssigneesBatch = [];
-  const timeTrackingsBatch = [];
+  const timeTrackingsBatch: TimeTrackingInsert[] = [];
   const invoicesBatch: InvoiceInsert[] = [];
   const expensesBatch: ExpenseInsert[] = [];
 
@@ -172,6 +175,13 @@ export const generateData = async () => {
             taskId,
             date: faker.date.recent({ days: 90 }),
             totalSeconds: faker.number.int({ min: 60 * 30, max: 60 * 60 * 8 }),
+            //billable rate null or random
+            billableRate: faker.datatype.boolean()
+              ? faker.finance.amount({
+                  max: 100,
+                  min: 10,
+                })
+              : null,
           });
         }
       }
