@@ -1,102 +1,124 @@
 "use client";
 
-import * as React from "react";
-import { Label, Pie, PieChart } from "recharts";
-
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-const chartData = [
-  { status: "todo", tasks: 275, fill: "var(--color-todo)" },
-  { status: "in_progress", tasks: 200, fill: "var(--color-in_progress)" },
-  { status: "completed", tasks: 287, fill: "var(--color-completed)" },
-];
+import * as React from "react";
+import { Label, Pie, PieChart } from "recharts";
 
 const chartConfig = {
   tasks: {
     label: "Tasks",
   },
   todo: {
-    label: "To Do",
-    color: "hsl(var(--status-todo))",
+    label: "Todo",
+    color: "hsl(var(--chart-1))",
   },
   in_progress: {
     label: "In Progress",
-    color: "hsl(var(--status-in-progress))",
+    color: "hsl(var(--chart-2))",
   },
   completed: {
     label: "Completed",
-    color: "hsl(var(--status-completed))",
+    color: "hsl(var(--chart-3))",
   },
 } satisfies ChartConfig;
 
-export function ChartTest() {
-  const totalVisitors = React.useMemo(() => {
+export function ChartTest({
+  todo,
+  inProgress,
+  completed,
+}: {
+  todo: number;
+  inProgress: number;
+  completed: number;
+}) {
+  const chartData = [
+    { status: "todo", tasks: Number(todo), fill: "var(--color-todo)" },
+    {
+      status: "in_progress",
+      tasks: Number(inProgress),
+      fill: "var(--color-in_progress)",
+    },
+    {
+      status: "completed",
+      tasks: Number(completed),
+      fill: "var(--color-completed)",
+    },
+  ];
+
+  const totalTasks = React.useMemo(() => {
     return chartData.reduce((acc, curr) => acc + curr.tasks, 0);
   }, []);
 
   return (
-    <Card className="flex flex-col">
-      <CardContent className="flex-1 pb-0">
-        <ChartContainer
-          config={chartConfig}
-          className="mx-auto aspect-square max-h-[250px]"
-        >
-          <PieChart>
-            <ChartTooltip
-              cursor={false}
-              content={<ChartTooltipContent hideLabel />}
-            />
-            <Pie
-              data={chartData}
-              dataKey="tasks"
-              nameKey="status"
-              innerRadius={60}
-              strokeWidth={5}
-            >
-              <Label
-                content={({ viewBox }) => {
-                  if (viewBox && "cx" in viewBox && "cy" in viewBox) {
-                    return (
-                      <text
-                        x={viewBox.cx}
-                        y={viewBox.cy}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                      >
-                        <tspan
+    <>
+      <Card className="flex flex-col max-w-xs w-full">
+        <CardHeader className="items-center pb-0">
+          <CardTitle>Tasks Overview</CardTitle>
+          <CardDescription>Overview of your tasks</CardDescription>
+        </CardHeader>
+        <CardContent className="flex-1 pb-0">
+          <ChartContainer
+            config={chartConfig}
+            className="mx-auto aspect-square max-h-[250px]"
+          >
+            <PieChart>
+              <ChartTooltip
+                cursor={false}
+                content={<ChartTooltipContent hideLabel />}
+              />
+              <Pie
+                data={chartData}
+                dataKey="tasks"
+                nameKey="status"
+                innerRadius={60}
+                strokeWidth={5}
+              >
+                <Label
+                  content={({ viewBox }) => {
+                    if (viewBox && "cx" in viewBox && "cy" in viewBox) {
+                      return (
+                        <text
                           x={viewBox.cx}
                           y={viewBox.cy}
-                          className="fill-foreground text-3xl font-bold"
+                          textAnchor="middle"
+                          dominantBaseline="middle"
                         >
-                          {totalVisitors.toLocaleString()}
-                        </tspan>
-                        <tspan
-                          x={viewBox.cx}
-                          y={(viewBox.cy || 0) + 24}
-                          className="fill-muted-foreground"
-                        >
-                          Tasks
-                        </tspan>
-                      </text>
-                    );
-                  }
-                }}
-              />
-            </Pie>
-            <ChartLegend
-              content={<ChartLegendContent nameKey="status" />}
-              className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"
-            />
-          </PieChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+                          <tspan
+                            x={viewBox.cx}
+                            y={viewBox.cy}
+                            className="fill-foreground text-3xl font-bold"
+                          >
+                            {totalTasks.toLocaleString()}
+                          </tspan>
+                          <tspan
+                            x={viewBox.cx}
+                            y={(viewBox.cy || 0) + 24}
+                            className="fill-muted-foreground"
+                          >
+                            Tasks
+                          </tspan>
+                        </text>
+                      );
+                    }
+                  }}
+                />
+              </Pie>
+            </PieChart>
+          </ChartContainer>
+        </CardContent>
+      </Card>
+    </>
   );
 }

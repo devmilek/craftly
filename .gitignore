@@ -18,6 +18,7 @@ coverage
 # Turbo
 .turbo
 .vscode
+.idea
 
 # Vercel
 .vercel

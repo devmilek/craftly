@@ -1,12 +1,11 @@
 import SidebarNavbar from "@/components/global/sidebar/sidebar-navbar";
 import { ChartTest } from "./_components/chart";
-import { db } from "@/lib/db";
-import { taskAssignees, tasks } from "@/lib/db/schemas";
-import { and, eq } from "drizzle-orm";
-import { ensureSessionWithOrganization } from "@/lib/auth/utils";
+import { getTasksStats, getTimeTrackingStats } from "./actions";
+import { TimeChart } from "./_components/time-chart";
 
 export default async function Home() {
-  const { user } = await ensureSessionWithOrganization();
+  const data = await getTasksStats();
+  const time = await getTimeTrackingStats();
   return (
     <>
       <SidebarNavbar
@@ -16,7 +15,14 @@ export default async function Home() {
           },
         ]}
       />
-      <ChartTest />
+      <div className="flex w-full gap-6">
+        <TimeChart data={time || []} />
+        <ChartTest
+          completed={data?.completed || 0}
+          inProgress={data?.inProgress || 0}
+          todo={data?.todo || 0}
+        />
+      </div>
     </>
   );
 }

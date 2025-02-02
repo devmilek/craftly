@@ -35,7 +35,6 @@ const AvatarUploader = ({
       if (!file) return;
 
       const { error, presignedUrl, fileId, src } = await getPresignedUrl({
-        contentType: file.type,
         fileName: file.name,
         size: file.size,
       });

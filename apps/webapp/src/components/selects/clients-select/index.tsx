@@ -37,7 +37,10 @@ export function ClientsSelect({
 
   const { data, isLoading } = useQuery({
     queryKey: ["search-clients", inputValue],
-    queryFn: async () => await searchClients(inputValue),
+    queryFn: async () => await searchClients({
+      query: inputValue,
+      page: 1,
+    }),
   });
 
   React.useEffect(() => {

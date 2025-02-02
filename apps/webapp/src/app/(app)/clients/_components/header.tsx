@@ -28,7 +28,7 @@ const Header = () => {
           <SearchInput />
           <StatusDropdown />
         </div>
-        <Button onClick={onOpen}>
+        <Button onClick={() => onOpen()}>
           New client
           <PlusIcon />
         </Button>

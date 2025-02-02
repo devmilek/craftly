@@ -19,7 +19,7 @@ const Header = () => {
           <ClientsFilter />
         </div>
         <div className="flex gap-3">
-          <Button onClick={onOpen}>
+          <Button onClick={() => onOpen()}>
             New contact
             <PlusIcon />
           </Button>

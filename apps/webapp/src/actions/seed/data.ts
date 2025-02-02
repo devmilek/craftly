@@ -99,7 +99,9 @@ export const generateData = async () => {
         clientId,
         organizationId,
         status: faker.helpers.arrayElement(projectStatus),
-        dueDate: faker.date.soon(),
+        dueDate: faker.date.soon({
+          days: 30,
+        }),
         id: projectId,
       });
 
@@ -110,7 +112,9 @@ export const generateData = async () => {
           name: faker.commerce.productName(),
           description: faker.commerce.productDescription(),
           organizationId,
-          dueDate: faker.date.soon(),
+          dueDate: faker.date.soon({
+            days: 5,
+          }),
           status: faker.helpers.arrayElement(taskStatus),
           priority: faker.helpers.arrayElement(taskPriority),
           projectId,
