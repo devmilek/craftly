@@ -75,7 +75,7 @@ export const useStopwatch = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [store.isRunning]);
+  }, [store, store.isRunning]);
 
   const hours = Math.floor(store.totalSeconds / 3600);
   const minutes = Math.floor((store.totalSeconds % 3600) / 60);

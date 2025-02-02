@@ -11,7 +11,7 @@ import {
 import { useModal } from "@/hooks/use-modals-store";
 import { cn, formatBytes } from "@/lib/utils";
 import { File, UploadCloud } from "lucide-react";
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
 import axios from "axios";
 import { toast } from "sonner";
@@ -77,39 +77,36 @@ const UploadFileModal = () => {
     }
   };
 
-  const onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
-      const newFile = acceptedFiles[0];
-      const { presignedUrl, error, fileId } = await getPresignedUrl({
-        fileName: newFile.name,
-        size: newFile.size,
-        projectId: data?.projectId,
+  const onDrop = async (acceptedFiles: File[]) => {
+    const newFile = acceptedFiles[0];
+    const { presignedUrl, error, fileId } = await getPresignedUrl({
+      fileName: newFile.name,
+      size: newFile.size,
+      projectId: data?.projectId,
+    });
+
+    if (error || !presignedUrl || !fileId) {
+      toast.error("Upload failded", {
+        description: error
+          ? `${error} during uploading ${newFile.name}`
+          : `Upload ${newFile.name} failed, please try again`,
       });
+      return;
+    }
 
-      if (error || !presignedUrl || !fileId) {
-        toast.error("Upload failded", {
-          description: error
-            ? `${error} during uploading ${newFile.name}`
-            : `Upload ${newFile.name} failed, please try again`,
-        });
-        return;
-      }
+    const newFileItem: FileUploadStatus = {
+      file: newFile,
+      fileId: fileId,
+      fileName: newFile.name,
+      size: newFile.size,
+      progress: 0,
+      presignedUrl: presignedUrl,
+      status: "pending",
+    };
 
-      const newFileItem: FileUploadStatus = {
-        file: newFile,
-        fileId: fileId,
-        fileName: newFile.name,
-        size: newFile.size,
-        progress: 0,
-        presignedUrl: presignedUrl,
-        status: "pending",
-      };
-
-      setFile(newFileItem);
-      uploadFileToCloudflare(newFileItem);
-    },
-    [data?.projectId]
-  );
+    setFile(newFileItem);
+    uploadFileToCloudflare(newFileItem);
+  };
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,

@@ -9,7 +9,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { projects } from "./projects";
-import { members, organizations, users } from "./users";
+import { organizations, users } from "./users";
 import { relations } from "drizzle-orm";
 
 export const taskStatus = ["todo", "in_progress", "completed"] as const;

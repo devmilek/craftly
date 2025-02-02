@@ -57,9 +57,7 @@ export function ChartTest({
     },
   ];
 
-  const totalTasks = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.tasks, 0);
-  }, []);
+  const totalTasks = chartData.reduce((acc, curr) => acc + curr.tasks, 0);
 
   return (
     <>

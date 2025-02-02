@@ -69,7 +69,7 @@ export const ClientsFilter = () => {
         setClients(data || []);
       }
     }
-  }, []);
+  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(

@@ -29,6 +29,7 @@ const KanbanView = ({
   projectId?: string;
   membersIds?: string[];
 }) => {
+  console.log(membersIds);
   const [activeTask, setActiveTask] = React.useState<TaskCardProps | null>(
     null
   );

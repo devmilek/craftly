@@ -58,7 +58,7 @@ export function AssigneeSelect({
         setMembers(data || []);
       }
     }
-  }, []);
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

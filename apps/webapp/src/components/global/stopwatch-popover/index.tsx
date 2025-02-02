@@ -139,7 +139,7 @@ const StopwatchPopover = () => {
     return () => window.removeEventListener("beforeunload", handleBeforeUnload);
   }, [isRunning, totalSeconds]);
 
-  const handleSubmit = async (values: TimerSchema) => {
+  const handleSubmit = async () => {
     try {
       pause();
       // Add your API call here
@@ -152,7 +152,7 @@ const StopwatchPopover = () => {
 
       reset();
       form.reset();
-    } catch (error) {
+    } catch {
       // toast({
       //   title: "Error",
       //   description: "Failed to save time entry. Please try again.",

@@ -2,7 +2,7 @@ import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { taskAssignees, tasks } from "@/lib/db/schemas";
 import { timeTrackings } from "@/lib/db/schemas/time-trackings";
-import { eq, sql, sum } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 export const getTasksStats = async () => {
   const { organizationId, session } = await getCurrentSession();

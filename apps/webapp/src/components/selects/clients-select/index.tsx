@@ -19,8 +19,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { useQuery } from "@tanstack/react-query";
-import { Client } from "@/lib/db/schemas";
 import { getClientById, searchClients } from "@/actions/clients";
+
+interface ClientFilterProps {
+  id: string;
+  name: string;
+}
 
 export function ClientsSelect({
   value,
@@ -32,15 +36,16 @@ export function ClientsSelect({
   disabled?: boolean;
 }) {
   const [open, setOpen] = React.useState(false);
-  const [client, setClient] = React.useState<Client | null>(null);
+  const [client, setClient] = React.useState<ClientFilterProps | null>(null);
   const [inputValue, setInputValue] = React.useState("");
 
   const { data, isLoading } = useQuery({
     queryKey: ["search-clients", inputValue],
-    queryFn: async () => await searchClients({
-      query: inputValue,
-      page: 1,
-    }),
+    queryFn: async () =>
+      await searchClients({
+        query: inputValue,
+        page: 1,
+      }),
   });
 
   React.useEffect(() => {
@@ -54,7 +59,7 @@ export function ClientsSelect({
         setClient(client || null);
       }
     }
-  }, []);
+  });
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

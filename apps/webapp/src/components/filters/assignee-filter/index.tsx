@@ -70,7 +70,7 @@ export const AssigneeFilter = () => {
         setAssignees(data || []);
       }
     }
-  }, []);
+  });
 
   useEffect(() => {
     const observer = new IntersectionObserver(

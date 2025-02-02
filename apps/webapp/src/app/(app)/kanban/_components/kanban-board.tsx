@@ -4,7 +4,6 @@ import React from "react";
 import { Todo } from "../page";
 import {
   DndContext,
-  DragEndEvent,
   DragOverlay,
   DragStartEvent,
   useDraggable,
@@ -19,7 +18,7 @@ const KanbanBoard = ({ data }: { data: Todo[] }) => {
     setActiveTodo(data);
   };
 
-  const onDragEnd = (e: DragEndEvent) => {
+  const onDragEnd = () => {
     setActiveTodo(null);
   };
   return (
