@@ -3,7 +3,7 @@
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { invoices } from "@/lib/db/schemas";
-import { and, eq, sql } from "drizzle-orm";
+import { and, asc, eq, sql } from "drizzle-orm";
 
 export const getInvoices = async ({ projectId }: { projectId?: string }) => {
   const { organizationId, session } = await getCurrentSession();
@@ -46,10 +46,7 @@ export const getInvoices = async ({ projectId }: { projectId?: string }) => {
   // Get invoice details in parallel with stats
   const invoiceData = await db.query.invoices.findMany({
     where: and(...baseConditions),
-    orderBy: (invoices, { desc }) => [
-      desc(invoices.dueDate),
-      desc(invoices.createdAt),
-    ],
+    orderBy: [asc(invoices.paid), asc(invoices.createdAt)],
   });
 
   return {

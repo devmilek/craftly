@@ -7,7 +7,7 @@ type AlertModal = {
   description: string;
   actionLabel: string;
   onAction: () => void | Promise<void>;
-  onCancel: () => void;
+  onCancel?: () => void;
   open: (
     params: Omit<
       AlertModal,
