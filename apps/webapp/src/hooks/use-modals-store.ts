@@ -9,7 +9,8 @@ export type ModalType =
   | "create-contact"
   | "view-task"
   | "invite-members"
-  | "upload-file";
+  | "upload-file"
+  | "create-task";
 
 type ModalData = {
   "upload-file": {

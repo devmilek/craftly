@@ -3,7 +3,7 @@
 import {
   createTaskSchema,
   CreateTaskSchema,
-} from "@/components/modals/task-modal/schema";
+} from "@/components/modals/view-task-modal/schema";
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { tasks } from "@/lib/db/schemas";
