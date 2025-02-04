@@ -8,13 +8,16 @@ import React from "react";
 const StatusSelect = ({
   value,
   onChange,
+  disabled,
 }: {
   value?: string | null;
   onChange: (value: string | null) => void;
+  disabled?: boolean;
 }) => {
   return (
     <StatusCombobox value={value} onChange={onChange}>
       <Button
+        disabled={disabled}
         size="sm"
         variant="outline"
         className={cn(

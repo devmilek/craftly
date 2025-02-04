@@ -7,9 +7,11 @@ import React from "react";
 const ProjectSelect = ({
   value,
   onChange,
+  disabled,
 }: {
   value: string | null;
   onChange: (client: string | null) => void;
+  disabled?: boolean;
 }) => {
   return (
     <ProjectsCombobox
@@ -19,6 +21,7 @@ const ProjectSelect = ({
       renderChildren={(project) => {
         return (
           <Button
+            disabled={disabled}
             variant={"ghost"}
             role="combobox"
             className={cn("flex min-w-0 justify-start w-full max-w-[300px]", {

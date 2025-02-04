@@ -16,14 +16,17 @@ import { addDays } from "date-fns";
 export function DateSelect({
   value,
   onChange,
+  disabled,
 }: {
-  value: Date | null;
-  onChange: (date: Date | null) => void;
+  value?: Date | null;
+  onChange: (date?: Date | null) => void;
+  disabled?: boolean;
 }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
+          disabled={disabled}
           variant={"outline"}
           size="sm"
           className={cn("font-normal", !value && "text-muted-foreground", {

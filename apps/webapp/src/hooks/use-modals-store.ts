@@ -10,13 +10,17 @@ export type ModalType =
   | "view-task"
   | "invite-members"
   | "upload-file"
-  | "create-task";
+  | "create-task"
+  | "view-task-sheet";
 
 type ModalData = {
   "upload-file": {
     projectId?: string;
   };
   "view-task": {
+    taskId: string;
+  };
+  "view-task-sheet": {
     taskId: string;
   };
   "create-project": ProjectInsert;

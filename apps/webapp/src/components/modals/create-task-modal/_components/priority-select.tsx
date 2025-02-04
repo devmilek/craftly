@@ -9,15 +9,18 @@ import React from "react";
 const PrioritySelect = ({
   value,
   onChange,
+  disabled,
 }: {
   value?: string | null;
   onChange: (value: string | null) => void;
+  disabled?: boolean;
 }) => {
   return (
     <PriorityCombobox value={value} onChange={onChange}>
       <Button
         size="sm"
         variant="outline"
+        disabled={disabled}
         className={cn("font-normal", !value && "text-muted-foreground", {
           "text-muted-foreground": !value,
           "text-priority-low": value === "low",

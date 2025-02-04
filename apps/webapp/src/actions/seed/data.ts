@@ -165,7 +165,7 @@ export const generateData = async () => {
           priority: faker.helpers.arrayElement(taskPriority),
           projectId,
           id: taskId,
-          assigneeId: member?.id,
+          assigneeId: member?.userId,
         });
 
         localTasksIndex++;
