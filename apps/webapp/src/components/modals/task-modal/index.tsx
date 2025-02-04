@@ -6,7 +6,7 @@ import Content from "./content";
 import { useModal } from "@/hooks/use-modals-store";
 
 const CreateTaskModal = () => {
-  const { isOpen, onClose } = useModal("create-task");
+  const { isOpen, onClose } = useModal("view-task");
   return (
     <Dialog.Root open={isOpen} onOpenChange={onClose}>
       <Dialog.Portal>

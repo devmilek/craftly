@@ -17,8 +17,8 @@ const DueDateSelect = ({
   onChange,
   disabled,
 }: {
-  value: Date | undefined;
-  onChange: (client: Date | undefined) => void;
+  value: Date | null;
+  onChange: (client: Date | null) => void;
   disabled?: boolean;
 }) => {
   return (
@@ -29,9 +29,10 @@ const DueDateSelect = ({
           variant={value ? "secondary" : "ghost"}
           className={cn("flex min-w-0 justify-start w-full", {
             "text-muted-foreground": !value,
+            "text-destructive": value && value < new Date(),
           })}
         >
-          <CalendarIcon className="opacity-50" />
+          <CalendarIcon className={cn({ "opacity-50": !value })} />
           <span className="truncate">
             {value ? format(value, "PPP") : <span>Pick due a date</span>}
           </span>
@@ -40,8 +41,8 @@ const DueDateSelect = ({
       <PopoverContent className="w-auto p-0" align="start">
         <Calendar
           mode="single"
-          selected={value}
-          onSelect={onChange}
+          selected={value || undefined}
+          onSelect={(date) => onChange(date || null)}
           initialFocus
         />
       </PopoverContent>

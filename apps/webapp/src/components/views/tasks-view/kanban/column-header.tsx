@@ -15,11 +15,11 @@ const ColumnHeader = ({
       case "new":
         return "bg-status-new";
       case "proposal_sent":
-        return "bg-status-proposal-sent";
+        return "bg-status-proposal_sent";
       case "in_progress":
-        return "bg-status-in-progress";
+        return "bg-status-in_progress";
       case "in_review":
-        return "bg-status-in-review";
+        return "bg-status-in_review";
       case "completed":
         return "bg-status-completed";
       case "todo":

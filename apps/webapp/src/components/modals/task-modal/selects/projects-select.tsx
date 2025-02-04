@@ -58,7 +58,7 @@ export function ProjectsSelect({
       <PopoverTrigger asChild>
         <Button
           disabled={disabled}
-          variant={value ? "secondary" : "ghost"}
+          variant={"ghost"}
           role="combobox"
           aria-expanded={open}
           className={cn("flex min-w-0 justify-start w-full", {
@@ -67,7 +67,7 @@ export function ProjectsSelect({
         >
           <FolderIcon className="opacity-50" />
           <span className="truncate">
-            {project ? project.name : "Select projects..."}
+            {project ? project.name : "Select project..."}
           </span>
         </Button>
       </PopoverTrigger>

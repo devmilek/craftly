@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { useModal } from "@/hooks/use-modals-store";
 import { cn, formatStatus } from "@/lib/utils";
 import { TaskPriority, TaskStatus } from "@/types";
 import { format } from "date-fns";
@@ -21,6 +22,7 @@ export interface TaskCardProps {
 }
 
 const TaskCard = ({
+  id,
   dueDate,
   name,
   subtasksCount,
@@ -31,15 +33,17 @@ const TaskCard = ({
   showStatus = true,
   overlay = false,
 }: TaskCardProps) => {
+  const { onOpen } = useModal("view-task");
   return (
     <div
       className={cn(
-        "bg-background border border-dashed rounded-xl hover:bg-accent/40 transition-colors",
+        "bg-background border border-dashed rounded-xl hover:bg-accent/40 transition-colors w-full",
         {
           "shadow-lg bg-background/20 dark:bg-background/50 backdrop-blur-md":
             overlay,
         }
       )}
+      onClick={() => onOpen({ taskId: id })}
     >
       <div className="p-5">
         {((status && showStatus) || dueDate) && (

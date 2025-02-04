@@ -7,7 +7,7 @@ export type ModalType =
   | "create-project"
   | "create-client"
   | "create-contact"
-  | "create-task"
+  | "view-task"
   | "invite-members"
   | "upload-file";
 
@@ -15,8 +15,8 @@ type ModalData = {
   "upload-file": {
     projectId?: string;
   };
-  "create-task": {
-    projectId?: string;
+  "view-task": {
+    taskId: string;
   };
   "create-project": ProjectInsert;
 };

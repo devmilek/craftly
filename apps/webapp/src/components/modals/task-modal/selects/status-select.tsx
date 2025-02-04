@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Check, FlagIcon } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 
-import { cn } from "@/lib/utils";
+import { cn, formatStatus } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -18,9 +18,9 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { taskPriority } from "@/lib/db/schemas";
+import { taskStatus } from "@/lib/db/schemas";
 
-const PrioritySelect = ({
+const StatusSelect = ({
   value,
   onChange,
   disabled,
@@ -35,56 +35,52 @@ const PrioritySelect = ({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="justify-between flex min-w-0 w-full"
           disabled={disabled}
-          variant={value ? "secondary" : "ghost"}
-          className={cn("flex min-w-0 justify-start w-full", {
-            "text-muted-foreground": !value,
-          })}
         >
-          <FlagIcon className="opacity-50" />
           <span className="truncate">
             {value ? (
-              <span className="capitalize">
-                {taskPriority.find((framework) => framework === value)}
+              <span className="flex items-center">
+                <div
+                  className={cn(
+                    "size-2 rounded-full mr-2 flex-shrink-0",
+                    `bg-status-${value}`
+                  )}
+                ></div>
+                {formatStatus(value)}
               </span>
             ) : (
-              "Select priority..."
+              "Select status..."
             )}
           </span>
+          <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Search priority..." />
+          <CommandInput placeholder="Search status..." />
           <CommandList>
-            <CommandEmpty>No priority found.</CommandEmpty>
+            <CommandEmpty>No status found.</CommandEmpty>
             <CommandGroup>
-              <CommandItem
-                value="none"
-                onSelect={() => {
-                  onChange(null);
-                  setOpen(false);
-                }}
-              >
-                None
-                <Check
-                  className={cn(
-                    "ml-auto",
-                    !value ? "opacity-100" : "opacity-0"
-                  )}
-                />
-              </CommandItem>
-              {taskPriority.map((item) => (
+              {taskStatus.map((item) => (
                 <CommandItem
                   key={item}
                   value={item}
-                  className="capitalize"
                   onSelect={(currentValue) => {
-                    onChange(currentValue === value ? "" : currentValue);
+                    onChange(currentValue === value ? "todo" : currentValue);
                     setOpen(false);
                   }}
                 >
-                  {item}
+                  <div
+                    className={cn(
+                      "size-2 rounded-full mr-2",
+                      `bg-status-${item}`
+                    )}
+                  ></div>
+                  {formatStatus(item)}
                   <Check
                     className={cn(
                       "ml-auto",
@@ -101,4 +97,4 @@ const PrioritySelect = ({
   );
 };
 
-export default PrioritySelect;
+export default StatusSelect;

@@ -7,9 +7,10 @@ import {
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
 import { tasks } from "@/lib/db/schemas";
+import { eq } from "drizzle-orm";
 import { v4 as uuid } from "uuid";
 
-export const createTask = async (values: CreateTaskSchema) => {
+export const updateTask = async (values: CreateTaskSchema, id: string) => {
   const { session, organizationId } = await getCurrentSession();
 
   if (!session) {
@@ -41,16 +42,18 @@ export const createTask = async (values: CreateTaskSchema) => {
   const taskId = uuid();
 
   try {
-    await db.insert(tasks).values({
-      id: taskId,
-      name,
-      organizationId,
-      projectId: projectId || null,
-      status,
-      description,
-      priority,
-      dueDate: dueDate || null,
-    });
+    await db
+      .update(tasks)
+      .set({
+        name,
+        organizationId,
+        projectId: projectId || null,
+        status,
+        description,
+        priority,
+        dueDate: dueDate || null,
+      })
+      .where(eq(tasks.id, id));
 
     // if (assigneesId && assigneesId.length > 0) {
     //   const mems = await db.query.members.findMany({

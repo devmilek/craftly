@@ -36,7 +36,7 @@ export function formatStatus(status: ProjectStatus | TaskStatus | string) {
       return "In Review";
     case "completed":
       return "Completed";
-    case "in-progress":
+    case "in_progress":
       return "In Progress";
     case "todo":
       return "To Do";
