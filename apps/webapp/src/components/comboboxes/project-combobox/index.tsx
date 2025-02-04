@@ -1,10 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown, Loader2Icon } from "lucide-react";
+import { Check, Loader2Icon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -18,27 +17,47 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { useQuery } from "@tanstack/react-query";
-import { Project } from "@/lib/db/schemas";
-import { getProjectById, searchProjects } from "@/actions/projects";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getProjectById, searchProjects } from "./actions";
+import { useInView } from "react-intersection-observer";
+import { useDebounceValue } from "usehooks-ts";
+
+interface ComboboxProject {
+  id: string;
+  name: string;
+  clientName: string | null;
+}
 
 export function ProjectsCombobox({
   value,
   onChange,
-  disabled,
+  renderChildren,
+  modal,
 }: {
   value?: string | null;
   onChange: (client: string | null) => void;
-  disabled?: boolean;
+  renderChildren: (project: ComboboxProject | null) => React.ReactNode;
+  modal?: boolean;
 }) {
+  const { ref, inView } = useInView();
   const [open, setOpen] = React.useState(false);
-  const [project, setProject] = React.useState<Project | null>(null);
+  const [project, setProject] = React.useState<ComboboxProject | null>(null);
   const [inputValue, setInputValue] = React.useState("");
+  const [debouncedInputValue] = useDebounceValue(inputValue, 400);
 
-  const { data, isLoading } = useQuery({
-    queryKey: ["search-projects", inputValue],
-    queryFn: async () => await searchProjects(inputValue),
-  });
+  const { data, isLoading, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["search-projects", debouncedInputValue],
+      queryFn: async ({ pageParam = 0 }) =>
+        await searchProjects(debouncedInputValue, pageParam),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages, lastPageParam) => {
+        if (lastPage.length === 0) {
+          return undefined;
+        }
+        return lastPageParam + 1;
+      },
+    });
 
   React.useEffect(() => {
     if (value) {
@@ -48,28 +67,26 @@ export function ProjectsCombobox({
     async function getAndSetProject() {
       if (value) {
         const project = await getProjectById(value);
-        setProject(project || null);
+        if (project) {
+          setProject(project);
+        } else {
+          onChange(null);
+          setProject(null);
+        }
       }
     }
-  }, [value, data]);
+  }, [onChange, value]);
+
+  React.useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage]);
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          disabled={disabled}
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="justify-between flex min-w-0"
-        >
-          <span className="truncate">
-            {project ? project.name : "Select project..."}
-          </span>
-          <ChevronsUpDown className="opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+    <Popover open={open} onOpenChange={setOpen} modal={modal}>
+      <PopoverTrigger asChild>{renderChildren(project)}</PopoverTrigger>
+      <PopoverContent className="w-[300px] p-0">
         <Command shouldFilter={false}>
           <CommandInput
             placeholder="Search project..."
@@ -86,31 +103,52 @@ export function ProjectsCombobox({
             )}
             {!isLoading && <CommandEmpty>No projects found.</CommandEmpty>}
             <CommandGroup>
-              {data?.map((item) => (
-                <CommandItem
-                  key={item.id}
-                  value={item.id}
-                  onSelect={(currentValue) => {
-                    setProject(
-                      currentValue === project?.id
-                        ? null
-                        : data.find((i) => i.id === currentValue) || null
-                    );
-                    onChange(
-                      currentValue === project?.id ? null : currentValue
-                    );
-                    setOpen(false);
-                  }}
-                >
-                  {item.name}
-                  <Check
-                    className={cn(
-                      "ml-auto",
-                      project?.id === item.id ? "opacity-100" : "opacity-0"
-                    )}
-                  />
-                </CommandItem>
+              {data?.pages.map((page, index) => (
+                <React.Fragment key={index}>
+                  {page?.map((item) => (
+                    <CommandItem
+                      key={item.id}
+                      value={item.id}
+                      onSelect={(currentValue) => {
+                        setProject(
+                          currentValue === project?.id
+                            ? null
+                            : page.find((i) => i.id === currentValue) || null
+                        );
+                        onChange(
+                          currentValue === project?.id ? null : currentValue
+                        );
+                        setOpen(false);
+                      }}
+                    >
+                      <div>
+                        <p>{item.name}</p>
+                        <p className="text-xs text-muted-foreground">
+                          ({item.clientName})
+                        </p>
+                      </div>
+                      <Check
+                        className={cn(
+                          "ml-auto",
+                          project?.id === item.id ? "opacity-100" : "opacity-0"
+                        )}
+                      />
+                    </CommandItem>
+                  ))}
+                </React.Fragment>
               ))}
+              {hasNextPage && (
+                <CommandItem>
+                  <div
+                    ref={ref}
+                    className="flex items-center justify-center w-full py-2"
+                  >
+                    {isFetchingNextPage && (
+                      <Loader2Icon className="animate-spin size-4 text-muted-foreground" />
+                    )}
+                  </div>
+                </CommandItem>
+              )}
             </CommandGroup>
           </CommandList>
         </Command>

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { PlusIcon } from "lucide-react";
 import StatsCard from "@/components/cards/stats-card";
 import { endOfWeek, startOfWeek } from "date-fns";
-import { taskAssignees, tasks } from "@/lib/db/schemas";
+import { tasks } from "@/lib/db/schemas";
 import { and, count, eq, gt, gte, isNull, lte } from "drizzle-orm";
 import { db } from "@/lib/db";
 
@@ -16,8 +16,7 @@ const ProjectStats = async ({ projectId }: { projectId: string }) => {
         count: count(),
       })
       .from(tasks)
-      .leftJoin(taskAssignees, eq(tasks.id, taskAssignees.taskId))
-      .where(and(eq(tasks.projectId, projectId), isNull(taskAssignees.id))),
+      .where(and(eq(tasks.projectId, projectId), isNull(tasks.assigneeId))),
   ]);
 
   const [[todoTasks], [plannedTasks]] = await Promise.all([

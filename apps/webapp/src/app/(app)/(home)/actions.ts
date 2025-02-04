@@ -1,6 +1,6 @@
 import { getCurrentSession } from "@/lib/auth/utils";
 import { db } from "@/lib/db";
-import { taskAssignees, tasks } from "@/lib/db/schemas";
+import { tasks } from "@/lib/db/schemas";
 import { timeTrackings } from "@/lib/db/schemas/time-trackings";
 import { eq, sql } from "drizzle-orm";
 
@@ -26,8 +26,7 @@ export const getTasksStats = async () => {
         ),
     })
     .from(tasks)
-    .innerJoin(taskAssignees, eq(tasks.id, taskAssignees.taskId))
-    .where(eq(taskAssignees.userId, session.userId));
+    .where(eq(tasks.assigneeId, session.userId));
 
   return {
     todo: Number(data.todo),

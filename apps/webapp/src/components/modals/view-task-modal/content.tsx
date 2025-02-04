@@ -14,7 +14,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { ProjectsSelect } from "./selects/projects-select";
 import DueDateSelect from "./selects/due-date-select";
 import { AssigneeSelect } from "./selects/assignee-select";
 import PrioritySelect from "./selects/priority-select";
@@ -24,6 +23,7 @@ import { getTaskById } from "./actions";
 import { Badge } from "@/components/ui/badge";
 import { useDebounceCallback } from "usehooks-ts";
 import { updateTask } from "@/actions/tasks/update-task";
+import ProjectSelect from "./selects/project-select";
 
 const Content = () => {
   const { isOpen, onClose, data } = useModal("view-task");
@@ -98,7 +98,7 @@ const Content = () => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <ProjectsSelect {...field} disabled={isLoading} />
+                    <ProjectSelect {...field} disabled={isLoading} />
                   </FormControl>
                 </FormItem>
               )}

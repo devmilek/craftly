@@ -7,8 +7,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { cn, formatDateRelative } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
 import React from "react";
 
@@ -34,7 +33,7 @@ const DueDateSelect = ({
         >
           <CalendarIcon className={cn({ "opacity-50": !value })} />
           <span className="truncate">
-            {value ? format(value, "PPP") : <span>Pick due a date</span>}
+            {value ? formatDateRelative(value) : <span>Pick due a date</span>}
           </span>
         </Button>
       </PopoverTrigger>

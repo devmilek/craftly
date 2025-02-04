@@ -11,10 +11,10 @@ import {
   taskStatus,
   taskPriority,
   members,
-  taskAssignees,
   invoices,
   InvoiceInsert,
   ExpenseInsert,
+  TaskInsert,
 } from "@/lib/db/schemas";
 import {
   TimeTrackingInsert,
@@ -25,7 +25,7 @@ import axios from "axios";
 import { v4 } from "uuid";
 import { serverAvatarUpload } from "../storage";
 import { and, eq } from "drizzle-orm";
-import { clientsData, projectsData, tasksData } from "./rawData";
+import { projectsData, tasksData } from "./rawData";
 
 export const generateData = async () => {
   const { organizationId, session } = await getCurrentSession();
@@ -61,8 +61,7 @@ export const generateData = async () => {
   const clientsBatch = [];
   const contactsBatch = [];
   const projectsBatch = [];
-  const tasksBatch = [];
-  const taskAssigneesBatch = [];
+  const tasksBatch: TaskInsert[] = [];
   const timeTrackingsBatch: TimeTrackingInsert[] = [];
   const invoicesBatch: InvoiceInsert[] = [];
   const expensesBatch: ExpenseInsert[] = [];
@@ -166,14 +165,8 @@ export const generateData = async () => {
           priority: faker.helpers.arrayElement(taskPriority),
           projectId,
           id: taskId,
+          assigneeId: member?.id,
         });
-
-        if (member) {
-          taskAssigneesBatch.push({
-            userId: member.userId,
-            taskId,
-          });
-        }
 
         localTasksIndex++;
 
@@ -204,7 +197,6 @@ export const generateData = async () => {
   await db.insert(dbContacts).values(contactsBatch);
   await db.insert(dbProjects).values(projectsBatch);
   await db.insert(dbTasks).values(tasksBatch);
-  await db.insert(taskAssignees).values(taskAssigneesBatch);
   await db.insert(timeTrackings).values(timeTrackingsBatch);
   await db.insert(invoices).values(invoicesBatch);
 };

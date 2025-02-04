@@ -4,7 +4,6 @@ import {
   pgTable,
   text,
   timestamp,
-  unique,
   uuid,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -32,6 +31,7 @@ export const tasks = pgTable("tasks", {
   organizationId: varchar()
     .notNull()
     .references(() => organizations.id),
+  assigneeId: varchar().references(() => users.id),
 
   dueDate: date("due_date", {
     mode: "date",
@@ -44,45 +44,14 @@ export const tasks = pgTable("tasks", {
     .$onUpdate(() => new Date()),
 });
 
-export const taskRelations = relations(tasks, ({ one, many }) => ({
+export const taskRelations = relations(tasks, ({ one }) => ({
   project: one(projects, {
     fields: [tasks.projectId],
     references: [projects.id],
   }),
-  assignees: many(taskAssignees),
 }));
 
 export type Task = typeof tasks.$inferSelect;
 export type TaskInsert = typeof tasks.$inferInsert;
-
-export const taskAssignees = pgTable(
-  "task_assignees",
-  {
-    id: uuid("id").primaryKey().defaultRandom(),
-    taskId: uuid("task_id")
-      .notNull()
-      .references(() => tasks.id, { onDelete: "cascade" }),
-    userId: text("user_id")
-      .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
-  },
-  (t) => ({
-    unq: unique().on(t.taskId, t.userId), // Unikalna kombinacja taskId i memberId
-  })
-);
-
-export const taskAssigneesRelations = relations(taskAssignees, ({ one }) => ({
-  task: one(tasks, {
-    fields: [taskAssignees.taskId],
-    references: [tasks.id],
-  }),
-  member: one(users, {
-    fields: [taskAssignees.userId],
-    references: [users.id],
-  }),
-}));
-
-export type TaskAssignee = typeof taskAssignees.$inferSelect;
-export type TaskAssigneeInsert = typeof taskAssignees.$inferInsert;
 
 // export type TaskAssignee = typeof taskAssignees.$inferSelect;

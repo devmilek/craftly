@@ -1,8 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { useModal } from "@/hooks/use-modals-store";
-import { cn, formatStatus } from "@/lib/utils";
+import { cn, formatDateRelative, formatStatus } from "@/lib/utils";
 import { TaskPriority, TaskStatus } from "@/types";
-import { format } from "date-fns";
 import { CheckCheckIcon, FileIcon, FlagIcon, FolderIcon } from "lucide-react";
 import React from "react";
 
@@ -57,7 +56,7 @@ const TaskCard = ({
                   dueDate < new Date() ? "destructive-outline" : "secondary"
                 }
               >
-                Due {format(dueDate, "PP")}
+                Due {formatDateRelative(dueDate)}
               </Badge>
             )}
           </div>
