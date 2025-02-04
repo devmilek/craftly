@@ -1,10 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Check, ChevronsUpDown } from "lucide-react";
+import { Check } from "lucide-react";
 
 import { cn, formatStatus } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandEmpty,
@@ -19,45 +18,20 @@ import {
 } from "@/components/ui/popover";
 import { taskStatus } from "@/lib/db/schemas";
 
-const StatusSelect = ({
+const StatusCombobox = ({
   value,
   onChange,
-  disabled,
+  children,
 }: {
   value?: string | null;
   onChange: (value: string | null) => void;
-  disabled?: boolean;
+  children: React.ReactNode;
 }) => {
   const [open, setOpen] = React.useState(false);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="justify-between flex min-w-0 w-full"
-          disabled={disabled}
-        >
-          <span className="truncate">
-            {value ? (
-              <span className="flex items-center">
-                <div
-                  className={cn(
-                    "size-2 rounded-full mr-2 flex-shrink-0",
-                    `bg-status-${value}`
-                  )}
-                ></div>
-                {formatStatus(value)}
-              </span>
-            ) : (
-              "Select status..."
-            )}
-          </span>
-          <ChevronsUpDown className="opacity-50" />
-        </Button>
-      </PopoverTrigger>
+      <PopoverTrigger asChild>{children}</PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
           <CommandList>
@@ -95,4 +69,4 @@ const StatusSelect = ({
   );
 };
 
-export default StatusSelect;
+export default StatusCombobox;

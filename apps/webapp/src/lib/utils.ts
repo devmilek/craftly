@@ -1,5 +1,17 @@
 import { ProjectStatus, TaskStatus } from "@/types";
 import { clsx, type ClassValue } from "clsx";
+import {
+  addDays,
+  format,
+  isSameYear,
+  isToday,
+  isTomorrow,
+  isWithinInterval,
+  isYesterday,
+  subDays,
+  subMonths,
+  subWeeks,
+} from "date-fns";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs: ClassValue[]) {
@@ -57,4 +69,59 @@ export const formatSeconds = (seconds: number) => {
   const hours = Math.floor(seconds / 3600);
   const minutes = Math.floor((seconds % 3600) / 60);
   return `${hours}h ${minutes}m`;
+};
+
+export const formatDateRelative = (date: Date): string => {
+  const now = new Date();
+
+  if (isToday(date)) return "Today";
+  if (isTomorrow(date)) return "Tomorrow";
+  if (isYesterday(date)) return "Yesterday";
+
+  // Future dates within next week
+  if (
+    isWithinInterval(date, {
+      start: now,
+      end: addDays(now, 7),
+    })
+  ) {
+    return format(date, "EEEE");
+  }
+
+  // Past dates within last week
+  if (
+    isWithinInterval(date, {
+      start: subDays(now, 7),
+      end: now,
+    })
+  ) {
+    return `Last ${format(date, "EEEE")}`;
+  }
+
+  // Past dates within last 4 weeks
+  if (
+    isWithinInterval(date, {
+      start: subWeeks(now, 4),
+      end: subDays(now, 7),
+    })
+  ) {
+    return format(date, "MMM d, yyyy");
+  }
+
+  // Past dates within last year
+  if (
+    isWithinInterval(date, {
+      start: subMonths(now, 12),
+      end: subWeeks(now, 4),
+    })
+  ) {
+    return format(date, "MMM d, yyyy");
+  }
+
+  // Default formatting
+  if (isSameYear(date, now)) {
+    return format(date, "MMM d");
+  }
+
+  return format(date, "MMM d, yyyy");
 };
