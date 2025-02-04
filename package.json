@@ -1,5 +1,5 @@
 {
-  "name": "Craftly",
+  "name": "craftly",
   "private": true,
   "scripts": {
     "build": "turbo build",

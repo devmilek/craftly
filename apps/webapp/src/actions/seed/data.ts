@@ -25,6 +25,7 @@ import axios from "axios";
 import { v4 } from "uuid";
 import { serverAvatarUpload } from "../storage";
 import { and, eq } from "drizzle-orm";
+import { clientsData, projectsData, tasksData } from "./rawData";
 
 export const generateData = async () => {
   const { organizationId, session } = await getCurrentSession();
@@ -49,6 +50,12 @@ export const generateData = async () => {
     invoices: { min: 5, max: 10 },
     expenses: { min: 5, max: 10 },
   };
+
+  const localTasksData = tasksData;
+  let localTasksIndex = 0;
+
+  const localProjectsData = projectsData;
+  let localProjectsIndex = 0;
 
   // Prepare batch arrays
   const clientsBatch = [];
@@ -104,7 +111,7 @@ export const generateData = async () => {
     for (let j = 0; j < projectCount; j++) {
       const projectId = v4();
       projectsBatch.push({
-        name: faker.commerce.productName(),
+        name: localProjectsData[localProjectsIndex % localProjectsData.length],
         description: faker.commerce.productDescription(),
         clientId,
         organizationId,
@@ -114,6 +121,8 @@ export const generateData = async () => {
         }),
         id: projectId,
       });
+
+      localProjectsIndex++;
 
       const invoicesCount = faker.number.int(config.invoices);
       for (let k = 0; k < invoicesCount; k++) {
@@ -147,7 +156,7 @@ export const generateData = async () => {
       for (let k = 0; k < taskCount; k++) {
         const taskId = v4();
         tasksBatch.push({
-          name: faker.commerce.productName(),
+          name: localTasksData[localTasksIndex % localTasksData.length],
           description: faker.commerce.productDescription(),
           organizationId,
           dueDate: faker.date.soon({
@@ -165,6 +174,8 @@ export const generateData = async () => {
             taskId,
           });
         }
+
+        localTasksIndex++;
 
         const timeTrackingCount = faker.number.int(config.timeTracking);
         for (let l = 0; l < timeTrackingCount; l++) {

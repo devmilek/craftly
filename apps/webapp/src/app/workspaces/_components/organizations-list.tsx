@@ -11,6 +11,7 @@ import {
   PlusIcon,
   Search,
 } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
@@ -56,9 +57,11 @@ const OrganizationsList = () => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <Button>
-          <PlusIcon />
-          Create
+        <Button asChild>
+          <Link href="/workspaces/create">
+            <PlusIcon />
+            Create
+          </Link>
         </Button>
       </div>
       <div className="space-y-2">

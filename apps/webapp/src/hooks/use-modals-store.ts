@@ -1,3 +1,4 @@
+import { ProjectInsert } from "@/lib/db/schemas";
 import { create } from "zustand";
 
 export type ModalType =
@@ -17,6 +18,7 @@ type ModalData = {
   "create-task": {
     projectId?: string;
   };
+  "create-project": ProjectInsert;
 };
 
 type ModalsState = {
