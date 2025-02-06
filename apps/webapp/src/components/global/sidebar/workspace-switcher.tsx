@@ -21,7 +21,6 @@ import {
 import { organization } from "@/lib/auth/auth-client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { useModal } from "@/hooks/use-modals-store";
 import Link from "next/link";
 import { getInitials } from "@/lib/utils";
 
@@ -44,7 +43,6 @@ export function TeamSwitcher({
 }) {
   const { isMobile } = useSidebar();
   const { refresh } = useRouter();
-  const { onOpen } = useModal("create-organization");
 
   const changeOrganization = async (organizationId: string) => {
     const { error } = await organization.setActive({
@@ -117,13 +115,15 @@ export function TeamSwitcher({
               </Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="gap-2 p-2" onClick={() => onOpen()}>
-              <div className="flex size-6 items-center justify-center rounded-md border bg-background">
-                <Plus className="size-4" />
-              </div>
-              <div className="font-medium text-muted-foreground">
-                Create Workspace
-              </div>
+            <DropdownMenuItem asChild className="gap-2 p-2">
+              <Link href="/organization/create">
+                <div className="flex size-6 items-center justify-center rounded-md border bg-background">
+                  <Plus className="size-4" />
+                </div>
+                <div className="font-medium text-muted-foreground">
+                  Create Workspace
+                </div>
+              </Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

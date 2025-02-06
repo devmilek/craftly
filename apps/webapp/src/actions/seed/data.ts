@@ -7,6 +7,7 @@ import {
   clients as dbClients,
   projects as dbProjects,
   tasks as dbTasks,
+  subtasks as dbSubtasks,
   projectStatus,
   taskStatus,
   taskPriority,
@@ -15,6 +16,7 @@ import {
   InvoiceInsert,
   ExpenseInsert,
   TaskInsert,
+  SubtaskInsert,
 } from "@/lib/db/schemas";
 import {
   TimeTrackingInsert,
@@ -46,6 +48,7 @@ export const generateData = async () => {
     contacts: { min: 5, max: 9 },
     projects: { min: 2, max: 7 },
     tasks: { min: 4, max: 20 },
+    subtasks: { min: 1, max: 7 },
     timeTracking: { min: 1, max: 3 },
     invoices: { min: 5, max: 10 },
     expenses: { min: 5, max: 10 },
@@ -62,6 +65,7 @@ export const generateData = async () => {
   const contactsBatch = [];
   const projectsBatch = [];
   const tasksBatch: TaskInsert[] = [];
+  const subtasksBatch: SubtaskInsert[] = [];
   const timeTrackingsBatch: TimeTrackingInsert[] = [];
   const invoicesBatch: InvoiceInsert[] = [];
   const expensesBatch: ExpenseInsert[] = [];
@@ -170,6 +174,20 @@ export const generateData = async () => {
 
         localTasksIndex++;
 
+        if (faker.datatype.boolean()) {
+          const subtasksCount = faker.number.int(config.subtasks);
+          for (let l = 0; l < subtasksCount; l++) {
+            subtasksBatch.push({
+              name: faker.commerce.productName(),
+              taskId,
+              id: v4(),
+              completed: faker.datatype.boolean()
+                ? faker.date.recent({ days: 5 })
+                : null,
+            });
+          }
+        }
+
         const timeTrackingCount = faker.number.int(config.timeTracking);
         for (let l = 0; l < timeTrackingCount; l++) {
           timeTrackingsBatch.push({
@@ -197,6 +215,7 @@ export const generateData = async () => {
   await db.insert(dbContacts).values(contactsBatch);
   await db.insert(dbProjects).values(projectsBatch);
   await db.insert(dbTasks).values(tasksBatch);
+  await db.insert(dbSubtasks).values(subtasksBatch);
   await db.insert(timeTrackings).values(timeTrackingsBatch);
   await db.insert(invoices).values(invoicesBatch);
 };

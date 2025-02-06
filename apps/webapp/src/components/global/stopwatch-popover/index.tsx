@@ -21,7 +21,7 @@ import { useForm } from "react-hook-form";
 import { timerSchema, TimerSchema } from "./schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
-import { ProjectsCombobox } from "../../comboboxes/project-combobox";
+// import { ProjectsCombobox } from "../../comboboxes/project-combobox";
 import { useStopwatch } from "@/hooks/use-stopwatch";
 import { TasksCombobox } from "@/components/comboboxes/tasks-combobox";
 
@@ -245,7 +245,7 @@ const StopwatchPopover = () => {
               className="space-y-4"
               onSubmit={form.handleSubmit(handleSubmit)}
             >
-              <FormField
+              {/* <FormField
                 name="projectId"
                 control={form.control}
                 render={({ field }) => (
@@ -265,7 +265,7 @@ const StopwatchPopover = () => {
                     <FormMessage />
                   </FormItem>
                 )}
-              />
+              /> */}
               <FormField
                 name="taskId"
                 control={form.control}

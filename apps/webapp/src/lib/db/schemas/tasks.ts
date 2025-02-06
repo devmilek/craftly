@@ -54,4 +54,21 @@ export const taskRelations = relations(tasks, ({ one }) => ({
 export type Task = typeof tasks.$inferSelect;
 export type TaskInsert = typeof tasks.$inferInsert;
 
-// export type TaskAssignee = typeof taskAssignees.$inferSelect;
+export const subtasks = pgTable("subtasks", {
+  id: uuid().primaryKey().defaultRandom(),
+  taskId: uuid().references(() => tasks.id, {
+    onDelete: "cascade",
+  }),
+  name: varchar({
+    length: 100,
+  }).notNull(),
+  completed: timestamp("completed"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at")
+    .notNull()
+    .defaultNow()
+    .$onUpdate(() => new Date()),
+});
+
+export type Subtask = typeof subtasks.$inferSelect;
+export type SubtaskInsert = typeof subtasks.$inferInsert;

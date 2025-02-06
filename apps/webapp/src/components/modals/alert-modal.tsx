@@ -39,7 +39,7 @@ export const AlertModal = () => {
 
   const handleCancel = () => {
     if (isLoading) return;
-    onCancel();
+    if (onCancel) onCancel();
     close();
   };
 

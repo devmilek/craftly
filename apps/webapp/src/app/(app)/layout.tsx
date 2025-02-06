@@ -16,7 +16,7 @@ const AppLayout = async ({ children }: { children: React.ReactNode }) => {
   }
 
   if (!session.activeOrganizationId) {
-    redirect("/organizations");
+    redirect("/workspaces");
   }
 
   return (

@@ -22,7 +22,7 @@ const AvatarUploader = ({
 }: {
   fallback: string;
   value?: string | null;
-  onValueChange: (value: string | null) => void;
+  onValueChange?: (value: string | null) => void;
   className?: string;
 }) => {
   const [uploading, setUploading] = useState(false);
@@ -71,7 +71,7 @@ const AvatarUploader = ({
 
       setUploading(false);
       toast.success("File uploaded successfully");
-      onValueChange(src);
+      if (onValueChange) onValueChange(src);
     },
     [onValueChange]
   );
@@ -88,7 +88,7 @@ const AvatarUploader = ({
     }
 
     setUploading(false);
-    onValueChange(null);
+    if (onValueChange) onValueChange(null);
     toast.success("File deleted successfully");
   };
 
