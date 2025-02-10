@@ -1,24 +1,43 @@
-import React from "react";
+import React, { Fragment, useEffect } from "react";
 import * as ScrollArea from "@radix-ui/react-scroll-area";
 import ColumnHeader from "./column-header";
 import { useDroppable } from "@dnd-kit/core";
-import Card, { TaskCardTask } from "./card";
+import Card from "./card";
 import { cn } from "@/lib/utils";
+import { TaskStatus } from "@/types";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { getTasksByStatus } from "./actions";
+import { useInView } from "react-intersection-observer";
 
-const Column = ({
-  status,
-  tasks,
-}: {
-  status: string;
-  tasks: TaskCardTask[];
-}) => {
+const Column = ({ status }: { status: TaskStatus }) => {
+  const { ref, inView } = useInView();
   const { isOver, setNodeRef } = useDroppable({
     id: status,
   });
 
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteQuery({
+      queryKey: ["tasks", { status }],
+      queryFn: async ({ pageParam = 0 }) =>
+        await getTasksByStatus(status, pageParam),
+      initialPageParam: 0,
+      getNextPageParam: (lastPage, allPages, lastPageParam) => {
+        if (lastPage.length === 0) {
+          return undefined;
+        }
+        return lastPageParam + 1;
+      },
+    });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, inView, isFetchingNextPage]);
+
   return (
     <div className="min-w-72 w-full flex flex-col h-full py-6">
-      <ColumnHeader status={status} count={tasks.length} />
+      <ColumnHeader status={status} />
       <ScrollArea.Root className="flex-1 relative overflow-hidden">
         <div
           className={cn(
@@ -30,9 +49,19 @@ const Column = ({
         />
         <ScrollArea.Viewport className="h-full w-full rounded-xl overflow-hidden">
           <div ref={setNodeRef} className="py-6 space-y-2">
-            {tasks.map((task) => (
-              <Card key={task.id} task={task} />
+            {/* {data?.pages.map((task) => <Card key={task.id} task={task} />)} */}
+            {data?.pages.map((page, index) => (
+              <Fragment key={index}>
+                {page.map((task) => (
+                  <Card key={task.id} task={task} />
+                ))}
+              </Fragment>
             ))}
+            {hasNextPage && (
+              <div ref={ref} className="flex justify-center py-4">
+                <div className="w-6 h-6 border-t-2 border-zinc-300" />
+              </div>
+            )}
           </div>
         </ScrollArea.Viewport>
         <div

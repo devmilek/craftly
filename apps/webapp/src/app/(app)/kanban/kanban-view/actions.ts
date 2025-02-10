@@ -1,13 +1,22 @@
-import { db } from "@/lib/db";
-import React from "react";
-import KanbanView from "./kanban-view";
-import { ensureSessionWithOrganization } from "@/lib/auth/utils";
-import { and, eq, isNotNull } from "drizzle-orm";
-import { projects, subtasks, tasks, users } from "@/lib/db/schemas";
-import SidebarNavbar from "@/components/global/sidebar/sidebar-navbar";
+"use server";
 
-const KanbanPage = async () => {
-  const { organizationId } = await ensureSessionWithOrganization();
+import { getCurrentSession } from "@/lib/auth/utils";
+import { db } from "@/lib/db";
+import { projects, subtasks, tasks, users } from "@/lib/db/schemas";
+import { TaskStatus } from "@/types";
+import { and, eq, isNotNull } from "drizzle-orm";
+
+export const getTasksByStatus = async (
+  status: TaskStatus,
+  page: number,
+  projectId?: string
+) => {
+  const { organizationId, session } = await getCurrentSession();
+
+  if (!session || !organizationId) {
+    return [];
+  }
+
   const data = await db
     .select({
       id: tasks.id,
@@ -29,23 +38,16 @@ const KanbanPage = async () => {
     .from(tasks)
     .leftJoin(projects, eq(tasks.projectId, projects.id))
     .leftJoin(users, eq(tasks.assigneeId, users.id))
-    .where(and(eq(tasks.organizationId, organizationId)))
+    .where(
+      and(
+        eq(tasks.organizationId, organizationId),
+        projectId ? eq(tasks.projectId, projectId) : undefined,
+        eq(tasks.status, status)
+      )
+    )
     .orderBy(tasks.updatedAt)
-    .limit(50);
+    .limit(10)
+    .offset(page * 10);
 
-  return (
-    <div>
-      <SidebarNavbar
-        items={[
-          {
-            label: "Tasks",
-          },
-        ]}
-      />
-      <h1 className="text-2xl font-semibold mb-4">Tasks</h1>
-      <KanbanView tasks={data} />
-    </div>
-  );
+  return data;
 };
-
-export default KanbanPage;

@@ -15,8 +15,8 @@ export interface TaskCardTask {
   assigneeId?: string | null;
   assigneeName?: string | null;
   assigneeImage?: string | null;
-  subtaskCount?: number | null;
-  doneSubtaskCount?: number | null;
+  subtasksCount?: number | null;
+  doneSubtasksCount?: number | null;
 }
 
 export interface TaskCardProps {
@@ -44,20 +44,17 @@ const Card = ({ task, overlay }: TaskCardProps) => {
       )}
     >
       <div className="p-5">
-        <h2 className="font-medium">{task.name}</h2>
+        <h2 className="font-semibold">{task.name}</h2>
         <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-muted-foreground">
-          {JSON.stringify({
-            subtaskCount: task.subtaskCount,
-            doneSubtaskCount: task.doneSubtaskCount,
-          })}
-          {task.subtaskCount && task.doneSubtaskCount && (
-            <div className="flex items-center space-x-2 text-xs">
-              <WorkflowIcon className="size-3" />
-              <span>
-                {task.doneSubtaskCount}/{task.subtaskCount}
-              </span>
-            </div>
-          )}
+          {(task.subtasksCount || 0) > 0 &&
+            (task.doneSubtasksCount || 0) > 0 && (
+              <div className="flex items-center space-x-2 text-xs">
+                <WorkflowIcon className="size-3" />
+                <span>
+                  {task.doneSubtasksCount}/{task.subtasksCount}
+                </span>
+              </div>
+            )}
           {task.dueDate && (
             <div
               className={cn("flex items-center space-x-2 text-xs", {

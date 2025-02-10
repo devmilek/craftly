@@ -24,7 +24,7 @@ const KanbanView = ({ tasks }: { tasks: TaskCardTask[] }) => {
   return (
     <DndContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
       <div className="grid">
-        <div className="flex px-8 gap-6 overflow-x-auto  h-screen">
+        <div className="flex px-8 gap-6 overflow-x-auto h-screen -mx-8">
           {taskStatus.map((status) => (
             <Column
               key={status}
