@@ -1,4 +1,4 @@
-# Craftly 🛠️ - Business Management Platform (STILL UNDER CONSTRUCT 🚨)
+# Craftly 🛠️ (under construction 🚨)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yourusername/craftly/blob/main/LICENSE)
 ![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
