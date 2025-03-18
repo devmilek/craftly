@@ -1,9 +1,9 @@
-# Craftly - Business Management Platform
+# Craftly 🛠️ - Business Management Platform (STILL UNDER CONSTRUCT 🚨)
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/yourusername/craftly/blob/main/LICENSE)
 ![Version](https://img.shields.io/badge/version-1.0.0-green.svg)
 
-<img src="public/logo.png" alt="Craftly Logo" width="200"/>
+<img src="https://github.com/devmilek/craftly/blob/main/apps/landing/public/logo.svg" alt="Craftly Logo" width="200"/>
 
 **Simplify Client Management, Project Tracking, and Financial Operations**
 
@@ -12,8 +12,6 @@
 ## 🚀 Overview
 
 Craftly is an all-in-one business management platform designed for freelancers, entrepreneurs, and growing businesses. Streamline your workflows with powerful tools for client management, project tracking, invoicing, expense monitoring, and AI-driven automation.
-
-**Live Demo:** [craftly.app](https://craftly.app) (placeholder)
 
 ---
 
